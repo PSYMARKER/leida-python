@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>pyleida.dynamics_metrics API documentation</title>
+<meta name="description" content="The module &#39;pyleida.dynamics_metrics&#39; provides functions
+to compute the metrics from dynamical systems theory" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyleida.dynamics_metrics</code></h1>
+</header>
+<section id="section-intro">
+<p>The module 'pyleida.dynamics_metrics' provides functions
+to compute the metrics from dynamical systems theory</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;The module &#39;pyleida.dynamics_metrics&#39; provides functions
+to compute the metrics from dynamical systems theory&#34;&#34;&#34;
+
+from ._dynamics_metrics import (
+    compute_dynamics_metrics,
+    fractional_occupancy,
+    fractional_occupancy_group,
+    dwell_times,
+    dwell_times_group,
+    transition_probabilities,
+    transition_probabilities_group,
+    group_transition_matrix,
+    plot_patterns_k,
+)
+
+__all__ = [
+    &#34;compute_dynamics_metrics&#34;,
+    &#34;fractional_occupancy&#34;,
+    &#34;fractional_occupancy_group&#34;,
+    &#34;dwell_times&#34;,
+    &#34;dwell_times_group&#34;,
+    &#34;transition_probabilities&#34;,
+    &#34;transition_probabilities_group&#34;,
+    &#34;group_transition_matrix&#34;,
+    &#34;plot_patterns_k&#34;
+]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyleida.dynamics_metrics.compute_dynamics_metrics"><code class="name flex">
+<span>def <span class="ident">compute_dynamics_metrics</span></span>(<span>clusters_labels, TR=None, save_results=False, path=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Execute the dynamics analysis using Dynamical Systems
+theory tools for each k explored: computes the fractional
+occupancies,dwell times, and transitions probabilities for
+each subject of each group/condition.</p>
+<h2 id="params">Params:</h2>
+<p>clusters_labels : pd.dataframe with shape (n_eigenvectors, 2 + range_of_K).
+Contains the predicted labels of each eigenvector
+across the K range explored. 1st column contains
+the subjects ids, and 2nd column contains the
+class/conditions labels. The remaining columns contain
+the predictions/labelling for each k explored.
+</p>
+<p>TR : np.float or int.
+Specify the Repetition Time of the fMRI data.</p>
+<p>save_results : bool.
+Whether to save results. If True, the results are
+saved in a folder called 'dynamics_metrics'.</p>
+<p>path : str.
+Specify the path in which the 'dynamics_metrics'
+folder will be created if 'save_results' was set
+to True.</p>
+<h2 id="returns">Returns:</h2>
+<p>metrics : dict.
+Contains 'dwell_times' (pd.DataFrame),
+'fract_occupancies' (pd.DataFrame),
+'transitions' (pd.DataFrame).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def compute_dynamics_metrics(clusters_labels,TR=None,save_results=False,path=None):
+    &#34;&#34;&#34;
+    Execute the dynamics analysis using Dynamical Systems
+    theory tools for each k explored: computes the fractional
+    occupancies,dwell times, and transitions probabilities for 
+    each subject of each group/condition.
+
+    Params:
+    -------
+    clusters_labels : pd.dataframe with shape (n_eigenvectors, 2 + range_of_K).
+        Contains the predicted labels of each eigenvector
+        across the K range explored. 1st column contains
+        the subjects ids, and 2nd column contains the 
+        class/conditions labels. The remaining columns contain
+        the predictions/labelling for each k explored.  
+        
+    TR : np.float or int.
+        Specify the Repetition Time of the fMRI data.
+
+    save_results : bool. 
+        Whether to save results. If True, the results are
+        saved in a folder called &#39;dynamics_metrics&#39;.
+
+    path : str.
+        Specify the path in which the &#39;dynamics_metrics&#39;
+        folder will be created if &#39;save_results&#39; was set
+        to True.
+
+    Returns:
+    --------
+    metrics : dict. 
+        Contains &#39;dwell_times&#39; (pd.DataFrame),
+        &#39;fract_occupancies&#39; (pd.DataFrame),
+        &#39;transitions&#39; (pd.DataFrame).
+    &#34;&#34;&#34;
+
+    #create folder (if specified) to save the results
+    if save_results:
+        try:
+            results_path = f&#39;{path}/dynamics_metrics&#39;
+            if not os.path.exists(results_path): 
+                os.makedirs(results_path)
+            print(f&#34;-Folder created to save results: &#39;./{results_path}&#39;&#34;)
+        except:
+            raise Exception(&#34;PROCESS ABORTED: the folder to save the results could&#39;t be created.&#34;)
+    
+    #check the names of 1st and 2nd col, and change them to &#39;subject_id&#39; and &#39;condition&#39;, if different.
+    if &#39;subject_id&#39; not in clusters_labels.columns: 
+        clusters_labels.rename(columns={clusters_labels.columns[0]:&#39;subject_id&#39;},inplace=True)
+    if &#39;condition&#39; not in clusters_labels.columns: 
+        clusters_labels.rename(columns={clusters_labels.columns[1]:&#39;condition&#39;},inplace=True)
+    
+    meta = clusters_labels[[&#39;subject_id&#39;,&#39;condition&#39;]] #keep only metadata
+    Ks = [col for col in clusters_labels.columns if col.startswith(&#39;k_&#39;)]
+    ys = clusters_labels[Ks].values #keep only clusters assignements for each k.
+
+    dwell_times,occupancies,transitions = {},{},{}
+    for k_idx,k in enumerate(Ks):
+        _ = [int(s) for s in k.replace(&#39;_&#39;,&#39; &#39;).split() if s.isdigit()]  
+        print(f&#39;k = {_[0]}&#39;)
+        if save_results: 
+            k_path = f&#39;{results_path}/{k}&#39;
+            if not os.path.exists(k_path):
+                os.mkdir(k_path)    
+        else:
+            k_path = None
+
+        #Compute the metrics
+        occupancies[k] = fractional_occupancy_group(
+            meta,
+            ys[:,k_idx],
+            save_results=save_results,
+            path=k_path
+            )
+        dwell_times[k] = dwell_times_group(
+            meta,
+            ys[:,k_idx],
+            TR=TR,
+            save_results=save_results,
+            path=k_path
+            )
+        transitions[k] = transition_probabilities_group(
+            meta,
+            ys[:,k_idx],
+            save_results=save_results,
+            path=k_path
+            )
+
+    print(&#39;\n*The metrics were succesfully computed.&#39;)
+
+    return {
+        &#39;dwell_times&#39;:dwell_times,
+        &#39;occupancies&#39;:occupancies,
+        &#39;transitions&#39;:transitions,
+        }</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.dwell_times"><code class="name flex">
+<span>def <span class="ident">dwell_times</span></span>(<span>labels, TR=None, plot=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Computes the dwell time (mean duration) of each
+phase-locking state. The dwell time represents
+the mean number of consecutive epochs spent in
+a particular state throughout the duration of a scan.</p>
+<h2 id="params">Params:</h2>
+<p>labels : numpy 1D array.
+Labels of PL states traversed across a scan.</p>
+<p>TR : np.float | int | None
+Specify the Repetition Time of the fMRI data.
+If None, the dwell times are expressed in
+volume unit, instead of seconds.</p>
+<p>plot : bool.
+Whether to create a barplot showing
+the computed dwell time of each phase-locking
+state.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dwell_times(labels,TR=None,plot=False):
+    &#34;&#34;&#34;
+    Computes the dwell time (mean duration) of each
+    phase-locking state. The dwell time represents
+    the mean number of consecutive epochs spent in
+    a particular state throughout the duration of a scan.
+
+    Params:
+    --------
+    labels : numpy 1D array.
+        Labels of PL states traversed across a scan.
+
+    TR : np.float | int | None
+        Specify the Repetition Time of the fMRI data.
+        If None, the dwell times are expressed in
+        volume unit, instead of seconds.
+
+    plot : bool.
+        Whether to create a barplot showing
+        the computed dwell time of each phase-locking
+        state.
+    &#34;&#34;&#34;
+    
+    dwell = {}
+    for cluster in np.unique(labels): #for each cluster (aka brain state)
+        dwell[cluster] = []
+        dwell[cluster].append([len(list(g[1])) for g in groupby(labels) if g[0]==cluster]) #get a sequence with the times it appears across time.
+    
+    #transforming list to array
+    for cluster in dwell.keys(): 
+        dwell[cluster] = np.concatenate([i for i in dwell[cluster]])
+    
+    #compute the average lifetime (TRs or seconds) of each state    
+    if TR is None:
+        mean_dwell = pd.DataFrame({&#39;Cluster&#39;:[i for i in dwell.keys()],&#39;Mean_lifetime&#39;:[np.mean(dwell[i]) for i in dwell.keys()]})
+    else:
+        mean_dwell = pd.DataFrame({&#39;Cluster&#39;:[i for i in dwell.keys()],&#39;Mean_lifetime&#39;:[np.mean(dwell[i])*TR for i in dwell.keys()]})
+    
+    if plot:
+        plt.figure()
+        plt.grid()
+        sns.barplot(x=[f&#39;State {i+1}&#39; for i in range(len(mean_dwell))],y=mean_dwell.Mean_lifetime)
+        if TR is None:
+            plt.ylabel(&#39;Average lifetime (TRs)&#39;,fontsize=15,fontweight=&#39;regular&#39;) 
+        else:
+            plt.ylabel(&#39;Average lifetime (s)&#39;,fontsize=15,fontweight=&#39;regular&#39;)
+        plt.xlabel(&#39;State&#39;,fontsize=15,fontweight=&#39;regular&#39;) 
+        plt.tight_layout()
+        plt.show()
+                                          
+    return dwell,mean_dwell</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.dwell_times_group"><code class="name flex">
+<span>def <span class="ident">dwell_times_group</span></span>(<span>metadata, labels, TR=None, save_results=False, path=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the dwell times for each subject and
+optionally save the results.</p>
+<h2 id="params">Params:</h2>
+<p>metadata : pd.dataframe with shape (N_subjects x N_time_points, 2).
+Contains the metadata. 1st column contains
+the subjects ids, and 2nd column contains the
+class/conditions/sessions labels.</p>
+<p>labels : numpy 1D array.
+Contains the clusters labels of each time point
+for each subject and condition contained in 'metadata'.</p>
+<p>TR : np.float or int.
+Specify the Repetition Time of the fMRI data.</p>
+<p>save_results : bool.
+Whether to save the computed dwell times in a .csv file,
+and the plot in a .png file.</p>
+<p>path : str.
+Only provided if save_results=True. Define the path
+in which we want to save the results.</p>
+<h2 id="returns">Returns:</h2>
+<p>results : pd.dataframe.
+Contains 'subject_id' in 1st col, 'condition' in 2nd col,
+and a column for each cluster [brain state] with the
+values indicating the mean consecutive appareances of
+each state.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dwell_times_group(metadata,labels,TR=None,save_results=False,path=None):
+    &#34;&#34;&#34;
+    Compute the dwell times for each subject and
+    optionally save the results.
+
+    Params:
+    -------
+    metadata : pd.dataframe with shape (N_subjects x N_time_points, 2).
+        Contains the metadata. 1st column contains
+        the subjects ids, and 2nd column contains the
+        class/conditions/sessions labels.
+
+    labels : numpy 1D array. 
+        Contains the clusters labels of each time point
+        for each subject and condition contained in &#39;metadata&#39;.
+
+    TR : np.float or int.
+        Specify the Repetition Time of the fMRI data.
+
+    save_results : bool. 
+        Whether to save the computed dwell times in a .csv file,
+        and the plot in a .png file.
+
+    path : str. 
+        Only provided if save_results=True. Define the path
+        in which we want to save the results.
+
+    Returns:
+    --------
+    results : pd.dataframe. 
+        Contains &#39;subject_id&#39; in 1st col, &#39;condition&#39; in 2nd col,
+        and a column for each cluster [brain state] with the
+        values indicating the mean consecutive appareances of
+        each state.
+    &#34;&#34;&#34;
+    if save_results and path is None: 
+        raise Exception(&#39;You must provide a path to save the results&#39;)
+    assert metadata.shape[0] == labels.shape[0], \
+        &#34;The number of rows in &#39;metadata&#39; must be the same as in &#39;labels&#39;&#34;
+    
+    results = []
+    #N_clusters = len(np.unique(labels))
+    for cond in np.unique(metadata.condition):
+        subs = metadata[metadata.condition==cond].subject_id.values
+        for s in np.unique(subs):
+            idx = np.logical_and(metadata.subject_id==s,metadata.condition==cond)
+            dw = dwell_times(labels[idx],TR=TR,plot=False)[-1]
+            dw_ = {
+                **{&#39;subject_id&#39;:s,&#39;condition&#39;:cond},
+                **{f&#39;PL_state_{k+1}&#39;:v for k,v in zip(dw.Cluster,dw.Mean_lifetime)}
+                }
+            results.append(dw_)
+    
+    results = pd.DataFrame(results).fillna(0.0)
+
+    #reorder columns by PL_state (necessary because, when a subject do not traverse
+    # a particular state, that state will be located at the end of the dataframe columns)
+    N_states = len(results.columns)-2
+    states_columns = [f&#39;PL_state_{i+1}&#39; for i in range(N_states)]
+    results = results[[&#39;subject_id&#39;,&#39;condition&#39;]+states_columns]
+
+    if save_results:
+        try: 
+            results.to_csv(f&#39;{path}/dwell_times.csv&#39;,sep=&#39;\t&#39;,index=False)
+        except:
+            print(&#34;Warning: &#39;dwell_times.csv&#39; was not saved in local folder.&#34;)
+
+    return results</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.fractional_occupancy"><code class="name flex">
+<span>def <span class="ident">fractional_occupancy</span></span>(<span>cluster_assignement)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the fractional occupancy of each phase-locking state
+across time in a subject scan (or the complete dataset to
+determine the occupancies of each state), i.e, the temporal
+percentage of epochs assigned to a given cluster centroid Vc.
+Formally, it is defined as the number of time points in which a
+PL state is active during the scan, divided by the total number
+of time points in the scan.</p>
+<h2 id="params">Params:</h2>
+<p>cluster_assignement : ndarray with shape (N_time_points,).
+Contains the clusters labels for each time point.</p>
+<h2 id="returns">Returns:</h2>
+<p>occupancies : pd.DataFrame with shape (N_clusters, 3).
+Contains the fractional occupancy of each cluster.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fractional_occupancy(cluster_assignement):
+    &#34;&#34;&#34;
+    Compute the fractional occupancy of each phase-locking state 
+    across time in a subject scan (or the complete dataset to 
+    determine the occupancies of each state), i.e, the temporal
+    percentage of epochs assigned to a given cluster centroid Vc. 
+    Formally, it is defined as the number of time points in which a
+    PL state is active during the scan, divided by the total number
+    of time points in the scan.
+
+    Params:
+    -------
+    cluster_assignement : ndarray with shape (N_time_points,).
+        Contains the clusters labels for each time point.
+
+    Returns:
+    ---------
+    occupancies : pd.DataFrame with shape (N_clusters, 3).
+        Contains the fractional occupancy of each cluster.
+    &#34;&#34;&#34;
+    N_time_points = cluster_assignement.shape[0] #number of time points
+    occupancies = pd.DataFrame(pd.Series(cluster_assignement).value_counts().reset_index())
+    occupancies.columns = [&#39;cluster&#39;,&#39;n_volumes&#39;]
+    #clusters_count[&#39;occupancy&#39;] = [(i/T)*100 for i in clusters_count.Count]
+    occupancies[&#39;occupancy&#39;] = [i/N_time_points for i in occupancies.n_volumes]
+
+    return occupancies.sort_values(by=&#39;cluster&#39;)</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.fractional_occupancy_group"><code class="name flex">
+<span>def <span class="ident">fractional_occupancy_group</span></span>(<span>metadata, labels, save_results=False, path=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the fractional occupancy for each subject
+in 'metadata', and optionally and save the results.</p>
+<h2 id="params">Params:</h2>
+<p>metadata : pd.dataframe with shape (N_subjects x N_time_points, 2).
+Contains the metadata. 1st column contains
+the subjects ids, and 2nd column contains
+the class/conditions/sessions labels.</p>
+<p>labels : numpy 1D array.
+Contains the clusters labels of each time
+point for each subject and condition contained
+in 'metadata'.</p>
+<p>save_results : bool.
+Whether to save the computed fractional
+occupancies in a .csv file, and the plot
+in a .png file.</p>
+<p>path : str.
+Define the path in which we want to save
+the results (necessary if 'save_results'
+was set to True).</p>
+<h2 id="returns">Returns:</h2>
+<p>results : pd.dataframe.
+Contains 'subject_id' in 1st column, 'condition'
+in 2nd column, and a column for each cluster (i.e.,
+phase-locking state) with the values indicating the
+fractional occupancy of each state.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fractional_occupancy_group(metadata,labels,save_results=False,path=None):
+    &#34;&#34;&#34;
+    Compute the fractional occupancy for each subject
+    in &#39;metadata&#39;, and optionally and save the results.
+
+    Params:
+    -------
+    metadata : pd.dataframe with shape (N_subjects x N_time_points, 2).
+        Contains the metadata. 1st column contains
+        the subjects ids, and 2nd column contains
+        the class/conditions/sessions labels.
+
+    labels : numpy 1D array. 
+        Contains the clusters labels of each time
+        point for each subject and condition contained
+        in &#39;metadata&#39;.
+
+    save_results : bool. 
+        Whether to save the computed fractional
+        occupancies in a .csv file, and the plot
+        in a .png file.
+
+    path : str. 
+        Define the path in which we want to save
+        the results (necessary if &#39;save_results&#39;
+        was set to True).
+
+    Returns:
+    --------
+    results : pd.dataframe. 
+        Contains &#39;subject_id&#39; in 1st column, &#39;condition&#39;
+        in 2nd column, and a column for each cluster (i.e.,
+        phase-locking state) with the values indicating the
+        fractional occupancy of each state.
+    &#34;&#34;&#34;
+    assert metadata.shape[0] == labels.shape[0], \
+        &#34;The number of rows in &#39;metadata&#39; must be the same as the number of provided &#39;labels&#39;.&#34;
+    if save_results and path is None: 
+        raise ValueError(&#39;You must provide a path to save the results&#39;)
+
+    results = []
+    #N_clusters = len(np.unique(labels)) #get the number of clusters (brain states)
+    for cond in np.unique(metadata.condition):
+        subs_ids = metadata[metadata.condition==cond].subject_id.values #get the subject id&#39;s that belongs to the current condition.
+        for sub in np.unique(subs_ids): #for each subject
+            idx = np.logical_and(metadata.subject_id==sub,metadata.condition==cond) #get index of the current subject clusters labels
+            occ = fractional_occupancy(labels[idx]) #compute the occupancies for current subject
+            occ_ = {
+                **{&#39;subject_id&#39;:sub,&#39;condition&#39;:cond},
+                **{f&#39;PL_state_{k+1}&#39;:v for k,v in zip(occ.cluster,occ.occupancy)}
+                }
+            results.append(occ_)
+    
+    results = pd.DataFrame(results).fillna(0.0) #convert results to dataframe and fill NaNs with 0.0
+
+    #reorder columns by PL_state (necessary because, when a subject do not traverse
+    # a particular state, that state will be located at the end of the dataframe columns)
+    N_states = len(results.columns)-2
+    states_columns = [f&#39;PL_state_{i+1}&#39; for i in range(N_states)]
+    results = results[[&#39;subject_id&#39;,&#39;condition&#39;]+states_columns]
+
+    #save results
+    if save_results:
+        try: 
+            results.to_csv(f&#39;{path}/occupancies.csv&#39;,sep=&#39;\t&#39;,index=False)
+        except:
+            print(&#34;Warning: &#39;occupancies.csv&#39; was not saved in local folder.&#34;)
+
+    return results</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.group_transition_matrix"><code class="name flex">
+<span>def <span class="ident">group_transition_matrix</span></span>(<span>transitions_df, metric='mean', plot=True, cmap='inferno', darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute and plot the mean or median transition matrix
+of each group (or a single group).</p>
+<h2 id="params">Params:</h2>
+<p>transitions_df : pd.DataFrame.
+Contains the transitions probabilities of each
+subject and group/condition. Output of the
+'transition_probabilities_group' function.</p>
+<p>metric : str.
+Select whether to compute the 'mean' or 'median'
+transition matrix for each group.</p>
+<p>plot : bool.
+Whether to plot the matrices.</p>
+<p>cmap : str.
+Select the cmap to use in the heatmap/s.</p>
+<p>darkstyle : bool.
+Whether to use a darkstyle for the plot.</p>
+<h2 id="returns">Returns:</h2>
+<p>mats : dict.
+Contains the groups names as keys, and a
+numpy 2D array (N_states,N_states) as values.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def group_transition_matrix(transitions_df,metric=&#39;mean&#39;,plot=True,cmap=&#39;inferno&#39;,darkstyle=False):
+    &#34;&#34;&#34;
+    Compute and plot the mean or median transition matrix
+    of each group (or a single group).
+
+    Params:
+    -------
+    transitions_df : pd.DataFrame.
+        Contains the transitions probabilities of each
+        subject and group/condition. Output of the
+        &#39;transition_probabilities_group&#39; function.
+
+    metric : str.
+       Select whether to compute the &#39;mean&#39; or &#39;median&#39;
+       transition matrix for each group.
+
+    plot : bool.
+        Whether to plot the matrices.
+
+    cmap : str.
+        Select the cmap to use in the heatmap/s.
+
+    darkstyle : bool.
+        Whether to use a darkstyle for the plot.
+
+    Returns:
+    --------
+    mats : dict. 
+        Contains the groups names as keys, and a
+        numpy 2D array (N_states,N_states) as values.
+    &#34;&#34;&#34;
+    if not isinstance(metric,str):
+        raise TypeError(&#34;&#39;metric&#39; must be a string!&#34;)
+    else:
+        if metric not in [&#39;mean&#39;,&#39;median&#39;]:
+            raise ValueError(&#34;Valid options for &#39;metric&#39; are &#39;mean&#39; or &#39;median&#39;.&#34;)
+
+    N_clusters = np.sqrt(len(transitions_df.columns[2:])).astype(int) #get the number of clusters/states.
+    mats = {}
+
+    conds = np.unique(transitions_df.condition)
+
+    for cond in conds:
+        if metric==&#39;mean&#39;: 
+            current_group_matrix = transitions_df[transitions_df.condition==cond].iloc[:,2:].mean().values.reshape(N_clusters,N_clusters)
+        elif metric==&#39;median&#39;:
+            current_group_matrix = transitions_df[transitions_df.condition==cond].iloc[:,2:].median().values.reshape(N_clusters,N_clusters)
+        mats[cond] = current_group_matrix
+
+        if plot:
+            #plotting
+            with plt.style.context(&#39;dark_background&#39; if darkstyle else &#39;default&#39;):
+                plt.figure(figsize=(5.5,4) if N_clusters&lt;10 else (8,6) if 10&lt;N_clusters&lt;15 else (10,8))
+                sns.heatmap(
+                    current_group_matrix,
+                    cmap=cmap,
+                    linecolor=&#39;black&#39; if not darkstyle else &#39;white&#39;,
+                    linewidths=1,
+                    annot=True,
+                    square=True,
+                    cbar_kws={&#34;shrink&#34;: .5,&#34;label&#34;:&#34;Transition\nprobability&#34;},
+                    vmin=0,
+                    vmax=1,
+                    center=0.5,
+                    fmt=&#39;.2f&#39;
+                    )
+                plt.xlabel(&#39;To&#39;,fontsize=15,fontweight=&#39;regular&#39;,labelpad=20)
+                plt.ylabel(&#39;From&#39;,fontsize=15,fontweight=&#39;regular&#39;,labelpad=20)
+                plt.yticks(np.arange(0.5,N_clusters+.5,1),[f&#39;State {i+1}&#39; for i in range(N_clusters)],fontweight=&#39;regular&#39;,rotation=&#39;horizontal&#39;)
+                if N_clusters&lt;=5:
+                    plt.xticks(np.arange(0.5,N_clusters+.5,1),[f&#39;State {i+1}&#39; for i in range(N_clusters)],fontweight=&#39;regular&#39;)
+                else:
+                    plt.xticks(np.arange(0.5,N_clusters+.5,1),[f&#39;State {i+1}&#39; for i in range(N_clusters)],fontweight=&#39;regular&#39;,rotation=30,horizontalalignment=&#34;right&#34;)
+                plt.title(cond,fontweight=&#39;regular&#39;,fontsize=18)
+                plt.tight_layout()
+                plt.show()
+
+    return mats</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.plot_patterns_k"><code class="name flex">
+<span>def <span class="ident">plot_patterns_k</span></span>(<span>dynamics_metric, type='violin', metric=None, add_points=False, colors=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create either a violinplot, barplot or boxplot showing
+the corresponding values of each phase-locking pattern
+of a particular k partition, provided in 'dynamics_metric'
+for each group/condition/session.</p>
+<h2 id="params">Params:</h2>
+<p>dynamics_metric : pd.DataFrame.<br>
+Contains the values of a dynamical system theory
+metric for each subject and PL pattern.
+1st column contains 'subject_id', 2nd column 'condition',
+and the rest of the columns the values for each pattern.</p>
+<p>type : str.
+Select the type of plot to create. Options are 'barplot',
+'violinplot' or 'boxplot'.</p>
+<p>metric : str. Optional.
+Select the metric whose values are in 'dynamics_metric'.
+Only used to insert y label.</p>
+<p>add_points : str.
+Whether to show each observation as a point
+above the created plot.
+Valid options are False, 'swarm', or 'strip'.</p>
+<p>color : list or None.
+Select the color to represent each group.
+If None, black and grey are used.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_patterns_k(dynamics_metric,type=&#39;violin&#39;,metric=None,add_points=False,colors=None):
+    &#34;&#34;&#34;
+    Create either a violinplot, barplot or boxplot showing
+    the corresponding values of each phase-locking pattern
+    of a particular k partition, provided in &#39;dynamics_metric&#39;
+    for each group/condition/session.
+
+    Params:
+    -------
+    dynamics_metric : pd.DataFrame.  
+        Contains the values of a dynamical system theory
+        metric for each subject and PL pattern. 
+        1st column contains &#39;subject_id&#39;, 2nd column &#39;condition&#39;,
+        and the rest of the columns the values for each pattern.
+
+    type : str.
+        Select the type of plot to create. Options are &#39;barplot&#39;,
+        &#39;violinplot&#39; or &#39;boxplot&#39;.
+
+    metric : str. Optional.
+        Select the metric whose values are in &#39;dynamics_metric&#39;.
+        Only used to insert y label.
+
+    add_points : str.
+        Whether to show each observation as a point
+        above the created plot.
+        Valid options are False, &#39;swarm&#39;, or &#39;strip&#39;.
+
+    color : list or None.
+        Select the color to represent each group.
+        If None, black and grey are used.
+    &#34;&#34;&#34;
+
+    options_type = [&#39;violin&#39;,&#39;boxplot&#39;,&#39;barplot&#39;]
+    options_addpoints = [&#39;strip&#39;,&#39;swarm&#39;,False]
+
+    n_groups = np.unique(dynamics_metric.condition).size
+
+    if type not in options_type:
+        raise ValueError(&#34;Valid type options are &#39;violin&#39;, &#39;boxplot&#39;, or &#39;barplot&#39;.&#34;)
+    elif type==&#39;violin&#39; and n_groups&gt;2:
+        raise ValueError(&#34;&#39;violin&#39; is not available when the number of groups/conditions &gt; 2&#34;)
+
+    if add_points not in options_addpoints:
+        raise ValueError(&#34;Valid options are &#39;strip&#39;, &#39;swarm&#39;, or False&#34;)
+
+    if colors is not None:
+        if n_groups != len(colors):
+            raise ValueError(&#34;The number of colors and the number of groups/condition must be the same.&#34;)
+
+    data = pd.melt(dynamics_metric,id_vars=[&#39;condition&#39;],value_vars=list(dynamics_metric.columns[2:]))
+    data[&#39;variable&#39;] = [str(i).replace(&#39;_&#39;,&#39; &#39;) for i in data.variable]
+    
+    n_patterns = np.unique(data.variable).size
+
+    plt.figure(figsize=(7,4))
+    if add_points==&#39;swarm&#39;:
+        sns.swarmplot(
+            data=data,
+            x=&#39;variable&#39;,
+            y=&#39;value&#39;,
+            hue = &#39;condition&#39;,
+            #jitter=True,
+            color=&#39;black&#39;,
+            edgecolor=None,
+            dodge = True,
+            size=1,
+            alpha=.6,
+            )
+
+    elif add_points==&#39;strip&#39;:
+        sns.stripplot(
+            data=data,
+            x=&#39;variable&#39;,
+            y=&#39;value&#39;,
+            hue = &#39;condition&#39;,
+            jitter=True,
+            color=&#39;black&#39;,
+            edgecolor=None,
+            dodge = True,
+            size=1,
+            alpha=.6
+            )
+        
+    plt.legend([],[], frameon=False)
+    
+    if type==&#39;boxplot&#39;:
+        sns.boxplot(
+            data=data,
+            x=&#39;variable&#39;,
+            y=&#39;value&#39;,
+            hue=&#39;condition&#39;,
+            palette=[&#39;black&#39;,&#39;grey&#39;] if colors is None else colors,
+            )
+
+    elif type==&#39;violin&#39;:
+        sns.violinplot(
+            data=data,
+            x=&#39;variable&#39;,
+            y=&#39;value&#39;,
+            hue=&#39;condition&#39;,
+            palette=[&#39;black&#39;,&#39;grey&#39;] if colors is None else colors,
+            scale=&#39;width&#39;,
+            inner=&#39;box&#39;,
+            linewidth=0.1,
+            split=True,
+            cut = 0,
+            dodge = False
+            )
+        
+    elif type==&#39;barplot&#39;:
+        sns.barplot(
+            data=data,
+            x=&#39;variable&#39;,
+            y=&#39;value&#39;,
+            hue=&#39;condition&#39;,
+            palette=[&#39;black&#39;,&#39;grey&#39;] if colors is None else colors
+            )
+
+    plt.xlabel(&#39;PL Pattern&#39;,fontsize=16,labelpad=15)
+    plt.ylabel(&#39;&#39; if metric is None else metric,fontsize=16,labelpad=15)
+    if n_patterns&gt;5:
+        plt.xticks(
+            range(n_patterns),
+            [f&#39;Pattern {i+1}&#39; for i in range(n_patterns)],
+            rotation=30,
+            horizontalalignment=&#34;right&#34;
+            )
+    else:
+        plt.xticks(range(n_patterns),[f&#39;Pattern {i+1}&#39; for i in range(n_patterns)])
+        
+    plt.tight_layout()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.transition_probabilities"><code class="name flex">
+<span>def <span class="ident">transition_probabilities</span></span>(<span>labels, k, norm=True, plot=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the transitions between patterns across time
+for a single subject. The number of states ('k')
+defines the matrix shape, ensuring that, if a given
+subject don't traverse a state of the detected states
+for the whole group, the matrix will be constructed
+correctly, respecting the original number of states.
+If a subject don't traverse a particular state,
+then the corresponding row will contain all zeros.</p>
+<h2 id="params">Params:</h2>
+<p>labels : ndarray array with shape (N_time_points,).
+Contains the KMeans predicted label
+for each time point.</p>
+<p>norm : bool.
+Whether to normalize the values of the
+transitions matrix.</p>
+<p>plot : bool.
+Whether to plot the transitions matrix.</p>
+<h2 id="returns">Returns:</h2>
+<p>transitions : ndarray with shape (N_states,N_states).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transition_probabilities(labels,k,norm=True,plot=False):
+    &#34;&#34;&#34;
+    Compute the transitions between patterns across time
+    for a single subject. The number of states (&#39;k&#39;)
+    defines the matrix shape, ensuring that, if a given
+    subject don&#39;t traverse a state of the detected states
+    for the whole group, the matrix will be constructed
+    correctly, respecting the original number of states.
+    If a subject don&#39;t traverse a particular state,
+    then the corresponding row will contain all zeros.
+    
+    Params:
+    ------
+    labels : ndarray with shape (N_time_points,). 
+        Contains the KMeans predicted label
+        for each time point.
+
+    norm : bool. 
+        Whether to normalize the values of the
+        transitions matrix.
+
+    plot : bool. 
+        Whether to plot the transitions matrix.
+    
+    Returns:
+    --------
+    transitions : ndarray with shape (N_states,N_states).
+    &#34;&#34;&#34;
+
+    N_states = k
+    transitions = np.zeros((N_states, N_states)) #create empty matrix 
+    N_volumes = labels.size 
+
+    #compute the transitions
+    for volume_idx in range(N_volumes-1):
+        _from = labels[volume_idx]
+        _to = _from + labels[volume_idx+1] - labels[volume_idx]
+        transitions[_from,_to]+=1
+
+    if norm:
+        np.seterr(invalid=&#39;ignore&#39;) # hide potential warning when dividing 0/0 = NaN
+        transitions = np.divide(
+            transitions.astype(np.float_),
+            np.sum(transitions,axis=1).reshape(transitions.shape[1],1)
+            ) #normalize the values to probabilities
+
+    #replace nan (if any) with 0. Can happen when a subject
+    # doesn&#39;t traverse a state at all.
+    transitions = np.nan_to_num(transitions,copy=True)
+        
+    if plot:
+        plt.figure()
+        sns.heatmap(
+            transitions,
+            annot=True,
+            cmap=&#39;viridis&#39;, 
+            square=True,
+            linecolor=&#39;black&#39;,
+            linewidths=0.5,
+            xticklabels=[f&#39;State {i+1}&#39; for i in range(N_states)],
+            yticklabels=[f&#39;State {i+1}&#39; for i in range(N_states)],
+            cbar_kws={&#34;shrink&#34;: 0.5}
+            )
+        plt.yticks(rotation=&#39;horizontal&#39;)
+        plt.xlabel(&#39;To&#39;,fontsize=15,fontweight=&#39;regular&#39;)
+        plt.ylabel(&#39;From&#39;,fontsize=15,fontweight=&#39;regular&#39;)
+        plt.tight_layout()
+
+    return transitions</code></pre>
+</details>
+</dd>
+<dt id="pyleida.dynamics_metrics.transition_probabilities_group"><code class="name flex">
+<span>def <span class="ident">transition_probabilities_group</span></span>(<span>metadata, labels, save_results=False, path=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the transition probabilities between
+phase-locking states for each subject in 'metadata'.</p>
+<h2 id="params">Params:</h2>
+<p>metadata : pd.dataframe (N_subjects x N_time_points, 2).
+Contains the metadata. 1st column contains
+the subjects ids, and 2nd column contains
+the class/conditions/sessions labels.</p>
+<p>labels : ndarray with shape (N_samples,). 
+Contains the clusters labels of each time
+point for each subject and condition contained
+in 'metadata'.</p>
+<p>save_results: bool.
+Whether to save the computed transition
+probabilities in a .csv file.</p>
+<p>path : str.
+Only provided if save_results=True. Define
+the path in which we want to save the results.</p>
+<h2 id="returns">Returns:</h2>
+<p>results: pd.dataframe.
+Contains 'subject_id' in 1st col, 'condition' in 2nd col,
+and a column for each transition [e.g. From_1_to_2,From_1_to_3 &hellip;]</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transition_probabilities_group(metadata,labels,save_results=False,path=None):
+    &#34;&#34;&#34;
+    Compute the transition probabilities between
+    phase-locking states for each subject in &#39;metadata&#39;.
+
+    Params:
+    -------
+    metadata : pd.dataframe (N_subjects x N_time_points, 2).
+        Contains the metadata. 1st column contains
+        the subjects ids, and 2nd column contains
+        the class/conditions/sessions labels.
+
+    labels : ndarray with shape (N_samples,). 
+        Contains the clusters labels of each time
+        point for each subject and condition contained
+        in &#39;metadata&#39;.
+
+    save_results: bool. 
+        Whether to save the computed transition
+        probabilities in a .csv file.
+
+    path : str. 
+        Only provided if save_results=True. Define
+        the path in which we want to save the results.
+
+    Returns:
+    --------
+    results: pd.dataframe. 
+        Contains &#39;subject_id&#39; in 1st col, &#39;condition&#39; in 2nd col,
+        and a column for each transition [e.g. From_1_to_2,From_1_to_3 ...]
+    &#34;&#34;&#34;
+    assert metadata.shape[0] == labels.shape[0], \
+        &#34;The number of rows in &#39;metadata&#39; must be the same as in &#39;labels&#39;&#34;
+    if save_results and path is None: 
+        raise Exception(&#39;You must provide a path to save the results&#39;)
+
+    results = []
+    subjects_list,cond_list = [],[]
+    N_clusters = len(np.unique(labels))
+    for cond in np.unique(metadata.condition):
+        subs_ids = metadata[metadata.condition==cond].subject_id.values #get an array with the subjects ids that belongs to a given condition.
+        for subject in np.unique(subs_ids):
+            idx = np.logical_and(metadata.subject_id==subject,metadata.condition==cond)
+            tr = transition_probabilities(labels[idx],k=N_clusters,norm=True,plot=False)
+            results.append(np.ravel(tr)) #vectorize the transitions matrix.
+            subjects_list.append(subject)
+            cond_list.append(cond)
+
+    results = pd.DataFrame(np.vstack(results))
+    columns_names = []
+    for i in range(N_clusters):
+        for j in range(N_clusters):
+            columns_names.append(f&#39;From_{i+1}_to_{j+1}&#39;)
+    
+    results.columns = columns_names
+    results.insert(0,&#39;subject_id&#39;,subjects_list)
+    results.insert(1,&#39;condition&#39;,cond_list)
+
+    if save_results: 
+        try:
+            results.to_csv(f&#39;{path}/transitions_probabilities.csv&#39;,sep=&#39;\t&#39;,index=False)
+        except:
+            print(&#34;The results could&#39;t be saved in .csv file. Please check the provided path.&#34;)
+
+    return results</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyleida" href="../index.html">pyleida</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pyleida.dynamics_metrics.compute_dynamics_metrics" href="#pyleida.dynamics_metrics.compute_dynamics_metrics">compute_dynamics_metrics</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.dwell_times" href="#pyleida.dynamics_metrics.dwell_times">dwell_times</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.dwell_times_group" href="#pyleida.dynamics_metrics.dwell_times_group">dwell_times_group</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.fractional_occupancy" href="#pyleida.dynamics_metrics.fractional_occupancy">fractional_occupancy</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.fractional_occupancy_group" href="#pyleida.dynamics_metrics.fractional_occupancy_group">fractional_occupancy_group</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.group_transition_matrix" href="#pyleida.dynamics_metrics.group_transition_matrix">group_transition_matrix</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.plot_patterns_k" href="#pyleida.dynamics_metrics.plot_patterns_k">plot_patterns_k</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.transition_probabilities" href="#pyleida.dynamics_metrics.transition_probabilities">transition_probabilities</a></code></li>
+<li><code><a title="pyleida.dynamics_metrics.transition_probabilities_group" href="#pyleida.dynamics_metrics.transition_probabilities_group">transition_probabilities_group</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

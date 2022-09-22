@@ -1,0 +1,1826 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>pyleida.plotting API documentation</title>
+<meta name="description" content="The module &#39;pyleida.plotting&#39; provides functions to generate
+plots and visual representations." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyleida.plotting</code></h1>
+</header>
+<section id="section-intro">
+<p>The module 'pyleida.plotting' provides functions to generate
+plots and visual representations.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;The module &#39;pyleida.plotting&#39; provides functions to generate
+plots and visual representations.&#34;&#34;&#34;
+
+from ._plotting import (
+    brain_states_network,
+    brain_states_nodes,
+    brain_states_on_surf,
+    brain_states_on_surf2,
+    states_k_glass,
+    brain_dynamics_gif,
+    matrices_gif, 
+    plot_static_fc_matrices,
+    states_in_bold,
+    states_in_bold_gif,
+    plot_pyramid,
+    _explore_state,
+    _save_html
+)
+
+__all__ = [
+    &#34;brain_states_network&#34;,
+    &#34;brain_states_nodes&#34;,
+    &#34;brain_states_on_surf&#34;,
+    &#34;brain_states_on_surf2&#34;,
+    &#34;states_k_glass&#34;,
+    &#34;brain_dynamics_gif&#34;,
+    &#34;matrices_gif&#34;,
+    &#34;plot_static_fc_matrices&#34;,
+    &#34;states_in_bold&#34;,
+    &#34;states_in_bold_gif&#34;,
+    &#34;plot_pyramid&#34;,
+    &#34;_explore_state&#34;,
+    &#34;_save_html&#34;
+]</code></pre>
+</details>
+</section>
+
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyleida.plotting._explore_state"><code class="name flex">
+<span>def <span class="ident">_explore_state</span></span>(<span>centroid, rois_labels, occupancy, dwell_times, coords, state_number=None, darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a figure showing a phase-locking state of
+interest in different formats:
+a barplot, a network representation in brain space,
+a matrix representation, and two boxplots with the
+occupancies and dwell times for each group/condition.</p>
+<h2 id="params">Params:</h2>
+<p>centroid : ndarray with shape (N_rois,).
+Vector representing a specific PL state.</p>
+<p>rois_labels : list.
+Contains the ROIs/parcels labels.</p>
+<p>occupancy, dwell_times : pd.DataFrame (2 columns).
+First column must be called condition, and
+the values must specify the group/condition
+of each observation. Second column (with any name)
+must contain the occupancy/dwell time of each subject
+for the PL state of interest.</p>
+<p>coords : ndarray with shape (N_rois, 3).
+Coordinates (in MNI space) of each ROI/parcel.</p>
+<p>state_number : int. Optional.
+Specify the number of the PL state of interest.</p>
+<p>darkstyle : bool.<br>
+Whether to use a dark background for the plot.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _explore_state(centroid,rois_labels,occupancy,dwell_times,coords,state_number=None,darkstyle=False):
+    &#34;&#34;&#34;
+    Create a figure showing a phase-locking state of
+    interest in different formats:
+    a barplot, a network representation in brain space,
+    a matrix representation, and two boxplots with the
+    occupancies and dwell times for each group/condition.
+
+    Params:
+    -------
+    centroid : ndarray with shape (N_rois,).
+        Vector representing a specific PL state.
+
+    rois_labels : list.
+        Contains the ROIs/parcels labels.
+
+    occupancy, dwell_times : pd.DataFrame (2 columns).
+        First column must be called condition, and
+        the values must specify the group/condition
+        of each observation. Second column (with any name)
+        must contain the occupancy/dwell time of each subject
+        for the PL state of interest.
+
+    coords : ndarray with shape (N_rois, 3).
+        Coordinates (in MNI space) of each ROI/parcel.
+
+    state_number : int. Optional.
+        Specify the number of the PL state of interest.
+
+    darkstyle : bool.  
+        Whether to use a dark background for the plot.
+    &#34;&#34;&#34;
+    #validation of input data
+    if not isinstance(centroid,np.ndarray):
+        raise TypeError(&#34;&#39;centroid&#39; must be a ndarray with shape (N_rois,)!&#34;)
+    if not centroid.size==len(rois_labels)==coords.shape[0]:
+        raise ValueError(&#34;The number of regions in &#39;centroid&#39;,&#39;rois_labels&#39;, and &#39;coords&#39; must be the same!&#34;)
+    for metric in [occupancy,dwell_times]:
+        if metric.columns[0]!=&#39;condition&#39;:
+            raise Exception(&#34;The 1st column in &#39;occupancy&#39; and &#39;dwell_times&#39; must be called &#39;condition&#39;.&#34;)
+
+    ax_positions = [[&#39;left&#39;,&#39;upper center&#39;, &#39;upper right&#39;],
+                    [&#39;left&#39;,&#39;lower center&#39;, &#39;lower right&#39;]]
+
+    plt.ion()
+
+    _, axd = plt.subplot_mosaic(
+        ax_positions,
+        figsize=(8, 8), 
+        constrained_layout=False
+        )
+
+    #title of complete figure
+    _.suptitle(
+        &#39;PL state&#39; if state_number is None 
+        else f&#39;PL state {state_number}&#39;,
+        fontsize=15,
+        fontweight=&#39;bold&#39;
+        )
+
+    #creating barplot with centroid values.
+    centroid_ = pd.DataFrame(
+        {&#39;roi&#39;:rois_labels,
+        &#39;value&#39;:centroid}
+        ).sort_values(&#39;value&#39;,ascending=False).reset_index()
+
+    sns.barplot(
+        x=centroid_.value,
+        y=centroid_.roi,
+        palette=[&#39;firebrick&#39; if i&gt;0 else &#39;royalblue&#39; for i in centroid_.value],
+        ax=axd[&#39;left&#39;]
+        )
+
+    if np.max(np.abs(centroid_.value))&gt;0.15:
+        axd[&#39;left&#39;].set_xlim(-1.05,1.05)
+    else:
+        axd[&#39;left&#39;].set_xlim(-0.11,0.11)
+
+    axd[&#39;left&#39;].set_title(&#39;fMRI phase\nprojection &#39;+r&#39;into $V_{c}$&#39;,fontsize=10)
+    axd[&#39;left&#39;].set_xlabel(&#39; &#39;)
+    axd[&#39;left&#39;].set_ylabel(&#39;Brain regions&#39;,fontsize=16,labelpad=20)
+    axd[&#39;left&#39;].tick_params(labelsize=5,axis=&#39;y&#39;)
+    axd[&#39;left&#39;].axvline(0,color=&#39;black&#39; if not darkstyle else &#39;white&#39;)
+
+    #creating brainplot
+    network = centroid2network(centroid)
+    edges_lw = {&#39;linewidth&#39;:1,&#39;color&#39;:&#39;firebrick&#39;}
+
+    #nodes that don&#39;t belong to the
+    #PL state are not shown
+    if np.where(centroid&gt;0)[0].size==0:
+        sizes = 20
+    else:
+        sizes = [20 if roi&gt;0 else 0 for roi in centroid]
+
+    plot_connectome(
+        network, 
+        coords, 
+        node_color=&#39;blue&#39;,
+        node_size=sizes, 
+        #edge_cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;, 
+        edge_vmin=None, 
+        edge_vmax=None, 
+        edge_threshold=None, 
+        output_file=None, 
+        display_mode=&#39;z&#39;, 
+        figure=_, 
+        axes=axd[&#39;upper center&#39;], 
+        annotate=True, 
+        black_bg=True if darkstyle else False, 
+        alpha=0.1, 
+        edge_kwargs=edges_lw, 
+        node_kwargs=None, 
+        colorbar=False
+        )
+
+    #axd[&#39;upper center&#39;].set_title(f&#39;PL state&#39;)
+
+        #creating centroid in matrix format
+
+    #scale centroid by its maximum value and transpose the matrix
+    centroid_scaled = centroid/np.max(np.abs(centroid))
+    matrix = np.outer(centroid_scaled,centroid_scaled.T)
+    sns.heatmap(
+        matrix,
+        vmin=-1,
+        vmax=1,
+        center=0,
+        square=True,
+        cmap=&#39;jet&#39;,
+        ax=axd[&#39;upper right&#39;],
+        cbar=False
+        #cbar_kws={&#39;shrink&#39;:0.25}
+        )
+
+    axd[&#39;upper right&#39;].set_title(
+        r&#39;$V_{c}$ * $V^{T}_{c}$&#39;
+        )
+
+    axd[&#39;upper right&#39;].set_xticks(
+        np.arange(20,matrix.shape[0],20),
+        np.arange(20,matrix.shape[0],20).tolist(),
+        rotation=0
+        )
+    axd[&#39;upper right&#39;].set_yticks(
+        np.arange(20,matrix.shape[0],20),
+        np.arange(20,matrix.shape[0],20).tolist()
+        )
+
+    axd[&#39;upper right&#39;].tick_params(
+        axis=&#39;both&#39;,
+        which=&#39;both&#39;,
+        bottom=False,
+        left=False,
+        top=False,
+        labelsize=7,
+        labelbottom=True,
+        labelleft=True
+        )
+
+    axd[&#39;upper right&#39;].set_ylabel(&#39;Brain region&#39;,fontsize=10)
+    axd[&#39;upper right&#39;].set_xlabel(&#39;Brain region&#39;,fontsize=10)
+
+    #creating boxplot with occupancies
+    occupancy.columns = [&#39;condition&#39;,&#39;value&#39;]
+
+    str_length = [len(cond) for cond in np.unique(occupancy.condition)]
+    N_conds = np.unique(occupancy.condition).size
+
+    sns.boxplot(
+        x=occupancy.condition,
+        y=occupancy.value,
+        ax=axd[&#39;lower center&#39;],
+        color=&#39;black&#39; if not darkstyle else &#39;white&#39;,
+        width=.4,
+        fliersize=.4,
+        #linewidth=.8,
+        #boxprops = dict(linewidth=3,color=&#39;black&#39;),
+        medianprops = dict(linewidth=1.5, color=&#39;black&#39; if darkstyle else &#39;white&#39;)
+        )
+    axd[&#39;lower center&#39;].set_ylabel(&#39;Occupancy&#39;,fontsize=15)
+    axd[&#39;lower center&#39;].set_xlabel(&#39;&#39;)
+    axd[&#39;lower center&#39;].tick_params(
+        labelsize=10,
+        axis=&#39;x&#39;,
+        labelrotation=0 if (N_conds&lt;=2 and np.max(str_length)&lt;5) else 45
+        )
+    sns.despine(ax=axd[&#39;lower center&#39;])
+
+    #creating boxplot with dwell times
+    dwell_times.columns = [&#39;condition&#39;,&#39;value&#39;]
+    N_conds = np.unique(dwell_times.condition).size
+    sns.boxplot(
+        x=dwell_times.condition,
+        y=dwell_times.value,
+        ax=axd[&#39;lower right&#39;],
+        color=&#39;black&#39; if not darkstyle else &#39;white&#39;,
+        width=.4,
+        fliersize=.4,
+        #linewidth=.8,
+        #boxprops = dict(linewidth=3, color=&#39;black&#39;),
+        medianprops = dict(linewidth=1.5, color=&#39;black&#39; if darkstyle else &#39;white&#39;)
+        )
+    axd[&#39;lower right&#39;].set_ylabel(&#39;Dwell time&#39;,fontsize=15)
+    axd[&#39;lower right&#39;].set_xlabel(&#39;&#39;)
+    axd[&#39;lower right&#39;].tick_params(
+        labelsize=10,
+        axis=&#39;x&#39;,
+        labelrotation=0 if (N_conds&lt;=2 and np.max(str_length)&lt;5) else 45
+        )
+    sns.despine(ax=axd[&#39;lower right&#39;])
+
+    plt.tight_layout(w_pad=0.7,h_pad=10)
+    plt.show()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting._save_html"><code class="name flex">
+<span>def <span class="ident">_save_html</span></span>(<span>path, plot, k, state=None, plot_type=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save brain plot/s as .html files.</p>
+<h2 id="params">Params:</h2>
+<p>path : str.
+Specify the folder in which
+the 'brain_plots' folder will
+be created.</p>
+<p>plot : dict or single plot.</p>
+<p>k : int.
+Specify the k-means partition.</p>
+<p>state : int.
+Specify a specific PL state number,
+if single plot is provided.</p>
+<p>plot_type : str.
+Type of plot (to use for the name of
+the saved files).
+E.g.: 'network', 'nodes', 'surface'.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _save_html(path,plot,k,state=None,plot_type=None):
+    &#34;&#34;&#34;
+    Save brain plot/s as .html files.
+
+    Params:
+    --------
+    path : str.
+        Specify the folder in which
+        the &#39;brain_plots&#39; folder will
+        be created.
+
+    plot : dict or single plot.
+
+    k : int.
+        Specify the k-means partition.
+
+    state : int.
+        Specify a specific PL state number,
+        if single plot is provided.
+
+    plot_type : str.
+        Type of plot (to use for the name of
+        the saved files).
+        E.g.: &#39;network&#39;, &#39;nodes&#39;, &#39;surface&#39;.
+    &#34;&#34;&#34;
+    try: 
+        path = f&#39;{path}/brain_plots&#39;
+        if not os.path.exists(path): 
+            os.makedirs(path)
+        if isinstance(plot,dict):           
+            for fig in plot.keys():
+                filename = f&#34;{path}/K{k}_{fig}_{plot_type}.html&#34;
+                plot[fig].save_as_html(filename)
+                print(f&#34;The plot was saved at: {filename}&#34;)
+        else:
+            filename = f&#34;{path}/K{k}_PL_state_{state}_{plot_type}.html&#34;
+            plot.save_as_html(filename)
+            print(f&#34;The plot was saved at: {filename}&#34;)
+    except:
+        print(&#34;The figures could&#39;t be saved on local folder.&#34;)</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.brain_dynamics_gif"><code class="name flex">
+<span>def <span class="ident">brain_dynamics_gif</span></span>(<span>states_labels, centroids, coords, filename='dfc', darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a .gif file showing an animated network
+representation of the
+detected phase-locking
+pattern of each volume for a given subject.</p>
+<h2 id="params">Params:</h2>
+<p>states_labels : ndarray of shape (N_volumes).
+Contain the predicted labels for each
+PL state following a specific K partition.</p>
+<p>centroids : ndarray of shape (N_centroids,N_ROIs).
+Contain the centroids for a given k
+partition.</p>
+<p>coords : ndarray of shape (N_ROIs,X-Y-Z).
+Contain the nodes coordinates of each
+ROI in MNI space.</p>
+<p>filename : str.
+Select the name of the created gif
+file.</p>
+<p>darkstyle : bool.
+Whether to create the plot using a
+dark theme.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def brain_dynamics_gif(states_labels,centroids,coords,filename=&#39;dfc&#39;,darkstyle=False):
+    &#34;&#34;&#34;
+    Create a .gif file showing an animated network
+    representation of the  detected phase-locking
+    pattern of each volume for a given subject.
+
+    Params:
+    -------
+    states_labels : ndarray of shape (N_volumes). 
+        Contain the predicted labels for each
+        PL state following a specific K partition.
+
+    centroids : ndarray of shape (N_centroids,N_ROIs).
+        Contain the centroids for a given k
+        partition.
+
+    coords : ndarray of shape (N_ROIs,X-Y-Z).
+        Contain the nodes coordinates of each
+        ROI in MNI space.
+
+    filename : str.
+        Select the name of the created gif
+        file.
+
+    darkstyle : bool.
+        Whether to create the plot using a
+        dark theme.
+    &#34;&#34;&#34;
+    #validate inputs
+    if not isinstance(centroids,np.ndarray):
+        raise TypeError(&#34;&#39;centroids&#39; must be a 2D array (N_centroids,N_ROIs)&#34;)
+    if not isinstance(coords,np.ndarray):
+        raise TypeError(&#34;&#39;coords&#39; must be a 2D array (N_ROIs,3)&#34;)
+    if not isinstance(filename,str):
+        raise TypeError(&#34;&#39;filename&#39; must be a string!&#34;)
+    if not isinstance(darkstyle,bool):
+        raise TypeError(&#34;&#39;darkstyle&#39; must be True or False!&#34;)
+    if centroids.shape[1] != coords.shape[0]:
+        raise Exception(&#34;The number of brain regions in &#39;centroids&#39; &#34;
+                        &#34;and &#39;coords&#39; must be the same!&#34;)
+
+    #plotting
+    N_centroids,N_rois = centroids.shape
+    networks = np.zeros((N_rois,N_rois,N_centroids))
+    for centroid_idx in range(N_centroids): #for each centroid/state in current k
+        centroid = centroids[centroid_idx,:]
+        networks[:,:,centroid_idx] = centroid2network(centroid)
+
+    filenames = [] #create empty list to save the name of the created plot for each matrix
+    plt.ioff()
+    with plt.style.context(&#34;dark_background&#34; if darkstyle else &#34;default&#34;):
+        for volume,state in enumerate(states_labels): #create plot of each volume.
+            edges_lw = {&#39;linewidth&#39;:.8,&#39;color&#39;:&#39;firebrick&#39;}
+            #plt.figure()
+            fig,ax = plt.subplots(ncols=1,nrows=1)
+
+            plot_connectome(
+                networks[:,:,state], 
+                coords, 
+                node_color=&#39;blue&#39; if not np.any(networks[:,:,state]) else &#39;black&#39; if not darkstyle else &#39;white&#39;, 
+                node_size=20, 
+                #edge_cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;, 
+                edge_vmin=None, 
+                edge_vmax=None, 
+                edge_threshold=None, 
+                output_file=None, 
+                display_mode=&#39;yz&#39;, 
+                figure=fig, 
+                axes=ax, 
+                #title=f&#39;Volume: {volume+1} - FC pattern {state+1}&#39;, 
+                annotate=True, 
+                black_bg=True if darkstyle else False, 
+                alpha=0.3, 
+                edge_kwargs=edges_lw, 
+                node_kwargs=None, 
+                colorbar=False
+                )
+
+            ax.set_title(f&#39;Volume: {volume+1} - PL pattern {state+1}&#39;)
+            filename_ = f&#39;file{volume}.png&#39; #define name to transiently save the figure
+            filenames.append(filename_) #append the name of the current plot into the list that contains all the names
+            plt.savefig(filename_) #save the plot as .png file
+            plt.close()
+    
+    #Create the gif from the previously created plots
+    with imageio.get_writer(f&#39;{filename}.gif&#39;,mode=&#39;I&#39;) as writer:
+        for filename_ in filenames:
+            image = imageio.imread(filename_)
+            writer.append_data(image)
+    
+    #Eliminate the created single plots.
+    for filename_ in set(filenames):
+        os.remove(filename_)</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.brain_states_network"><code class="name flex">
+<span>def <span class="ident">brain_states_network</span></span>(<span>centroids, nodes_coords, state='all', node_size=15, node_color='black', linewidth=5, open=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Plot each provided cluster centroid (phase-locking state)
+as a connected network in a html file. Each ROI with a
+positive value is connected by an edge with all the other
+ROIs that have also positive values.
+Note: the order of brain regions in 'centroids' must
+coincide with the order of brain regions in 'nodes_coords'. </p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (N_centroids, N_rois) or (N_rois,).
+PL state/s to plot.</p>
+<p>nodes_coords : ndarray with shape (N_rois, 3).
+Contains the coordinates (X, Y, Z) of each
+node of our parcellation in MNI space.</p>
+<p>state : 'all' or int.
+Select whether to plot 'all' the provided
+centroids or only a centroid of interest.</p>
+<p>node_size : int.
+Select the size of the nodes.</p>
+<p>node_color : str.
+Select the color of the nodes. If 'infer',
+then the nodes participating in the brain
+states are colored red and the rest blue.</p>
+<p>linewidth : int.
+Select the size of the edges connecting
+the nodes.</p>
+<p>open : bool.
+Whether to open the plots in web browser.</p>
+<h2 id="returns">Returns:</h2>
+<p>plots : dict or single object.
+A dictionary that contains each created plot,
+or a single plot. To open a particular plot,
+use 'plots[x].open_in_browser()' and 'plots[x].save_as_html(args)'
+to save it.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def brain_states_network(centroids,nodes_coords,state=&#39;all&#39;,node_size=15,node_color=&#39;black&#39;,linewidth=5,open=True):
+    &#34;&#34;&#34;
+    Plot each provided cluster centroid (phase-locking state)
+    as a connected network in a html file. Each ROI with a
+    positive value is connected by an edge with all the other
+    ROIs that have also positive values.
+    Note: the order of brain regions in &#39;centroids&#39; must
+    coincide with the order of brain regions in &#39;nodes_coords&#39;. 
+
+    Params:
+    -------
+    centroids : ndarray with shape (N_centroids, N_rois) or (N_rois,).
+        PL state/s to plot.
+
+    nodes_coords : ndarray with shape (N_rois, 3). 
+        Contains the coordinates (X, Y, Z) of each
+        node of our parcellation in MNI space.
+
+    state : &#39;all&#39; or int.
+        Select whether to plot &#39;all&#39; the provided
+        centroids or only a centroid of interest.
+
+    node_size : int. 
+        Select the size of the nodes.
+
+    node_color : str. 
+        Select the color of the nodes. If &#39;infer&#39;,
+        then the nodes participating in the brain
+        states are colored red and the rest blue.
+
+    linewidth : int. 
+        Select the size of the edges connecting
+        the nodes.
+
+    open : bool. 
+        Whether to open the plots in web browser.
+
+    Returns:
+    --------
+    plots : dict or single object. 
+        A dictionary that contains each created plot,
+        or a single plot. To open a particular plot, 
+        use &#39;plots[x].open_in_browser()&#39; and &#39;plots[x].save_as_html(args)&#39;
+        to save it.
+    &#34;&#34;&#34;
+    #validation of input data
+    if state!=&#39;all&#39; and not isinstance(state,int):
+        raise TypeError(&#34;&#39;state&#39; must be either &#39;all&#39; or an integer specifying &#34;
+                        &#34;the number of a particular PL state&#34;)
+    
+    if isinstance(state,int):
+        centroids = centroids[state-1,:] #keep only the selected state vector
+
+    N_centroids = centroids.shape[0] if centroids.ndim&gt;1 else 1 #defining N of centroids
+    N_rois = centroids.size if N_centroids==1 else centroids.shape[1] #defining N of ROIs.
+
+    if N_rois != nodes_coords.shape[0]:
+        raise Exception(&#34;The number of regions in &#39;centroids&#39; and &#39;nodes_coords&#39; must coincide.&#34;)
+
+    if N_centroids&gt;1:
+        plots = {} #dictionary to save generated plots
+
+    #creating connectiviy matrix of each centroid
+    for centroid_idx in range(N_centroids):
+        if N_centroids&gt;1:
+            centroid = centroids[centroid_idx,:]
+        else:
+            centroid = centroids.copy()
+
+        network = centroid2network(centroid)
+
+        #plotting
+        g = view_connectome(
+                network,
+                nodes_coords,
+                node_size=node_size,
+                node_color=[&#39;mediumblue&#39; if roi&lt;0 else &#39;firebrick&#39; for roi in centroid] if node_color==&#39;infer&#39; else &#39;black&#39;,
+                linewidth=linewidth,
+                colorbar=False,
+                title=f&#39;PL state {centroid_idx+1}&#39; if state==&#39;all&#39; else f&#39;PL state {state}&#39;
+                )
+        
+        #saving plot of current centroid in dictionary
+        if N_centroids&gt;1:
+            plots[f&#39;PL_state{centroid_idx+1}&#39;] = g
+        
+        if open:
+            g.open_in_browser()
+
+    return plots if N_centroids&gt;1 else g</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.brain_states_nodes"><code class="name flex">
+<span>def <span class="ident">brain_states_nodes</span></span>(<span>centroids, nodes_coords, state='all', node_size=5, nodes_labels=None, open=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a 3D interactive figure embedded in a
+.html file showing the BOLD phase-locking (PL)
+states in anatomical MNI space. Each parcel/ROI
+is represented as a node. Nodes that are part of
+the PL pattern are coloured in red, and the rest
+of nodes are coloured in blue.</p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (N_centroids, N_rois) or (N_rois,).
+PL state/s to plot. </p>
+<p>nodes_coords : ndarray of shape (N_rois,3).
+Contains the coordinate (X,Y,Z) of each brain
+region in MNI space. The order must be the same
+as in 'centroids' columns.</p>
+<p>state : str | int.
+If 'all', then a figure of each centroid in
+'centroids' will be created. If 'int', then
+only the selected centroid will be plotted.
+If a single centroid is provided in 'centroids',
+then specify the PL state 'number' to define the
+plot title.</p>
+<p>node_size : int or float.
+Define the size of the nodes. Nodes that don't
+belong to the pattern are plotted smaller.</p>
+<p>nodes_labels : list (optional).
+Contains the name of each ROI. Must be in the
+same order as in 'nodes_coords'. Default is
+None, which doesn't show any node label.</p>
+<p>open : bool.
+Whether to open the plots in web browser.</p>
+<h2 id="returns">Returns:</h2>
+<p>plot/s : dict or single plot.
+A dictionary that contains each created plot,
+or a single plot. To open a particular plot,
+use 'plots['PL_state_{x}'].open_in_browser()'
+and
+'plots['PL_state_{x}'].save_as_html(args)'
+to save it.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def brain_states_nodes(centroids,nodes_coords,state=&#39;all&#39;,node_size=5,nodes_labels=None,open=True):
+    &#34;&#34;&#34;
+    Create a 3D interactive figure embedded in a
+    .html file showing the BOLD phase-locking (PL)
+    states in anatomical MNI space. Each parcel/ROI
+    is represented as a node. Nodes that are part of
+    the PL pattern are coloured in red, and the rest
+    of nodes are coloured in blue.
+
+    Params:
+    -------
+    centroids : ndarray with shape (N_centroids, N_rois) or (N_rois,).
+        PL state/s to plot. 
+
+    nodes_coords : ndarray of shape (N_rois,3).
+        Contains the coordinate (X,Y,Z) of each brain
+        region in MNI space. The order must be the same
+        as in &#39;centroids&#39; columns.
+
+    state : str | int.
+        If &#39;all&#39;, then a figure of each centroid in
+        &#39;centroids&#39; will be created. If &#39;int&#39;, then
+        only the selected centroid will be plotted.
+        If a single centroid is provided in &#39;centroids&#39;,
+        then specify the PL state &#39;number&#39; to define the
+        plot title.
+
+    node_size : int or float.
+        Define the size of the nodes. Nodes that don&#39;t
+        belong to the pattern are plotted smaller.
+
+    nodes_labels : list (optional).
+        Contains the name of each ROI. Must be in the
+        same order as in &#39;nodes_coords&#39;. Default is
+        None, which doesn&#39;t show any node label.
+
+    open : bool. 
+        Whether to open the plots in web browser.
+
+    Returns:
+    --------
+    plot/s : dict or single plot. 
+        A dictionary that contains each created plot,
+        or a single plot. To open a particular plot,
+        use &#39;plots[&#39;PL_state_{x}&#39;].open_in_browser()&#39;
+        and  &#39;plots[&#39;PL_state_{x}&#39;].save_as_html(args)&#39;
+        to save it.
+    &#34;&#34;&#34;
+
+    #validation of input data
+    if state!=&#39;all&#39; and not isinstance(state,int):
+        raise TypeError(&#34;&#39;state&#39; must be either &#39;all&#39; or an integer specifying &#34;
+                        &#34;the number of a particular PL state&#34;)
+    
+    if isinstance(state,int):
+        centroids = centroids[state-1,:] #keep only the selected state vector
+
+    N_centroids = centroids.shape[0] if centroids.ndim&gt;1 else 1 #defining N of centroids
+    N_rois = centroids.size if N_centroids==1 else centroids.shape[1] #defining N of ROIs.
+
+    if N_rois != nodes_coords.shape[0]:
+        raise Exception(&#34;The number of regions in &#39;centroids&#39; and &#39;nodes_coords&#39; must coincide.&#34;)
+
+    if N_centroids&gt;1:
+        plots = {} #dictionary to save generated plots
+
+    #plotting
+    for centroid_idx in range(N_centroids):
+        if N_centroids&gt;1:
+            centroid = centroids[centroid_idx,:]
+        else:
+            centroid = centroids.copy()
+
+        #generating list of colors. Positive values get red, negative values get blue
+        cols = [&#39;mediumblue&#39; if roi&lt;0 else &#39;firebrick&#39; for roi in centroid]
+        #define node sizes
+        sizes = [node_size if roi&lt;0 else node_size*2 for roi in centroid]
+        g = view_markers(
+            nodes_coords,
+            marker_size=sizes,
+            marker_labels=nodes_labels if nodes_labels is None else [nodes_labels[roi_idx] if val&gt;0 else &#39;&#39; for roi_idx,val in zip(range(centroid.size),centroid)],
+            title=f&#39;PL state {centroid_idx+1}&#39; if state==&#39;all&#39; else f&#39;PL state {state}&#39;,
+            marker_color=cols
+            ) #create plot object.
+        
+        #saving plot of current centroid in dictionary
+        if N_centroids&gt;1:
+            plots[f&#39;PL_state{centroid_idx+1}&#39;] = g
+        
+        if open:
+            g.open_in_browser()
+
+    return plots if N_centroids&gt;1 else g</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.brain_states_on_surf"><code class="name flex">
+<span>def <span class="ident">brain_states_on_surf</span></span>(<span>centroids, parcellation=None, discretize=True, cmap='auto', black_bg=False, open=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a 3D interactive figure embedded in a
+.html file showing the BOLD phase-locking (PL)
+states on cortical surface. By default, all the
+cortical regions that belong to a given PL state
+or pattern are coloured in red(s), while the rest
+of cortical regions are coloured in blue(s). You
+can change the colormap throught the 'cmap' argument.</p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (N_centroids, N_rois) or (N_rois,).
+PL state/s to plot. </p>
+<p>parcellation : str.
+Path to the parcellation file (.nii or .nii.gz).</p>
+<p>discretize : bool. Default = True.
+Whether to plot the raw values of the phase-locking
+state/centroid, or plot the brain regions than belong
+to the phase-locking state with the same intensity.</p>
+<p>cmap : str or matplotlib colormap, optional. Default = 'auto'.
+Colormap to use in the brain plot.
+If 'auto', then the brain regions that
+belong to the phase-locking state will
+be coloured in red, and the rest of regions
+in blue.</p>
+<p>black_bg : bool.
+Whether to use a black background.</p>
+<p>open : bool.
+Whether to open the plots in browser.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def brain_states_on_surf(centroids,parcellation=None,discretize=True,cmap=&#39;auto&#39;,black_bg=False,open=True):
+    &#34;&#34;&#34;
+    Create a 3D interactive figure embedded in a
+    .html file showing the BOLD phase-locking (PL)
+    states on cortical surface. By default, all the
+    cortical regions that belong to a given PL state
+    or pattern are coloured in red(s), while the rest
+    of cortical regions are coloured in blue(s). You
+    can change the colormap throught the &#39;cmap&#39; argument.
+
+    Params:
+    ------
+    centroids : ndarray with shape (N_centroids, N_rois) or (N_rois,).
+        PL state/s to plot. 
+
+    parcellation : str.
+        Path to the parcellation file (.nii or .nii.gz).
+
+    discretize : bool. Default = True.
+        Whether to plot the raw values of the phase-locking
+        state/centroid, or plot the brain regions than belong
+        to the phase-locking state with the same intensity.
+
+    cmap : str or matplotlib colormap, optional. Default = &#39;auto&#39;.
+        Colormap to use in the brain plot.
+        If &#39;auto&#39;, then the brain regions that
+        belong to the phase-locking state will
+        be coloured in red, and the rest of regions
+        in blue.
+
+    black_bg : bool. 
+        Whether to use a black background.
+
+    open : bool. 
+        Whether to open the plots in browser.
+    &#34;&#34;&#34;
+    if isinstance(parcellation,str):
+        if not parcellation.endswith((&#39;.nii&#39;,&#39;.nii.gz&#39;)):
+            raise ValueError(&#34;The parcellation must be either a .nii or .nii.gz file.&#34;)
+    elif parcellation is None:
+        raise ValueError(&#34;You must provide the path to the parcellation file.&#34;)
+    else:
+        raise TypeError(&#34;&#39;parcellation&#39; must be a string!&#34;)
+
+    n_rois = centroids.shape[1] if centroids.ndim&gt;1 else centroids.size
+    n_centroids = centroids.shape[0] if centroids.ndim&gt;1 else 1
+    mask = NiftiLabelsMasker(parcellation).fit()
+
+    if n_centroids&gt;1:
+        plots = {}
+
+    if cmap==&#39;auto&#39;:
+        cmap = sns.diverging_palette(250, 15, s=75, l=40,n=9, center=&#34;dark&#34;,as_cmap=True)
+
+    vol2surf_kwargs = {&#39;interpolation&#39;:&#39;linear&#39;,&#39;radius&#39;:1.0} 
+    for c in range(n_centroids):
+        if discretize: #for each centroid
+            if n_centroids&gt;1:
+                centroid_map = np.array([1 if node&gt;0.0 else 0.1 for node in centroids[c,:]]).reshape(1,n_rois)
+            else:
+                centroid_map = np.array([1 if node&gt;0.0 else 0.1 for node in centroids]).reshape(1,n_rois)
+        else:
+            if n_centroids&gt;1:
+                centroid_map = centroids[c,:].reshape(1,n_rois)
+            else:
+                centroid_map = centroids.reshape(1,n_rois)
+
+        stat_map = mask.inverse_transform(centroid_map) #get stat map of current PL pattern to plot
+
+        g = view_img_on_surf(
+            stat_map,
+            surf_mesh=&#39;fsaverage&#39;,
+            black_bg=black_bg,
+            vmin=0 if discretize else None,
+            vmax=1 if discretize else None,
+            symmetric_cmap=False if discretize else True,
+            cmap=cmap,
+            colorbar=False if discretize else True,
+            colorbar_height=0.25,
+            threshold=None,
+            vol_to_surf_kwargs=vol2surf_kwargs
+            ) #plot current centroid
+        
+        if n_centroids&gt;1:
+            plots[f&#39;PL_state{c+1}&#39;] = g
+
+        if open: 
+            g.open_in_browser()
+
+    return plots if n_centroids&gt;1 else g</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.brain_states_on_surf2"><code class="name flex">
+<span>def <span class="ident">brain_states_on_surf2</span></span>(<span>centroid, parcellation=None, surface='pial', hemi='right', view='lateral', only_mesh=True, mesh_alpha=0.05)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Plot a BOLD phase-locking state of interest
+on cortical surface mesh. </p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (N_rois).
+Contain the centroid/s.</p>
+<p>parcellation : str.
+Path to the .nii or .nii.gz file containing the
+parcellation from which the signals were extracted.</p>
+<p>surface : str.
+Specify the surface type to plot the pattern on.
+Valid options are 'pial','infl', and 'white'.</p>
+<p>hemi : str.
+Select the hemisphere to plot.
+Valid options are'right', 'left' or 'both'.</p>
+<p>view : str.
+View of the surface that is rendered.
+Default='lateral'. Options = {'lateral', 'medial',
+'dorsal', 'ventral', 'anterior', 'posterior'}.
+If 'hemi'='both', then 'dorsal' and 'lateral' views
+are displayed.</p>
+<p>only_mesh : bool.
+Whether to show only the cortical mesh, or add
+background with sulcus information.</p>
+<p>mesh_alpha : float. Default = 0.05
+Specify the transparency of the mesh.</p>
+<h2 id="returns">Returns:</h2>
+<p>g : SurfaceView.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def brain_states_on_surf2(centroid,parcellation=None,surface=&#39;pial&#39;,hemi=&#39;right&#39;,view=&#39;lateral&#39;,only_mesh=True,mesh_alpha=0.05):
+    &#34;&#34;&#34;
+    Plot a BOLD phase-locking state of interest 
+    on cortical surface mesh. 
+
+    Params:
+    -------
+    centroids : ndarray with shape (N_rois).
+        Contain the centroid/s.
+
+    parcellation : str.
+        Path to the .nii or .nii.gz file containing the
+        parcellation from which the signals were extracted.
+
+    surface : str.
+        Specify the surface type to plot the pattern on.
+        Valid options are &#39;pial&#39;,&#39;infl&#39;, and &#39;white&#39;.
+
+    hemi : str.
+        Select the hemisphere to plot. 
+        Valid options are&#39;right&#39;, &#39;left&#39; or &#39;both&#39;.
+
+    view : str.
+        View of the surface that is rendered. 
+        Default=&#39;lateral&#39;. Options = {&#39;lateral&#39;, &#39;medial&#39;,
+        &#39;dorsal&#39;, &#39;ventral&#39;, &#39;anterior&#39;, &#39;posterior&#39;}.
+        If &#39;hemi&#39;=&#39;both&#39;, then &#39;dorsal&#39; and &#39;lateral&#39; views
+        are displayed.
+
+    only_mesh : bool.
+        Whether to show only the cortical mesh, or add
+        background with sulcus information.
+
+    mesh_alpha : float. Default = 0.05
+        Specify the transparency of the mesh.
+
+    Returns:
+    --------
+    g : SurfaceView. 
+    &#34;&#34;&#34;
+    if isinstance(parcellation,str):
+        if not parcellation.endswith((&#39;.nii&#39;,&#39;.nii.gz&#39;)):
+            raise ValueError(&#34;The parcellation must be either a .nii or .nii.gz file.&#34;)
+    elif parcellation is None:
+        raise ValueError(&#34;You must provide the path to the parcellation file.&#34;)
+    else:
+        raise TypeError(&#34;&#39;parcellation&#39; must be a string!&#34;)
+    if hemi not in [&#39;left&#39;,&#39;right&#39;,&#39;both&#39;]:
+        raise ValueError(&#34;&#39;hemi&#39; must be either &#39;right&#39;, &#39;left&#39;, or &#39;both&#39;.&#34;)
+    elif hemi==&#39;both&#39;:
+        print(&#34;WARNING: &#39;view&#39; is automatically set to &#39;dorsal&#39; and &#39;lateral&#39; when &#39;hemi&#39;=&#39;both&#39;.&#34;)
+    if surface not in [&#39;pial&#39;,&#39;white&#39;,&#39;infl&#39;]:
+        raise ValueError(&#34;&#39;surface&#39; must be either &#39;pial&#39;,&#39;infl&#39;, or &#39;white&#39;.&#34;)
+    view_options = [&#39;lateral&#39;, &#39;medial&#39;, &#39;dorsal&#39;, &#39;ventral&#39;, &#39;anterior&#39;, &#39;posterior&#39;] 
+    if view not in view_options:
+        raise ValueError(f&#34;Valid options for &#39;view&#39; are {view_options} .&#34;)
+
+    n_rois = centroid.size
+    
+    parcellation_mask = NiftiLabelsMasker(parcellation).fit()
+    surf = fetch_surf_fsaverage(&#39;fsaverage&#39;)
+    pal = sns.diverging_palette(250, 15, s=75, l=40,n=9, center=&#34;dark&#34;,as_cmap=True)
+
+    centroid_map = np.array([1 if node&gt;0.0 else 0.1 for node in centroid]).reshape(1,n_rois)
+        
+    #get stat map of current PL pattern to plot
+    stat_map = parcellation_mask.inverse_transform(centroid_map)
+
+    plt.ion()
+    if hemi!=&#39;both&#39;:
+        texture = vol_to_surf(stat_map,surf[f&#39;pial_{hemi}&#39;])
+
+        fig_ = plot_surf_stat_map(
+            surf[f&#39;{surface}_{hemi}&#39;],
+            texture,
+            threshold=0.2, 
+            hemi=hemi,
+            view=view,
+            #title=&#39;Surface right hemisphere&#39;, 
+            colorbar=False, 
+            bg_map=None if only_mesh else surf[f&#39;sulc_{hemi}&#39;],
+            alpha=mesh_alpha,
+            cmap=pal,
+            bg_on_data=False
+            )
+
+        if view==&#39;dorsal&#39;:
+            ax = fig_.axes
+            ax[0].view_init(90,270)
+
+    else:
+        fig_, axes_ = plt.subplots(nrows=2,ncols=2,figsize=(11,11),subplot_kw={&#39;projection&#39;: &#39;3d&#39;})
+
+        ax_config = {
+            0 : [&#39;left&#39;,&#39;dorsal&#39;],
+            1 : [&#39;right&#39;,&#39;dorsal&#39;],
+            2 : [&#39;left&#39;,&#39;lateral&#39;],
+            3 : [&#39;right&#39;,&#39;lateral&#39;]
+            }
+
+        axes_ = np.ravel(axes_)
+
+        texture = {}
+        texture[&#39;left&#39;] = vol_to_surf(stat_map,surf[&#39;pial_left&#39;])
+        texture[&#39;right&#39;] = vol_to_surf(stat_map,surf[&#39;pial_right&#39;])
+
+        for ax_idx,ax in enumerate(axes_):
+            hemi = ax_config[ax_idx][0]
+            view = ax_config[ax_idx][1]
+
+            plot_surf_stat_map(
+                surf[f&#39;{surface}_{hemi}&#39;],
+                texture[hemi],
+                threshold=0.2, 
+                hemi=hemi,
+                view=view,
+                colorbar=False, 
+                bg_map=None if only_mesh else surf[f&#39;sulc_{hemi}&#39;],
+                alpha=mesh_alpha,
+                cmap=pal,
+                bg_on_data=False,
+                axes=ax,
+                figure=fig_,
+                #engine=&#39;plotly&#39;,
+                #kwargs={&#39;symmetric_cmap&#39;:False}
+                )
+
+        axes_[0].view_init(90,270)
+        axes_[1].view_init(90,270)
+        plt.tight_layout(pad=0,h_pad=0,w_pad=0)
+
+    return fig_</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.matrices_gif"><code class="name flex">
+<span>def <span class="ident">matrices_gif</span></span>(<span>mats, cmap='jet', filename='dfc', vmin=-1, vmax=1, darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a gif file showing the phase-coherence
+connectivity matrix for each time point of a
+given subject.</p>
+<h2 id="params">Params:</h2>
+<p>mats : ndarray of shape (N_rois, N_rois, N_volumes).
+Phase-coherence connectivity matrices
+of a particular subject.</p>
+<p>cmap : str.
+Select the colormap of the heatmaps.</p>
+<p>filename : str.
+Select the name of the created gif file.</p>
+<p>vmin : float.
+Select the minimum value of the colormap.</p>
+<p>vmax : float.
+Select the max value of the colormap.</p>
+<p>darkstyle : bool.
+Whether to use a dark theme for the plot.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def matrices_gif(mats,cmap=&#39;jet&#39;,filename=&#39;dfc&#39;,vmin=-1,vmax=1,darkstyle=False):
+    &#34;&#34;&#34;
+    Create a gif file showing the phase-coherence
+    connectivity matrix for each time point of a
+    given subject.
+    
+    Params:
+    -------
+    mats : ndarray of shape (N_rois, N_rois, N_volumes).
+        Phase-coherence connectivity matrices
+        of a particular subject.
+
+    cmap : str. 
+        Select the colormap of the heatmaps.
+
+    filename : str. 
+        Select the name of the created gif file.
+
+    vmin : float. 
+        Select the minimum value of the colormap.
+
+    vmax : float. 
+        Select the max value of the colormap.
+
+    darkstyle : bool.
+        Whether to use a dark theme for the plot.
+    &#34;&#34;&#34;
+    if not isinstance(mats,np.ndarray):
+        raise TypeError(&#34;&#39;mats&#39; must be a 3D array!&#34;)
+    if mats.ndim!=3:
+        raise Exception(&#34;&#39;mats&#39; must be a 3D array!&#34;)
+    
+    N_rois = mats.shape[0]
+    filenames = [] #create empty list to save the name of the created plot for each matrix
+    try:
+        plt.ioff()
+        with plt.style.context(&#34;dark_background&#34; if darkstyle else &#34;default&#34;):
+            linecolor = &#39;w&#39; if darkstyle else &#39;k&#39;
+            for mat in range(mats.shape[-1]): #create plot of each matrix.
+                plt.figure()
+                sns.heatmap(
+                    mats[:,:,mat],
+                    square=True,
+                    vmin=vmin,
+                    vmax=vmax,
+                    center=0,
+                    cmap=cmap,
+                    cbar_kws={&#34;shrink&#34;: .5,&#34;label&#34;: &#34;Phase-coherence&#34;}
+                    )
+                plt.xticks(
+                    np.arange(20,N_rois,20),
+                    np.arange(20,N_rois,20).tolist(),
+                    rotation=0
+                    )
+                plt.yticks(
+                    np.arange(20,N_rois,20),
+                    np.arange(20,N_rois,20).tolist(),
+                    )
+                plt.xlabel(&#39;Brain region&#39;, fontsize=15,fontweight=&#39;regular&#39;)
+                plt.ylabel(&#39;Brain region&#39;, fontsize=15,fontweight=&#39;regular&#39;) 
+                plt.axhline(y=0, color=linecolor,linewidth=5)
+                plt.axhline(y=mats[:,:,mat].shape[1], color=linecolor,linewidth=5)
+                plt.axvline(x=0, color=linecolor,linewidth=5)
+                plt.axvline(x=mats[:,:,mat].shape[0], color=linecolor,linewidth=5)
+                plt.title(f&#39;TR = {mat+1}&#39;,fontweight=&#39;regular&#39;,fontsize=18)
+                plt.tight_layout()
+                filename_ = f&#39;file{mat}.png&#39; #define name to transiently save the figure
+                filenames.append(filename_) #append the name of the current plot into the list that contains all the names
+                plt.savefig(filename_) #save the plot as .png file
+                plt.close()
+        
+        #Create the gif from the previously created plots
+        with imageio.get_writer(f&#39;{filename}.gif&#39;,mode=&#39;I&#39;) as writer:
+            for filename_ in filenames:
+                image = imageio.imread(filename_)
+                writer.append_data(image)
+        
+        #Eliminate the created single plots.
+        for filename_ in set(filenames):
+            os.remove(filename_)
+
+    except:
+        raise Exception(&#34;An error occured when creating the .gif file.&#34;)</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.plot_pyramid"><code class="name flex">
+<span>def <span class="ident">plot_pyramid</span></span>(<span>metric_data, stats, K_min=2, K_max=20, class_column='condition', metric_name=None, despine=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create pyramid showing the metric of interest
+for each group, cluster, and K. Significant
+states are coloured 'blue' if the associated
+p-value is lower than 0.05 but higher than 0.05/k,
+and 'red' if the p-value is lower than 0.05/k.</p>
+<h2 id="params">Params:</h2>
+<p>metric_data : dict.
+Contains the computed occupancies or
+dwell times for each k partition.</p>
+<p>stats : pandas.dataframe.
+Contains the pooled stats across values
+of K for a given metric (occupancies, dwell times).</p>
+<p>K_min,K_max : int.
+Min and max K partitions explored.</p>
+<p>class_column : str.
+Specify the name of the column that
+contains the classes labels.</p>
+<p>metric_name : str | None. Default: None.
+Specify the name of the metric to
+plot (only used for title.)</p>
+<p>despine : bool.
+Whether to despine top and right edges
+of the subplots.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_pyramid(metric_data,stats,K_min=2,K_max=20,class_column=&#39;condition&#39;,metric_name=None,despine=True):
+    &#34;&#34;&#34;
+    Create pyramid showing the metric of interest
+    for each group, cluster, and K. Significant
+    states are coloured &#39;blue&#39; if the associated
+    p-value is lower than 0.05 but higher than 0.05/k,
+    and &#39;red&#39; if the p-value is lower than 0.05/k.
+
+    Params:
+    -------
+    metric_data : dict.
+        Contains the computed occupancies or
+        dwell times for each k partition.
+
+    stats : pandas.dataframe.
+        Contains the pooled stats across values
+        of K for a given metric (occupancies, dwell times).
+
+    K_min,K_max : int.
+        Min and max K partitions explored.
+
+    class_column : str.
+        Specify the name of the column that
+        contains the classes labels.
+
+    metric_name : str | None. Default: None.
+        Specify the name of the metric to
+        plot (only used for title.)
+
+    despine : bool.
+        Whether to despine top and right edges
+        of the subplots.
+    &#34;&#34;&#34;
+    alpha3 = np.sum(np.arange(K_min,K_max+1,1))
+    
+    #generate list with colors specifying the
+    # color of the barplot of a particular state.
+    color_list = []
+    stats_df = stats.copy()
+    for pval,bonf in zip(stats[&#39;p-value&#39;],stats[&#39;alpha_Bonferroni&#39;]):
+        color_list.append(&#39;green&#39; if 0.05/alpha3&lt;pval&lt;bonf 
+                        else &#39;firebrick&#39; if 0.05&gt;pval&gt;bonf 
+                        else &#39;royalblue&#39; if pval&lt;0.05/alpha3 
+                        else &#39;black&#39;)
+
+    stats_df[&#39;color&#39;] = color_list
+
+    #creating plot
+    plt.ion()
+    _,axs = plt.subplots(
+        ncols=K_max,
+        nrows=K_max-K_min+1,
+        figsize=(15,10),
+        sharex=True,
+        subplot_kw=dict(box_aspect=1)
+        )
+
+    cond1 = np.unique(stats.group_1).item()
+    cond2 = np.unique(stats.group_2).item()
+
+    title = f&#34;{cond1} vs {cond2}&#34;
+    if metric_name is not None:
+        title = f&#34;{metric_name.capitalize().replace(&#39;_&#39;,&#39; &#39;)}: {title}&#34;
+    _.suptitle(title,fontsize=20,fontweight=&#39;bold&#39;)
+
+    for idx in range(K_max-K_min+1): #idx of rows/k&#39;s
+        df = metric_data[f&#39;k_{K_min+idx}&#39;]
+        class_column_idx = df.columns.get_loc(class_column) #get the location (idx) of the class column
+
+        for feature_idx,feature in enumerate(df.columns[class_column_idx+1:].values):
+            sns.barplot(
+                data=df,
+                x=class_column,
+                y=feature,
+                ax=axs[idx,feature_idx],
+                linewidth=0,
+                color=stats_df[(stats_df.k==K_min+idx)&amp;(stats.variable.str.contains(feature))].color.values[0],
+                errcolor=&#34;.2&#34;, 
+                edgecolor=&#39;white&#39;
+                )
+            axs[idx,feature_idx].set_box_aspect(1)
+            axs[idx,feature_idx].set_xlabel(&#39;&#39;)
+            axs[idx,feature_idx].set_ylabel(&#39;&#39;)
+            axs[idx,0].set_ylabel(f&#39;K = {K_min+idx}&#39;,rotation=0,labelpad=30)
+            axs[idx,feature_idx].spines[[&#39;bottom&#39;,&#39;top&#39;,&#39;right&#39;,&#39;left&#39;]].set_color(&#39;black&#39;)
+            if despine:
+                sns.despine(ax=axs[idx,feature_idx])
+            axs[idx,feature_idx].tick_params(axis=&#39;y&#39;,labelsize=4)
+            axs[idx,feature_idx].tick_params(axis=&#39;x&#39;,labelsize=7,labelrotation=45)
+
+        #delete all the unpopulated subplots    
+        current_k = K_min+idx 
+        for add in np.arange(current_k,K_max): #iterate throught the empty subplots
+            sns.despine(left=True,bottom=True,ax=axs[idx,add]) #delete axis
+            axs[idx,add].tick_params( #delete thicks info
+                        axis=&#39;both&#39;,         
+                        which=&#39;both&#39;,      
+                        bottom=False,
+                        top=False,
+                        left=False,      
+                        labelbottom=False,
+                        labelleft=False)
+
+    plt.tight_layout(pad=.4,w_pad=.6)
+    plt.show()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.plot_static_fc_matrices"><code class="name flex">
+<span>def <span class="ident">plot_static_fc_matrices</span></span>(<span>signals, n_rows, n_columns, cmap='jet', darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Plot each subject static functional connectivity
+matrix (Pearson correlation as metric) in the same
+figure.</p>
+<h2 id="params">Params:</h2>
+<p>signals : dict.
+Contains 'subject_ids' as keys and 2D arrays
+with the time series (N_rois, N_signals) as
+values.</p>
+<p>n_rows : int.
+Define the number of rows of the plot.</p>
+<p>n_columns : int.
+Define the number of columns of the plot.</p>
+<p>cmap : str.
+Colormap for the heatmaps.</p>
+<p>darkstyle : bool.
+Whether to use a darkstyle for the create plot.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_static_fc_matrices(signals,n_rows,n_columns,cmap=&#39;jet&#39;,darkstyle=False):
+    &#34;&#34;&#34;
+    Plot each subject static functional connectivity
+    matrix (Pearson correlation as metric) in the same
+    figure.
+    
+    Params:
+    -------
+    signals : dict. 
+        Contains &#39;subject_ids&#39; as keys and 2D arrays
+        with the time series (N_rois, N_signals) as
+        values.
+
+    n_rows : int. 
+        Define the number of rows of the plot.
+
+    n_columns : int. 
+        Define the number of columns of the plot.
+
+    cmap : str. 
+        Colormap for the heatmaps.
+
+    darkstyle : bool.
+        Whether to use a darkstyle for the create plot.
+    &#34;&#34;&#34;
+    N_subjects = len(signals.keys())
+
+    if n_rows*n_columns&lt;N_subjects:
+        raise ValueError(&#34;n_rows x n_columns must be higher or equal to the number of matrices to plot!&#34;)
+
+    with plt.style.context(&#39;dark_background&#39; if darkstyle else &#39;default&#39;):
+        _, axs = plt.subplots(
+            n_rows,
+            n_columns,
+            figsize=(n_columns*2, n_rows*2),
+            edgecolor=&#39;black&#39;,
+            subplot_kw=dict(box_aspect=1)
+            )
+
+        axs = axs.ravel()    
+        
+        i = 0
+        while i&lt;N_subjects:
+            for su in signals.keys():
+                sns.heatmap(
+                    np.corrcoef(signals[su]),
+                    ax=axs[i],
+                    vmax=1,
+                    vmin=-1,
+                    center=0,
+                    cmap=cmap,
+                    square=True,
+                    cbar_kws={&#34;shrink&#34;: 0.3,&#39;label&#39;:&#39;Pearson\ncorrelation&#39;}
+                    )
+                axs[i].set_title(su,fontsize=7)
+
+                axs[i].tick_params(
+                    axis=&#39;both&#39;,          # changes apply to the x-axis
+                    which=&#39;both&#39;,      # both major and minor ticks are affected
+                    bottom=False,      # ticks along the bottom edge are off
+                    left=False,
+                    top=False,
+                    labelsize=5,         # ticks along the top edge are off
+                    labelbottom=False,
+                    labelleft=False
+                    ) # labels along the bottom edge are off
+
+                i += 1
+
+        if N_subjects!=n_columns*n_rows:
+            missing = np.arange(N_subjects,n_columns*n_rows,1)
+            for idx in missing:
+                sns.despine(left=True,bottom=True,ax=axs[idx]) #delete axis
+                axs[idx].tick_params( #delete thicks info
+                            axis=&#39;both&#39;,       
+                            which=&#39;both&#39;,      
+                            bottom=False,      
+                            top=False,         
+                            left=False,      
+                            labelbottom=False,
+                            labelleft=False)
+
+    plt.tight_layout(pad=1)</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.states_in_bold"><code class="name flex">
+<span>def <span class="ident">states_in_bold</span></span>(<span>signals, y, alpha=0.7)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create plot showing the time-series of BOLD signals,
+highlighting the dominant phase-locking (PL) pattern
+of each time point or volume.</p>
+<h2 id="params">Params:</h2>
+<p>signals : ndarray with shape (N_ROIs,N_volumes).
+Contains the signals of the subject
+of interest.</p>
+<p>y : ndarray with shape (N_volumes).
+Contains the cluster assignement of
+each time point or volume in 'signals'.</p>
+<p>alpha : float.
+Transparency of the background.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def states_in_bold(signals,y,alpha=0.7):
+    &#34;&#34;&#34;
+    Create plot showing the time-series of BOLD signals, 
+    highlighting the dominant phase-locking (PL) pattern
+    of each time point or volume.
+
+    Params:
+    -------
+    signals : ndarray with shape (N_ROIs,N_volumes).
+        Contains the signals of the subject
+        of interest.
+
+    y : ndarray with shape (N_volumes).
+        Contains the cluster assignement of
+        each time point or volume in &#39;signals&#39;.
+
+    alpha : float.
+        Transparency of the background.
+    &#34;&#34;&#34;
+    colors = {
+        0:&#39;royalblue&#39;,
+        1:&#39;grey&#39;,
+        2:&#39;tomato&#39;,
+        3:&#39;orange&#39;,
+        4:&#39;cyan&#39;,
+        5:&#39;violet&#39;,
+        6:&#39;yellow&#39;,
+        7:&#39;purple&#39;,
+        8:&#39;firebrick&#39;,
+        9:&#39;teal&#39;,
+        10:&#39;orchid&#39;,
+        11:&#39;red&#39;,
+        12:&#39;green&#39;,
+        13:&#39;steelblue&#39;,
+        14:&#39;indigo&#39;,
+        15:&#39;gold&#39;,
+        16:&#39;sienna&#39;,
+        17:&#39;coral&#39;,
+        18:&#39;olive&#39;,
+        19:&#39;salmon&#39;
+        }
+
+    if signals.shape[1]!=y.size:
+        raise ValueError(f&#34;The number of time points of the provided signals ({signals.shape[1]}) &#34;
+                        f&#34;must coincide with the number of provided labels ({y.size}&#34;)
+    
+    y_colors = pd.Series(y).map(colors).values
+
+    plt.figure(figsize=(13,3.25))
+    plt.plot(signals.T,c=&#34;dimgrey&#34;)
+    plt.plot(np.mean(signals.T,axis=1),c=&#34;black&#34;,linewidth=3)
+
+    N_volumes = signals.shape[1]
+    for time_point,state in zip(range(N_volumes),y_colors):
+        plt.axvspan(time_point-0.5,time_point+0.5,alpha=alpha,color=state)
+
+    plt.xlabel(&#34;Time points (volumes)&#34;,fontsize=18)
+    plt.ylabel(&#34;BOLD signals&#34;,fontsize=18)
+    plt.xlim(0-0.5,(N_volumes-1)+0.5)
+
+    plt.tight_layout()
+    plt.show()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.states_in_bold_gif"><code class="name flex">
+<span>def <span class="ident">states_in_bold_gif</span></span>(<span>filename, signals, y, alpha=0.7, duration=0.1, keep_previous=True, show_labels=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create .gif file showing the BOLD time series and
+the dominant phase-locking state of each time point
+or volume.</p>
+<h2 id="params">Params:</h2>
+<p>filename : str.
+Define the name of the .gif file.</p>
+<p>signals : ndarray with shape (N_rois,N_volumes).
+Contains the BOLD time series to plot.</p>
+<p>y : ndarray with shape (N_volumes,).
+Contains the label of the dominant PL
+state of each time point or volumne.</p>
+<p>alpha : float.
+Transparency of lines that highlight the
+dominant PL state.</p>
+<p>duration : float.
+Duration of each frame.</p>
+<p>keep_previous : bool.
+Whether to preserve the previous lines
+that highlight the dominant PL states.</p>
+<p>show_labels : bool.
+Whether to show text indicating the number
+of the dominant PL state.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def states_in_bold_gif(filename,signals,y,alpha=0.7,duration=0.1,keep_previous=True,show_labels=True):
+    &#34;&#34;&#34;
+    Create .gif file showing the BOLD time series and
+    the dominant phase-locking state of each time point
+    or volume.
+
+    Params:
+    -------
+    filename : str.
+        Define the name of the .gif file.
+
+    signals : ndarray with shape (N_rois,N_volumes).
+        Contains the BOLD time series to plot.
+
+    y : ndarray with shape (N_volumes,).
+        Contains the label of the dominant PL
+        state of each time point or volumne.
+
+    alpha : float.
+        Transparency of lines that highlight the
+        dominant PL state.
+
+    duration : float.
+        Duration of each frame.
+
+    keep_previous : bool.
+        Whether to preserve the previous lines
+        that highlight the dominant PL states.
+
+    show_labels : bool.
+        Whether to show text indicating the number
+        of the dominant PL state.
+    &#34;&#34;&#34;
+
+    filenames = []
+    colors = {
+        0:&#39;royalblue&#39;,
+        1:&#39;grey&#39;,
+        2:&#39;tomato&#39;,
+        3:&#39;orange&#39;,
+        4:&#39;cyan&#39;,
+        5:&#39;violet&#39;,
+        6:&#39;yellow&#39;,
+        7:&#39;purple&#39;,
+        8:&#39;firebrick&#39;,
+        9:&#39;teal&#39;,
+        10:&#39;orchid&#39;,
+        11:&#39;red&#39;,
+        12:&#39;green&#39;,
+        13:&#39;steelblue&#39;,
+        14:&#39;indigo&#39;,
+        15:&#39;gold&#39;,
+        16:&#39;sienna&#39;,
+        17:&#39;coral&#39;,
+        18:&#39;olive&#39;,
+        19:&#39;salmon&#39;
+        }
+
+    if signals.shape[1]!=y.size:
+        raise Exception(f&#34;The number of time points of the provided signals ({signals.shape[1]}) &#34;
+                        f&#34;must coincide with the number of provided labels ({y.size}&#34;)
+
+    y_colors = pd.Series(y).map(colors).values
+    N_volumes = signals.shape[1]
+
+    #plt.figure()
+    plt.ioff()
+    plt.figure(figsize=(13,3.25))
+    plt.plot(signals.T,c=&#34;dimgrey&#34;)
+    plt.plot(np.mean(signals.T,axis=1),c=&#34;black&#34;,linewidth=3)
+    plt.title(&#39;&#39;)
+    plt.xlabel(&#34;Time points (volumes)&#34;,fontsize=18)
+    plt.ylabel(&#34;BOLD signals&#34;,fontsize=18)
+    plt.xlim(0-0.5,(N_volumes-1)+0.5)
+    plt.tight_layout()
+    filename_ = f&#39;file0.png&#39;
+    filenames.append(filename_)
+    plt.savefig(filename_)
+    if not keep_previous:
+        plt.close()
+
+    for time_point,state in zip(range(N_volumes),y_colors):
+        if not keep_previous:
+            plt.figure(figsize=(13,3.25))
+            plt.plot(signals.T,c=&#34;dimgrey&#34;)
+            plt.plot(np.mean(signals.T,axis=1),c=&#34;black&#34;,linewidth=3)
+            plt.xlabel(&#34;Time points (volumes)&#34;,fontsize=16)
+            plt.ylabel(&#34;BOLD signals&#34;,fontsize=16)
+            plt.xlim(0-0.5,(N_volumes-1)+0.5)
+        if show_labels and not keep_previous:
+            plt.axvspan(time_point-0.5,time_point+0.5,alpha=alpha,color=state,label=f&#39;PL state {y[time_point]+1}&#39;)
+            plt.legend(loc=2,prop={&#39;size&#39;: 15})
+        if show_labels and keep_previous:
+            plt.axvspan(time_point-0.5,time_point+0.5,alpha=alpha,color=state)
+            title_obj = plt.title(f&#39;State {y[time_point]+1}&#39;,fontsize=22,fontweight=&#39;regular&#39;)
+            plt.setp(title_obj, color=state)
+            plt.tight_layout()
+
+        else:
+            plt.axvspan(time_point-0.5,time_point+0.5,alpha=alpha,color=state)
+        if not keep_previous:
+            plt.tight_layout()
+        filename_ = f&#39;file{time_point+1}.png&#39; #define name to transiently save the figure
+        filenames.append(filename_) #append the name of the current plot into the list that contains all the names
+        plt.savefig(filename_) #save the plot as .png file
+        if not keep_previous:
+            plt.close()
+    if keep_previous:
+        plt.close()
+
+    #Create the gif from the previously created plots
+    with imageio.get_writer(f&#39;{filename}.gif&#39;,mode=&#39;I&#39;,duration=duration) as writer:
+        for filename_ in filenames:
+            image = imageio.imread(filename_)
+            writer.append_data(image)
+    
+    #Eliminate the created single plots.
+    for filename_ in set(filenames):
+        os.remove(filename_)</code></pre>
+</details>
+</dd>
+<dt id="pyleida.plotting.states_k_glass"><code class="name flex">
+<span>def <span class="ident">states_k_glass</span></span>(<span>centroids, coords, darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a glass brain (axial view) showing the
+network representation of each PL pattern for
+the selected 'k' partition.</p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (N_centroids, N_rois).
+Contains the centroids (PL states) of a
+specific 'k' partition.</p>
+<p>coords : ndarray with shape (N_rois, 3).
+ROIs coordinates in MNI space.</p>
+<p>darkstyle : bool.
+Whether to use a dark theme for the plots.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def states_k_glass(centroids,coords,darkstyle=False):
+    &#34;&#34;&#34;
+    Create a glass brain (axial view) showing the
+    network representation of each PL pattern for
+    the selected &#39;k&#39; partition.
+
+    Params:
+    -------
+    centroids : ndarray with shape (N_centroids, N_rois).
+        Contains the centroids (PL states) of a 
+        specific &#39;k&#39; partition.
+
+    coords : ndarray with shape (N_rois, 3).
+        ROIs coordinates in MNI space.
+        
+    darkstyle : bool.
+        Whether to use a dark theme for the plots.
+    &#34;&#34;&#34;
+    if not isinstance(centroids,np.ndarray) or (isinstance(centroids,np.ndarray) and centroids.ndim!=2):
+        raise TypeError(&#34;&#39;centroids&#39; must be a 2D array!&#34;)
+    
+    if centroids.shape[1]!=coords.shape[0]:
+        raise Exception(&#34;The number of brain regions in &#39;centroids&#39; and &#39;coords&#39; must be the same!&#34;)
+    
+    N_states = centroids.shape[0]
+
+    #Decide number of columns and rows
+    if N_states&gt;10:
+        if not N_states%2==0:
+            n_columns = int((N_states+1)/2)
+        else:
+            n_columns = int(N_states/2)
+    else:
+        n_columns = N_states
+
+    #creating plot
+    plt.ion()
+    
+    fig,axs = plt.subplots(
+        ncols=n_columns,
+        nrows=1 if N_states&lt;=10 else 2,
+        figsize=(n_columns*2,2.5 if N_states&lt;=10 else 5),
+        sharey=False,
+        sharex=False,
+        subplot_kw=dict(box_aspect=1.3),
+        constrained_layout=False
+        )
+    axs = np.ravel(axs)
+
+    sizes_and_lws = {
+        &#39;n_columns&#39;:np.arange(2,11),
+        &#39;lw&#39;:np.linspace(.2,.8,9)[::-1],
+        &#39;node_size&#39;:np.linspace(10,20,9)[::-1]
+    }
+
+    for state_idx in range(N_states): #for each centroid/state in current k
+        edges_lw = {&#39;linewidth&#39;:sizes_and_lws[&#39;lw&#39;][n_columns-2],&#39;color&#39;:&#39;firebrick&#39;}
+        centroid = centroids[state_idx,:]
+        network = centroid2network(centroid)
+
+        plot_connectome(
+            network, 
+            coords, 
+            node_color=&#39;blue&#39; if not np.any(network) else &#39;black&#39; if not darkstyle else &#39;white&#39;, 
+            node_size=sizes_and_lws[&#39;node_size&#39;][n_columns-2], 
+            #edge_cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;, 
+            edge_vmin=None, 
+            edge_vmax=None, 
+            edge_threshold=None, 
+            output_file=None, 
+            display_mode=&#39;z&#39;, 
+            figure=fig, 
+            axes=axs[state_idx], 
+            #title=f&#39;FC pattern {state_idx+1}&#39;, 
+            annotate=True, 
+            black_bg=True if darkstyle else False, 
+            alpha=0.3, 
+            edge_kwargs=edges_lw, 
+            node_kwargs=None, 
+            colorbar=False
+            )
+
+        axs[state_idx].set_title(f&#39;PL pattern {state_idx+1}&#39;,fontweight=&#39;bold&#39;,fontsize=8)
+        
+    #if k is odd, delete the lines and contents of the empty plot.
+    if N_states&gt;10:
+        if not N_states%2==0:
+            sns.despine(left=True,bottom=True,ax=axs[-1]) #delete axis
+            axs[-1].tick_params( #delete thicks info
+                        axis=&#39;both&#39;,          
+                        which=&#39;both&#39;,      
+                        bottom=False,      
+                        top=False,         
+                        left=False,      
+                        labelbottom=False,
+                        labelleft=False)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyleida" href="../index.html">pyleida</a></code></li>
+</ul>
+</li>
+
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+    <li><code><a title="pyleida.plotting.brain_dynamics_gif" href="#pyleida.plotting.brain_dynamics_gif">brain_dynamics_gif</a></code></li>
+    <li><code><a title="pyleida.plotting.brain_states_network" href="#pyleida.plotting.brain_states_network">brain_states_network</a></code></li>
+    <li><code><a title="pyleida.plotting.brain_states_nodes" href="#pyleida.plotting.brain_states_nodes">brain_states_nodes</a></code></li>
+    <li><code><a title="pyleida.plotting.brain_states_on_surf" href="#pyleida.plotting.brain_states_on_surf">brain_states_on_surf</a></code></li>
+    <li><code><a title="pyleida.plotting.brain_states_on_surf2" href="#pyleida.plotting.brain_states_on_surf2">brain_states_on_surf2</a></code></li>
+    <li><code><a title="pyleida.plotting.matrices_gif" href="#pyleida.plotting.matrices_gif">matrices_gif</a></code></li>
+    <li><code><a title="pyleida.plotting.plot_pyramid" href="#pyleida.plotting.plot_pyramid">plot_pyramid</a></code></li>
+    <li><code><a title="pyleida.plotting.plot_static_fc_matrices" href="#pyleida.plotting.plot_static_fc_matrices">plot_static_fc_matrices</a></code></li>
+    <li><code><a title="pyleida.plotting.states_in_bold" href="#pyleida.plotting.states_in_bold">states_in_bold</a></code></li>
+    <li><code><a title="pyleida.plotting.states_in_bold_gif" href="#pyleida.plotting.states_in_bold_gif">states_in_bold_gif</a></code></li>
+    <li><code><a title="pyleida.plotting.states_k_glass" href="#pyleida.plotting.states_k_glass">states_k_glass</a></code></li>
+    <li><code><a title="pyleida.plotting._explore_state" href="#pyleida.plotting._explore_state">_explore_state</a></code></li>
+    <li><code><a title="pyleida.plotting._save_html" href="#pyleida.plotting._save_html">_save_html</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

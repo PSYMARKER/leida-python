@@ -1,0 +1,28 @@
+name: pL
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  #python essentials
+  - python=3.9
+  - notebook=6.4.11
+  - ipython=8.4.0
+  - pip
+
+  #Base libraries
+  - numpy=1.22.3
+  - pandas=1.4.3
+  - scipy=1.8
+
+  #Plotting
+  - matplotlib=3.5.2
+  - seaborn=0.11.2
+  - imageio=2.19.3
+
+  #Specific libraries
+  - scikit-learn=1.1.1
+  - nilearn=0.9.1
+
+  - pip:
+    - pyleida

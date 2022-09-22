@@ -1,0 +1,94 @@
+L Precentral        
+R Precentral        
+L Frontal Sup 2     
+R Frontal Sup 2     
+L Frontal Mid 2     
+R Frontal Mid 2     
+L Frontal Inf Oper  
+R Frontal Inf Oper  
+L Frontal Inf Tri   
+R Frontal Inf Tri   
+L Frontal Inf Orb 2 
+R Frontal Inf Orb 2 
+L Rolandic Oper     
+R Rolandic Oper     
+L Supp Motor Area   
+R Supp Motor Area   
+L Olfactory         
+R Olfactory         
+L Frontal Sup Medial
+R Frontal Sup Medial
+L Frontal Med Orb   
+R Frontal Med Orb   
+L Rectus            
+R Rectus            
+L OFCmed            
+R OFCmed            
+L OFCant            
+R OFCant            
+L OFCpost           
+R OFCpost           
+L OFClat            
+R OFClat            
+L Insula            
+R Insula            
+L Cingulate Ant     
+R Cingulate Ant     
+L Cingulate Mid     
+R Cingulate Mid     
+L Cingulate Post    
+R Cingulate Post    
+L Hippocampus       
+R Hippocampus       
+L ParaHippocampal   
+R ParaHippocampal   
+L Amygdala          
+R Amygdala          
+L Calcarine         
+R Calcarine         
+L Cuneus            
+R Cuneus            
+L Lingual           
+R Lingual           
+L Occipital Sup     
+R Occipital Sup     
+L Occipital Mid     
+R Occipital Mid     
+L Occipital Inf     
+R Occipital Inf     
+L Fusiform          
+R Fusiform          
+L Postcentral       
+R Postcentral       
+L Parietal Sup      
+R Parietal Sup      
+L Parietal Inf      
+R Parietal Inf      
+L SupraMarginal     
+R SupraMarginal     
+L Angular           
+R Angular           
+L Precuneus         
+R Precuneus         
+L Paracentral Lobule
+R Paracentral Lobule
+L Caudate           
+R Caudate           
+L Putamen           
+R Putamen           
+L Pallidum          
+R Pallidum          
+L Thalamus          
+R Thalamus          
+L Heschl            
+R Heschl            
+L Temporal Sup      
+R Temporal Sup      
+L Temporal Pole Sup 
+R Temporal Pole Sup 
+L Temporal Mid      
+R Temporal Mid      
+L Temporal Pole Mid 
+R Temporal Pole Mid 
+L Temporal Inf      
+R Temporal Inf      

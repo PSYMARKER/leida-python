@@ -1,0 +1,1561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>pyleida.clustering API documentation</title>
+<meta name="description" content="The module &#39;pyleida.clustering&#39; provides a class and functions to identify and
+explore the BOLD phase-locking states or patterns using K-Means clustering" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyleida.clustering</code></h1>
+</header>
+<section id="section-intro">
+<p>The module 'pyleida.clustering' provides a class and functions to identify and
+explore the BOLD phase-locking states or patterns using K-Means clustering</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+The module &#39;pyleida.clustering&#39; provides a class and functions to identify and
+explore the BOLD phase-locking states or patterns using K-Means clustering
+&#34;&#34;&#34;
+
+from ._clustering import (
+    KMeansLeida,
+    identify_states,
+    centroid2matrix,
+    plot_clustering_scores, 
+    barplot_eig,
+    barplot_states,
+    plot_clusters3D,
+    plot_clusters_boundaries,
+    plot_voronoi,
+    dunn_fast,
+    patterns_stability,
+)
+
+__all__ = [
+    &#34;KMeansLeida&#34;,
+    &#34;identify_states&#34;,
+    &#34;centroid2matrix&#34;,
+    &#34;plot_clustering_scores&#34;,
+    &#34;barplot_eig&#34;,
+    &#34;barplot_states&#34;,
+    &#34;plot_clusters3D&#34;,
+    &#34;plot_clusters_boundaries&#34;,
+    &#34;plot_voronoi&#34;,
+    &#34;dunn_fast&#34;,
+    &#34;patterns_stability&#34;
+]</code></pre>
+</details>
+</section>
+
+<section>
+</section>
+
+<section>
+    <h2 class="section-title" id="header-classes">Class</h2>
+    <dl>
+    <dt id="pyleida.clustering.KMeansLeida"><code class="flex name class">
+    <span>class <span class="ident">KMeansLeida</span></span>
+    <span>(</span><span>k=2, metric='cosine', n_init=10, n_iter=1000)</span>
+    </code></dt>
+    <dd>
+    <div class="desc"><p>K-Means algorithm with cosine or euclidean
+    distance-based optimization.</p>
+    <h2 id="params">Params:</h2>
+    <p>k : int.
+    The number of clusters to form as well as
+    the number of centroids to generate.</p>
+    <p>metric : str.
+    Whether to use 'cosine' or 'euclidean' distance
+    to optimize the centroids.</p>
+    <p>n_init : int.
+    Number of time the k-means algorithm will be
+    run with different centroid seeds. The final
+    results will be the best output of n_init
+    consecutive runs in terms of inertia.</p>
+    <p>n_iter : int.
+    Maximum number of iterations of the k-means
+    algorithm for a single run.</p>
+    <h2 id="attributes">Attributes:</h2>
+    <p>cluster_centers_ : ndarray of shape (n_centroids,n_ROIs).
+    Coordinates of cluster centers.</p>
+    <p>labels_ : ndarray of shape (n_samples,).
+    Labels of each point.</p>
+    <p>inertia_ : float.
+    Sum of squared distances of samples to their closest
+    cluster center (aka distortion).</p></div>
+    <details class="source">
+    <summary>
+    <span>Expand source code</span>
+    </summary>
+    <pre><code class="python">class KMeansLeida():
+        &#34;&#34;&#34;
+        K-Means algorithm with cosine or euclidean
+        distance-based optimization.
+    
+        Params:
+        -------
+        k : int.
+            The number of clusters to form as well as
+            the number of centroids to generate.
+    
+        metric : str.
+            Whether to use &#39;cosine&#39; or &#39;euclidean&#39; distance
+            to optimize the centroids.
+    
+        n_init : int.
+            Number of time the k-means algorithm will be
+            run with different centroid seeds. The final
+            results will be the best output of n_init
+            consecutive runs in terms of inertia.
+    
+        n_iter : int.
+            Maximum number of iterations of the k-means
+            algorithm for a single run.
+    
+        Attributes:
+        -----------
+        cluster_centers_ : ndarray of shape (n_centroids,n_ROIs).
+            Coordinates of cluster centers.
+    
+        labels_ : ndarray of shape (n_samples,).
+            Labels of each point.
+    
+        inertia_ : float.
+            Sum of squared distances of samples to their closest
+            cluster center (aka distortion).
+        &#34;&#34;&#34;
+        def __init__(self,k=2, metric=&#39;cosine&#39;,n_init=10,n_iter=1_000):
+            #validation of input data
+            if not isinstance(metric,str):
+                raise TypeError(&#34;&#39;metric&#39; must be a string!&#34;)
+            if metric not in [&#39;euclidean&#39;,&#39;cosine&#39;]:
+                raise ValueError(&#34;&#39;metric&#39; must be either &#39;cosine&#39; or &#39;euclidean&#39;&#34;)
+    
+            _check_isint({
+                &#39;k&#39;:k,
+                &#39;n_init&#39;:n_init,
+                &#39;n_iter&#39;:n_iter
+                })
+    
+            if k&lt;2:
+                raise ValueError(&#34;&#39;k&#39; must be &gt; 1&#34;)
+    
+            self._k_ = k
+            self._metric_ = metric
+            self._n_iter_ = n_iter
+            self._n_init_ = n_init
+    
+        def fit(self,y,random_state=None):
+            &#34;&#34;&#34;
+            Compute k-means clustering.
+    
+            Params:
+            --------
+            y : ndarray of shape (n_samples,n_features).
+                Training instances to cluster.
+    
+            random_state : int or None.
+                Determines random number generation
+                for centroid initialization. Use an
+                int to make the randomness deterministic.
+    
+            Returns:
+            --------
+            self : object.
+                Fitted estimator.
+            &#34;&#34;&#34;
+            for init_idx in range(self._n_init_):
+                #print(f&#39;\tCurrent initialization: {init_idx+1}&#39;)
+                if random_state is not None:
+                    np.random.seed(random_state)
+                idx = np.random.choice(len(y), self._k_, replace=False)  
+    
+                #Step 1. Randomly assigning first centroids positions
+                centroids = y[idx, :]
+                 
+                #Step 2. Finding the distance between centroids and all the data labels
+                distances = cdist(y, centroids ,self._metric_)
+                 
+                #Step 3. Predict each observation label based on the minimum Distance
+                labels = np.array([np.argmin(i) for i in distances]) #Step 3
+                 
+                #Step 4.Repeating the above steps for a defined number of iterations
+                labels_all = []
+                for iter in range(self._n_iter_): 
+                    centroids = []
+                    for centroid_idx in range(self._k_):
+                        #Updating centroids by computing the mean of the observations in each cluster
+                        temp_cent = y[labels==centroid_idx].mean(axis=0) 
+                        centroids.append(temp_cent)
+             
+                    centroids = np.vstack(centroids) #Updated centroids 
+                     
+                    distances = cdist(y, centroids ,self._metric_)
+                    labels = np.array([np.argmin(i) for i in distances])
+                    if iter!=0:
+                        if np.array_equal(labels,labels_all[-1]):
+                            #print(f&#39;\tConverged at iteration n° {iter+1}&#39;)
+                            break
+                    labels_all.append(labels)
+    
+                #compute distortion on final centroids of current centroids initialization
+                distortion = self._distortion(y,centroids)
+    
+                #update centroids,distortion and labels keeping always the best updated
+                if init_idx == 0:
+                    best_distortion = distortion
+                    optimum_centroids = centroids
+                    optimum_labels = labels.copy()
+                if distortion &lt; best_distortion:
+                    best_distortion = distortion.copy()
+                    optimum_centroids = centroids.copy()
+                    optimum_labels = labels.copy()
+                 
+            self.cluster_centers_ = optimum_centroids
+            self.labels_ = optimum_labels
+            self.inertia_ = best_distortion
+    
+            self._remap_labels()
+            self._is_fitted = True
+    
+        def _check_is_fitted(self):
+            &#34;&#34;&#34;
+            Check if the k-means model had been already fitted.
+            &#34;&#34;&#34;
+            if not hasattr(self,&#34;_is_fitted&#34;):
+                raise Exception(&#34;You have to fit the model first by using the &#39;fit&#39; method.&#34;)
+    
+        def transform(self,y,closest=False):
+            &#34;&#34;&#34;
+            Computes distances between each observation
+            or data point and each centroid. Differs from
+            sklearn transform method in that here we can select
+            if retrieve all the distances or only the distances
+            to closest centroid. In the new space, each dimension
+            is the distance to the cluster centers.
+    
+            Params:
+            --------
+            y : ndarray of shape (n_samples,n_features).
+                Data to transform. 
+            
+            Returns:
+            --------
+            distances : ndarray of shape (n_samples,n_centroids).
+                y transformed in the new space.
+            &#34;&#34;&#34;
+            self._check_is_fitted()
+    
+            distances = cdist(y, self.cluster_centers_ ,self._metric_)
+            if not closest:
+                return distances
+            else:
+                return distances.min(1)
+    
+        def predict(self,y):
+            &#34;&#34;&#34;
+            Assign cluster label to each data point in &#39;y&#39;.
+            Predict the closest cluster each sample in y belongs to.
+    
+            Params:
+            -------
+            y : ndarray of shape (n_samples,n_features).
+                Data to predict.
+            
+            Returns:
+            --------
+            labels : ndarray of shape (n_samples,).
+                Index of the cluster each sample belongs to.
+            &#34;&#34;&#34;
+            self._check_is_fitted()
+            
+            labels = np.array([np.argmin(i) for i in self.transform(y)])
+            return labels
+    
+        def _distortion(self,y,centroids):
+            &#34;&#34;&#34;
+            Sum of squared distances of samples to their
+            closest cluster center.
+    
+            Params:
+            ------
+            y : ndarray of shape (n_samples,n_features).
+                Samples clustered.
+    
+            centroids : ndarray of shape (n_centroids,n_features).
+                Computed centroids/prototypes.
+    
+            Returns:
+            --------
+            sum_sqr_dist : float.
+                Computed distortion.
+            &#34;&#34;&#34;
+            #distances = self.transform(y,closest=True)
+            distances = cdist(y, centroids ,self._metric_).min(1)
+            sqr_dist = distances**2
+            sum_sqr_dist = np.sum(sqr_dist)
+            
+            return sum_sqr_dist
+    
+        def _remap_labels(self):
+            &#34;&#34;&#34;&#34;
+            After fitting the k-means model and making the
+            labelling of each sample, this function computes
+            the frequency of each cluster label across all samples,
+            and relabels the original labels so that centroid 1 is
+            always the cluster with higher number of observations.
+            &#34;&#34;&#34;
+            label,freq = np.unique(self.labels_,return_counts=True)
+            sorted_idxs = np.argsort(freq)[::-1]
+            dct = {k:v for k,v in zip(sorted_idxs,label)}
+            new_labels = np.array([dct[n] for n in self.labels_])
+            self.labels_ = new_labels
+            self.cluster_centers_ = self.cluster_centers_[sorted_idxs,:]</code></pre>
+    </details>
+    <h3>Methods</h3>
+    <dl>
+    <dt id="pyleida.clustering.KMeansLeida.fit"><code class="name flex">
+    <span>def <span class="ident">fit</span></span>(<span>self, y, random_state=None)</span>
+    </code></dt>
+    <dd>
+    <div class="desc"><p>Compute k-means clustering.</p>
+    <h2 id="params">Params:</h2>
+    <p>y : ndarray of shape (n_samples,n_features).
+    Training instances to cluster.</p>
+    <p>random_state : int or None.
+    Determines random number generation
+    for centroid initialization. Use an
+    int to make the randomness deterministic.</p>
+    <h2 id="returns">Returns:</h2>
+    <p>self : object.
+    Fitted estimator.</p></div>
+    <details class="source">
+    <summary>
+    <span>Expand source code</span>
+    </summary>
+    <pre><code class="python">def fit(self,y,random_state=None):
+        &#34;&#34;&#34;
+        Compute k-means clustering.
+    
+        Params:
+        --------
+        y : ndarray of shape (n_samples,n_features).
+            Training instances to cluster.
+    
+        random_state : int or None.
+            Determines random number generation
+            for centroid initialization. Use an
+            int to make the randomness deterministic.
+    
+        Returns:
+        --------
+        self : object.
+            Fitted estimator.
+        &#34;&#34;&#34;
+        for init_idx in range(self._n_init_):
+            #print(f&#39;\tCurrent initialization: {init_idx+1}&#39;)
+            if random_state is not None:
+                np.random.seed(random_state)
+            idx = np.random.choice(len(y), self._k_, replace=False)  
+    
+            #Step 1. Randomly assigning first centroids positions
+            centroids = y[idx, :]
+             
+            #Step 2. Finding the distance between centroids and all the data labels
+            distances = cdist(y, centroids ,self._metric_)
+             
+            #Step 3. Predict each observation label based on the minimum Distance
+            labels = np.array([np.argmin(i) for i in distances]) #Step 3
+             
+            #Step 4.Repeating the above steps for a defined number of iterations
+            labels_all = []
+            for iter in range(self._n_iter_): 
+                centroids = []
+                for centroid_idx in range(self._k_):
+                    #Updating centroids by computing the mean of the observations in each cluster
+                    temp_cent = y[labels==centroid_idx].mean(axis=0) 
+                    centroids.append(temp_cent)
+         
+                centroids = np.vstack(centroids) #Updated centroids 
+                 
+                distances = cdist(y, centroids ,self._metric_)
+                labels = np.array([np.argmin(i) for i in distances])
+                if iter!=0:
+                    if np.array_equal(labels,labels_all[-1]):
+                        #print(f&#39;\tConverged at iteration n° {iter+1}&#39;)
+                        break
+                labels_all.append(labels)
+    
+            #compute distortion on final centroids of current centroids initialization
+            distortion = self._distortion(y,centroids)
+    
+            #update centroids,distortion and labels keeping always the best updated
+            if init_idx == 0:
+                best_distortion = distortion
+                optimum_centroids = centroids
+                optimum_labels = labels.copy()
+            if distortion &lt; best_distortion:
+                best_distortion = distortion.copy()
+                optimum_centroids = centroids.copy()
+                optimum_labels = labels.copy()
+             
+        self.cluster_centers_ = optimum_centroids
+        self.labels_ = optimum_labels
+        self.inertia_ = best_distortion
+    
+        self._remap_labels()
+        self._is_fitted = True</code></pre>
+    </details>
+    </dd>
+    <dt id="pyleida.clustering.KMeansLeida.predict"><code class="name flex">
+    <span>def <span class="ident">predict</span></span>(<span>self, y)</span>
+    </code></dt>
+    <dd>
+    <div class="desc"><p>Assign cluster label to each data point in 'y'.
+    Predict the closest cluster each sample in y belongs to.</p>
+    <h2 id="params">Params:</h2>
+    <p>y : ndarray of shape (n_samples,n_features).
+    Data to predict.</p>
+    <h2 id="returns">Returns:</h2>
+    <p>labels : ndarray of shape (n_samples,).
+    Index of the cluster each sample belongs to.</p></div>
+    <details class="source">
+    <summary>
+    <span>Expand source code</span>
+    </summary>
+    <pre><code class="python">def predict(self,y):
+        &#34;&#34;&#34;
+        Assign cluster label to each data point in &#39;y&#39;.
+        Predict the closest cluster each sample in y belongs to.
+    
+        Params:
+        -------
+        y : ndarray of shape (n_samples,n_features).
+            Data to predict.
+        
+        Returns:
+        --------
+        labels : ndarray of shape (n_samples,).
+            Index of the cluster each sample belongs to.
+        &#34;&#34;&#34;
+        self._check_is_fitted()
+        
+        labels = np.array([np.argmin(i) for i in self.transform(y)])
+        return labels</code></pre>
+    </details>
+    </dd>
+    <dt id="pyleida.clustering.KMeansLeida.transform"><code class="name flex">
+    <span>def <span class="ident">transform</span></span>(<span>self, y, closest=False)</span>
+    </code></dt>
+    <dd>
+    <div class="desc"><p>Computes distances between each observation
+    or data point and each centroid. Differs from
+    sklearn transform method in that here we can select
+    if retrieve all the distances or only the distances
+    to closest centroid. In the new space, each dimension
+    is the distance to the cluster centers.</p>
+    <h2 id="params">Params:</h2>
+    <p>y : ndarray of shape (n_samples,n_features).
+    Data to transform. </p>
+    <h2 id="returns">Returns:</h2>
+    <p>distances : ndarray of shape (n_samples,n_centroids).
+    y transformed in the new space.</p></div>
+    <details class="source">
+    <summary>
+    <span>Expand source code</span>
+    </summary>
+    <pre><code class="python">def transform(self,y,closest=False):
+        &#34;&#34;&#34;
+        Computes distances between each observation
+        or data point and each centroid. Differs from
+        sklearn transform method in that here we can select
+        if retrieve all the distances or only the distances
+        to closest centroid. In the new space, each dimension
+        is the distance to the cluster centers.
+    
+        Params:
+        --------
+        y : ndarray of shape (n_samples,n_features).
+            Data to transform. 
+        
+        Returns:
+        --------
+        distances : ndarray of shape (n_samples,n_centroids).
+            y transformed in the new space.
+        &#34;&#34;&#34;
+        self._check_is_fitted()
+    
+        distances = cdist(y, self.cluster_centers_ ,self._metric_)
+        if not closest:
+            return distances
+        else:
+            return distances.min(1)</code></pre>
+    </details>
+    </dd>
+    </dl>
+    </dd>
+    </dl>
+    </section>
+
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyleida.clustering.barplot_eig"><code class="name flex">
+<span>def <span class="ident">barplot_eig</span></span>(<span>eig, features_list)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create barplot showing the values of the
+eigenvector for each brain region. This
+eigenvector could be either an eigenvector
+of a particular time point, or a cluster
+centroid.</p>
+<h2 id="params">Params:</h2>
+<p>eig : ndarray with shape (N_ROIs,).
+Contains the eigenvector to plot.</p>
+<p>features_list : list.
+Contains the names of the ROIs.
+Must be in the same order as in 'eig'.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def barplot_eig(eig,features_list):
+    &#34;&#34;&#34; 
+    Create barplot showing the values of the
+    eigenvector for each brain region. This
+    eigenvector could be either an eigenvector
+    of a particular time point, or a cluster
+    centroid.
+
+    Params:
+    -------
+    eig : ndarray with shape (N_ROIs,). 
+        Contains the eigenvector to plot.
+
+    features_list : list. 
+        Contains the names of the ROIs. 
+        Must be in the same order as in &#39;eig&#39;.
+    &#34;&#34;&#34;
+    # generating list of colors. 
+    # Positive values get red, negative values get blue
+    cols = [&#39;mediumblue&#39; if i&lt;0 else &#39;firebrick&#39; for i in eig]
+
+    plt.ion()
+    plt.figure(figsize=(4,15))
+    sns.barplot(y=features_list,x=eig,orient=&#39;h&#39;,palette=cols)
+    plt.axvline(0,color=&#39;black&#39;)
+    if np.max(np.abs(eig))&gt;0.15:
+        plt.xlim(-1.05,1.05)
+    else:
+        plt.xlim(-0.11,0.11)
+    plt.xticks(fontweight=&#39;regular&#39;)
+    plt.yticks(fontweight=&#39;regular&#39;,fontsize=8)
+    plt.ylabel(&#39;Brain areas&#39;,rotation=&#39;vertical&#39;,fontsize=24,labelpad=40)
+    plt.tight_layout()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.barplot_states"><code class="name flex">
+<span>def <span class="ident">barplot_states</span></span>(<span>centroids, rois_labels)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create subplots with barplots showing
+the values of each cluster centroid.</p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (n_centroids,n_rois).
+Contains the centroids.</p>
+<p>rois_labels : list.
+Contains the names of each ROI.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def barplot_states(centroids,rois_labels):
+    &#34;&#34;&#34;
+    Create subplots with barplots showing
+    the values of each cluster centroid.
+
+    Params:
+    ------
+    centroids : ndarray with shape (n_centroids,n_rois).
+        Contains the centroids.
+
+    rois_labels : list. 
+        Contains the names of each ROI.
+    &#34;&#34;&#34;
+    if not isinstance(centroids,np.ndarray):
+        raise TypeError(&#34;&#39;centroids&#39; must be a numpy 2D array!&#34;)
+    if centroids.shape[1]!=len(rois_labels):
+        raise Exception(&#34;The number of brain regions in &#39;centroids&#39; and &#39;rois_labels&#39; must be the same!&#34;)
+    
+    N_centroids = centroids.shape[0]
+
+    plt.ion()
+    _,axs = plt.subplots(
+        ncols=N_centroids,
+        nrows=1,
+        sharey=True,
+        figsize=(N_centroids if N_centroids&gt;4 else 4,8)
+        )
+    axs = np.ravel(axs)
+
+    for fig_idx in range(N_centroids):
+        # generating list of colors.
+        # Positive values get red, negative values get blue
+        cols = [&#39;mediumblue&#39; if i&lt;0 else &#39;firebrick&#39; for i in centroids[fig_idx,:]]
+
+        sns.barplot(
+            y=rois_labels,
+            x=centroids[fig_idx,:],
+            orient=&#39;h&#39;,
+            palette=cols,
+            ax=axs[fig_idx]
+            )
+        axs[fig_idx].axvline(0,color=&#39;black&#39;)
+        if np.max(np.abs(centroids[fig_idx,:]))&gt;0.15:
+            axs[fig_idx].set_xlim(-1.05,1.05)
+        else:
+            axs[fig_idx].set_xlim(-0.11,0.11)
+        #axs[fig_idx].set_xlim(-0.11,0.11) 
+        axs[fig_idx].tick_params(axis=&#39;y&#39;,labelsize=5)
+        axs[fig_idx].tick_params(axis=&#39;x&#39;,labelsize=6 if N_centroids&gt;5 else 3)
+        axs[fig_idx].set_title(
+            f&#39;PL pattern {fig_idx+1}&#39;,
+            fontweight=&#39;regular&#39;,
+            fontsize=4,
+            pad=10
+            )
+    axs[0].set_ylabel(&#39;Brain areas&#39;,rotation=&#39;vertical&#39;,fontsize=24,labelpad=25)
+    plt.tight_layout()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.centroid2matrix"><code class="name flex">
+<span>def <span class="ident">centroid2matrix</span></span>(<span>centroids, plot=True, cmap='jet', darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Take the controids resulting from the k-means
+clustering (i.e., the phase-locking states) and
+reconstruct the connectivity pattern in matrix
+format.</p>
+<p>Note: see Cabral et al. 2017 [p.4 and p.6].</p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (n_centroids,n_rois).
+Clusters centroids of a specific K partition.</p>
+<p>plot : bool.
+Whether to create plot showing
+the matrices.</p>
+<p>cmap : str. Default = 'jet'.
+Select the colormap to use.</p>
+<p>darkstyle : bool.
+Whether to use a black background.</p>
+<h2 id="returns">Returns:</h2>
+<p>states : ndarray with shape (n_rois,n_rois,n_centroids).
+PL states in matrix format.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def centroid2matrix(centroids,plot=True,cmap=&#39;jet&#39;,darkstyle=False):
+    &#34;&#34;&#34;
+    Take the controids resulting from the k-means
+    clustering (i.e., the phase-locking states) and
+    reconstruct the connectivity pattern in matrix
+    format.
+    
+    Note: see Cabral et al. 2017 [p.4 and p.6].
+    
+    Params:
+    -------
+    centroids : ndarray with shape (n_centroids,n_rois).
+        Clusters centroids of a specific K partition.
+
+    plot : bool.
+        Whether to create plot showing
+        the matrices.
+
+    cmap : str. Default = &#39;jet&#39;.
+        Select the colormap to use.
+
+    darkstyle : bool.
+        Whether to use a black background.
+    
+    Returns:
+    --------
+    states : ndarray with shape (n_rois,n_rois,n_centroids).
+        PL states in matrix format.
+    &#34;&#34;&#34;
+    if not isinstance(centroids,np.ndarray) or centroids.ndim!=2:
+        raise TypeError(&#34;&#39;centroids&#39; must be a 2D array (n_centroids,n_rois)!&#34;)
+
+    N_states, N_regions = centroids.shape
+    states = np.empty((N_regions,N_regions,N_states))
+    
+    for state_idx in range(N_states):
+        #scale centroid by its maximum value and transpose the matrix
+        centroid = centroids[state_idx,:]/np.max(np.abs(centroids[state_idx,:]))
+        states[:,:,state_idx] = np.outer(centroid,centroid.T)
+
+    if plot:
+        plt.ion()
+        with plt.style.context(&#39;dark_background&#39; if darkstyle else &#39;default&#39;):
+            _, axs = plt.subplots(
+                nrows=1,
+                ncols=N_states,
+                figsize=(N_states*2, 2 if N_states&lt;=10 else 1),
+                edgecolor=&#39;black&#39;,
+                subplot_kw=dict(box_aspect=1)
+                )
+
+            axs = axs.ravel()
+            ticks_size = 6 if N_states&lt;=10 else 5 if 10&lt;N_states&lt;=15 else 4
+
+            for state_idx in range(N_states):
+                sns.heatmap(
+                    states[:,:,state_idx],
+                    ax=axs[state_idx],
+                    vmax=1,
+                    vmin=-1,
+                    center=0,
+                    cmap=cmap,
+                    square=True,
+                    cbar=False
+                    )
+                axs[state_idx].set_title(f&#39;PL state {state_idx+1}&#39;,fontsize=7 if N_states&lt;15 else 5)
+                #axs[state_idx].set_xlabel(f&#39;ROIs&#39;,fontsize=6.5)
+                #axs[state_idx].set_ylabel(f&#39;ROIs&#39;,fontsize=6.5)
+                axs[state_idx].set_xticks(
+                    np.arange(20,N_regions,20),
+                    np.arange(20,N_regions,20).tolist(),
+                    rotation=0
+                    )
+                axs[state_idx].set_yticks(
+                    np.arange(20,N_regions,20),
+                    np.arange(20,N_regions,20).tolist(),
+                    )
+                
+                axs[state_idx].tick_params(
+                    axis=&#39;both&#39;,
+                    which=&#39;both&#39;,
+                    bottom=False,
+                    left=False,
+                    top=False,
+                    #labelsize=5 if N_states&lt;15 else 3.5,
+                    labelsize=ticks_size,
+                    pad=0
+                    #labelbottom=False,
+                    #labelleft=False
+                    )
+
+        plt.tight_layout(pad=1,w_pad=1)
+
+    return states</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.dunn_fast"><code class="name flex">
+<span>def <span class="ident">dunn_fast</span></span>(<span>points, labels)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the Dunn index.</p>
+<h2 id="params">Params:</h2>
+<p>points : ndarray with shape (N_samples,N_features).
+Observations/samples.</p>
+<p>labels : ndarray with shape (N_samples).
+Labels of each observation in 'points'.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dunn_fast(points, labels):
+    &#34;&#34;&#34; 
+    Compute the Dunn index.
+    
+    Params:
+    ----------
+    points : ndarray with shape (N_samples,N_features).
+        Observations/samples.
+        
+    labels : ndarray with shape (N_samples).
+        Labels of each observation in &#39;points&#39;.
+    &#34;&#34;&#34;
+    distances = cosine_distances(points)
+    ks = np.sort(np.unique(labels))
+    
+    deltas = np.ones([len(ks), len(ks)])*1_000_000
+    big_deltas = np.zeros([len(ks), 1])
+    
+    l_range = list(range(0, len(ks)))
+    
+    for k in l_range:
+        for l in (l_range[0:k]+l_range[k+1:]):
+            deltas[k, l] = _delta_fast((labels == ks[k]), (labels == ks[l]), distances)
+        
+        big_deltas[k] = _big_delta_fast((labels == ks[k]), distances)
+
+    di = np.min(deltas)/np.max(big_deltas)
+    return di</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.identify_states"><code class="name flex">
+<span>def <span class="ident">identify_states</span></span>(<span>eigens_dataset, K_min=2, K_max=20, n_init=15, random_state=None, plot=True, save_results=False, path=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Perform k-means clustering for each value of 'k' to identify the
+different (discrete) number of clusters (i.e.,the phase-locking
+states). At eack 'k', a k-means model is fitted and a cluster is
+assign to each eigenvector. These 'predictions' are located in a
+new column of the provided 'eigens_dataset'.
+In addition, each 'k' is evaluated by means of the Dunn score or
+Dunn index, distortion (aka sum squared errors), silhouete score,
+and Davies Bouldin score.</p>
+<h2 id="params">Params:</h2>
+<p>eigens : ndarray with shape (n_eigevectors, n_ROIs).
+Contains the extracted eigenvectors from the dFC matrices. </p>
+<p>K_max, K_min : int.
+Max and min number of clusters to fit.</p>
+<p>n_init : int.
+Number of times the clustering algorithm
+will be run with different centroid seeds.</p>
+<p>random_state : None or int.
+Determines random number generation for
+centroid initialization.
+Use an int to make the randomness deterministic.</p>
+<p>plot : bool.
+Whether to create plots showing the number
+of k in the X axis, and the Dunn mean score,
+Silhoutte score, distortion, and Davis Bouldin
+score for each k in the Y axis.</p>
+<p>save_results : bool.
+Whether to save results in '{path}/clustering'.</p>
+<p>path : str.
+Where to create the 'clustering' folder if
+'save_results' was set to True.</p>
+<h2 id="returns">Returns:</h2>
+<p>eigens_predictions : pd.dataframe.
+Contains the metadata (subjects_ids and conditions),
+and a column for each K partition is added containing
+the predicted label for each observation (row).</p>
+<p>clustering_performance : pd.dataframe.
+Contains the Dunn score, Silhouette score and distorion
+values for each K explored.</p>
+<p>models : dict.
+Contain the fitted k-means models.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def identify_states(eigens_dataset,K_min=2,K_max=20,n_init=15,random_state=None,plot=True,save_results=False,path=None):
+    &#34;&#34;&#34;
+    Perform k-means clustering for each value of &#39;k&#39; to identify the
+    different (discrete) number of clusters (i.e.,the phase-locking
+    states). At eack &#39;k&#39;, a k-means model is fitted and a cluster is
+    assign to each eigenvector. These &#39;predictions&#39; are located in a
+    new column of the provided &#39;eigens_dataset&#39;.
+    In addition, each &#39;k&#39; is evaluated by means of the Dunn score or
+    Dunn index, distortion (aka sum squared errors), silhouete score,
+    and Davies Bouldin score.
+    
+    Params:
+    -------
+    eigens : ndarray with shape (n_eigevectors, n_ROIs). 
+        Contains the extracted eigenvectors from the dFC matrices. 
+
+    K_max, K_min : int. 
+        Max and min number of clusters to fit.
+
+    n_init : int.
+        Number of times the clustering algorithm
+        will be run with different centroid seeds.
+
+    random_state : None or int.
+        Determines random number generation for
+        centroid initialization.
+        Use an int to make the randomness deterministic.
+
+    plot : bool. 
+        Whether to create plots showing the number
+        of k in the X axis, and the Dunn mean score,
+        Silhoutte score, distortion, and Davis Bouldin
+        score for each k in the Y axis.
+
+    save_results : bool. 
+        Whether to save results in &#39;{path}/clustering&#39;.
+
+    path : str.
+        Where to create the &#39;clustering&#39; folder if
+        &#39;save_results&#39; was set to True.
+
+    Returns:
+    --------
+    eigens_predictions : pd.dataframe.
+        Contains the metadata (subjects_ids and conditions),
+        and a column for each K partition is added containing
+        the predicted label for each observation (row).
+
+    clustering_performance : pd.dataframe.
+        Contains the Dunn score, Silhouette score and distorion
+        values for each K explored.
+
+    models : dict.
+        Contain the fitted k-means models.
+    &#34;&#34;&#34;
+    if save_results:
+        try:
+            results_path = f&#39;{path}/clustering&#39;
+            if not os.path.exists(results_path):
+                os.makedirs(results_path)
+            print(f&#34;-Creating folder to save results: &#39;./{results_path}&#39;&#34;)
+        except:
+            print(&#34;Warning: the folder to save the results could&#39;t be created.&#34;)
+
+    #Execute the k-means models fitting process
+    eigens_predictions = eigens_dataset[[&#39;subject_id&#39;,&#39;condition&#39;]] #copy provided data (to avoid overwriting)
+    X = np.array(eigens_dataset.iloc[:,2:],dtype=np.float32) #keep array with the eigenvectors (remove &#39;subject_ids&#39; and &#39;condition&#39; columns)
+
+    N_samples = X.shape[0]
+    if N_samples&gt;30_000:
+        random_samples_idx = np.random.choice(np.arange(N_samples),size=30_000,replace=False)
+
+    clustering_performance = []
+
+    models = {} #dict to save each fitted model
+
+    for k in range(K_min,K_max+1):
+        print(f&#39;k = {k}&#39;)
+        kmeans = KMeansLeida(k=k,n_init=n_init,n_iter=1_000)
+        kmeans.fit(X,random_state=random_state)
+        models[f&#39;k_{k}&#39;] = kmeans
+        clustering_performance.append({
+            &#39;k&#39;:k,
+            &#39;Dunn_score&#39;:dunn_fast(X,kmeans.labels_) if N_samples&lt;30_000 
+                        else dunn_fast(X[random_samples_idx,:],kmeans.labels_[random_samples_idx]),
+            &#39;distortion&#39;:kmeans.inertia_,
+            &#39;silhouette_score&#39;:silhouette_score(X=X, labels=kmeans.labels_, metric=&#39;cosine&#39;) if N_samples&lt;30_000
+                        else silhouette_score(X=X[random_samples_idx,:], labels=kmeans.labels_[random_samples_idx], metric=&#39;cosine&#39;),
+            &#39;Davies-Bouldin_score&#39;:davies_bouldin_score(X, kmeans.labels_)
+            })
+        
+        #predict each volume label
+        eigens_predictions.loc[:,f&#39;k_{k}&#39;] = kmeans.labels_ #adding column with clusters assignment
+
+        #save model to disk
+        if save_results:
+            models_folder = f&#39;{results_path}/models&#39;
+            if not os.path.exists(models_folder):
+                os.mkdir(models_folder)
+            model_filename = f&#39;model_k_{k}.pkl&#39;
+            pickle.dump(kmeans, open(f&#39;{models_folder}/{model_filename}&#39;, &#39;wb&#39;))
+
+    clustering_performance = pd.DataFrame(clustering_performance)
+
+    if plot:
+        plt.ioff()
+        plot_clustering_scores(clustering_performance)
+        if save_results:
+            try:
+                plt.savefig(f&#39;{results_path}/clustering_performance.png&#39;,dpi=300)
+            except:
+                print(&#39;The figures were not saved on local folder.&#39;)
+        plt.close()
+    #save results
+    if save_results:
+        try:
+            clustering_performance.to_csv(f&#39;{results_path}/clustering_performance.csv&#39;,sep=&#39;\t&#39;,index=False)
+            eigens_predictions.to_csv(f&#39;{results_path}/predictions.csv&#39;,sep=&#39;\t&#39;,index=False)
+        except:
+            print(&#39;The .csv files were not saved on disk. &#39;
+                &#39;You can still save them by yourself using the returned variables.&#39;)
+
+    print(&#39;\n*The clustering process has succesfully ended.&#39;)
+        
+    return eigens_predictions,clustering_performance,models</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.patterns_stability"><code class="name flex">
+<span>def <span class="ident">patterns_stability</span></span>(<span>X, y=None, n_clusters=None, folds=5, metric='ari', plot=True, darkstyle=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Run a stratified KFold cross-validation to explore
+the stability of assigned clusters across folds.
+The provided data in 'X' and is splitted in a train
+set and a test set. Then, a cross-validation is
+performed by splitting the train set into n number
+of 'folds'. At each iteration, a given fold is used to
+fit a KMeans model, which is used to assign a cluster
+label to each observation of the test set. Finally,
+the similarity between clusters assignments of the test
+set across folds is evaluated by using either the ARI
+(adjusted Rand index) score ('ari') or the AMI (adjusted
+mutual information) score ('ami').</p>
+<h2 id="params">Params:</h2>
+<p>X : ndarray with shape (n_volumes,n_rois).
+Contains the eigenvectors.</p>
+<p>y : ndarray with shape (n_volumes,). Optional.
+Clusters assignment of each observation in 'X'.
+If 'None', you must provide 'n_clusters'.</p>
+<p>n_clusters : int. Optional.
+Select the numbers of clusters to fit the
+K-Means models. If 'y' is not None, then
+the number of clusters is inferred from
+the provided array.</p>
+<p>folds : int.
+Select the number of folds for the
+cross-validation.</p>
+<p>metric : str.
+Metric to compute the similarity between
+clusters assignments across folds.</p>
+<p>plot : bool.
+Whether to create a heatmap showing the
+scores obtained in the cross-validation.</p>
+<p>darkstyle : bool.
+Whether to use a dark background for plotting.</p>
+<h2 id="returns">Returns:</h2>
+<p>scores : ndarray with shape (n_folds,n_folds).
+Array containing the computed values of the
+selected metric for each pair of folds.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def patterns_stability(X,y=None,n_clusters=None,folds=5,metric=&#39;ari&#39;,plot=True,darkstyle=False):
+    &#34;&#34;&#34;
+    Run a stratified KFold cross-validation to explore
+    the stability of assigned clusters across folds.
+    The provided data in &#39;X&#39; and is splitted in a train
+    set and a test set. Then, a cross-validation is
+    performed by splitting the train set into n number
+    of &#39;folds&#39;. At each iteration, a given fold is used to
+    fit a KMeans model, which is used to assign a cluster
+    label to each observation of the test set. Finally,
+    the similarity between clusters assignments of the test
+    set across folds is evaluated by using either the ARI
+    (adjusted Rand index) score (&#39;ari&#39;) or the AMI (adjusted
+    mutual information) score (&#39;ami&#39;).
+
+    Params:
+    -------
+    X : ndarray with shape (n_volumes,n_rois).
+        Contains the eigenvectors.
+
+    y : ndarray with shape (n_volumes,). Optional.
+        Clusters assignment of each observation in &#39;X&#39;.
+        If &#39;None&#39;, you must provide &#39;n_clusters&#39;.
+
+    n_clusters : int. Optional.
+        Select the numbers of clusters to fit the
+        K-Means models. If &#39;y&#39; is not None, then
+        the number of clusters is inferred from
+        the provided array.
+
+    folds : int.
+        Select the number of folds for the
+        cross-validation.
+
+    metric : str.
+        Metric to compute the similarity between
+        clusters assignments across folds.
+
+    plot : bool.
+        Whether to create a heatmap showing the
+        scores obtained in the cross-validation.
+
+    darkstyle : bool.
+        Whether to use a dark background for plotting.
+
+    Returns:
+    --------
+    scores : ndarray with shape (n_folds,n_folds).
+        Array containing the computed values of the
+        selected metric for each pair of folds.
+    &#34;&#34;&#34;
+    if not isinstance(metric,str) or metric not in [&#39;ari&#39;,&#39;ami&#39;]:
+        raise Exception(&#34;&#39;metric&#39; must be either &#39;ari&#39; or &#39;ami&#39;&#34;)
+
+    if not isinstance(X,np.ndarray):
+        raise TypeError(&#34;&#39;X&#39; must be a 2D array!&#34;)
+
+    if y is None and n_clusters is None:
+        raise Exception(&#34;You must specify either predicted labels in &#39;y&#39; &#34;
+                        &#34;or a number of clusters (&#39;n_clusters&#39;).&#34;)
+    elif y is not None and n_clusters is not None:
+        print(&#34;Warning: when &#39;y&#39; is provided, the &#39;n_clusters&#39; &#34;
+            &#34;is inferred from &#39;y&#39;.&#34;)
+
+    if y is not None:
+        if not isinstance(y,np.ndarray):
+            raise TypeError(&#34;&#39;y&#39; must be an array!&#34;)
+        n_clusters = np.unique(y).size
+        X_tr,X_ts,y_tr,_ = train_test_split(X,y,stratify=y,train_size=.5)
+    else:
+        X_tr,X_ts = train_test_split(X,train_size=.5)
+
+    #compute centroids on different folds
+    kfold = StratifiedKFold(n_splits=folds) if y is not None else KFold(n_splits=folds)
+    predictions_ = np.empty((X_ts.shape[0],folds))
+
+    if y is not None:
+        for i,(tr_idx,_) in enumerate(kfold.split(X_tr,y_tr)):
+            print(f&#39;Current fold: {i+1}&#39;)
+            km = KMeansLeida(k=n_clusters)
+            km.fit(X_tr[tr_idx])
+            predictions_[:,i] = km.predict(X_ts)
+    else:
+        for i,(tr_idx,_) in enumerate(kfold.split(X_tr)):
+            print(f&#39;Current fold: {i+1}&#39;)
+            km = KMeansLeida(k=n_clusters)
+            km.fit(X_tr[tr_idx])
+            predictions_[:,i] = km.predict(X_ts)
+
+    #compute scores
+    scores = np.empty((folds,folds))
+
+    for fold_idx in range(folds):
+        for fold_idx2 in range(folds):
+            if metric==&#39;ari&#39;:
+                scores[fold_idx,fold_idx2] = adjusted_rand_score(
+                    predictions_[:,fold_idx],
+                    predictions_[:,fold_idx2]
+                    )
+            else:
+                scores[fold_idx,fold_idx2] = adjusted_mutual_info_score(
+                    predictions_[:,fold_idx],
+                    predictions_[:,fold_idx2]
+                    )
+
+    font_sizes = {&#39;folds&#39;:np.arange(2,21,1),&#39;fsize&#39;:np.linspace(6,15,19)[::-1]}
+
+    if plot:
+        plt.ion()
+        with plt.style.context(&#39;dark_background&#39; if darkstyle else &#39;default&#39;):
+            matrix_ = np.triu(scores)
+            plt.figure()
+            sns.heatmap(
+                scores[1:,:-1],
+                vmin=0,
+                center=.5,
+                vmax=1,
+                cmap=&#39;viridis&#39;,
+                square=True,
+                linecolor=&#39;black&#39; if darkstyle else &#39;white&#39;,
+                linewidths=.4,
+                annot=True,
+                annot_kws={&#39;size&#39;:font_sizes[&#39;fsize&#39;][folds-2]},
+                mask=matrix_[1:,:-1],
+                yticklabels=[f&#39;{i+2}&#39; for i in range(folds-1)],
+                xticklabels=[f&#39;{i+1}&#39; for i in range(folds-1)],
+                fmt=&#39;.2f&#39;,
+                cbar_kws={&#39;label&#39;: &#39;ARI score&#39; if metric==&#39;ari&#39; else &#39;AMI score&#39;,&#39;shrink&#39;: 0.5}
+                )
+            plt.xlabel(&#39;Fold&#39;,fontsize=16)
+            plt.ylabel(&#39;Fold&#39;,fontsize=16)
+            plt.yticks(rotation=0)
+            plt.tight_layout()
+
+    return scores</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.plot_clustering_scores"><code class="name flex">
+<span>def <span class="ident">plot_clustering_scores</span></span>(<span>data)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a 2x2 panel with lineplots showing
+the clustering evaluation metrics for each
+explored k value (Dunn score, distortion,
+silhouette score, and Davis-Bouldin score).</p>
+<h2 id="params">Params:</h2>
+<p>data : pandas.dataframe.
+Contain k in the 1st col, with the
+rest of columns containing the values
+of the clustering evaluation metrics.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_clustering_scores(data):
+    &#34;&#34;&#34;
+    Create a 2x2 panel with lineplots showing
+    the clustering evaluation metrics for each
+    explored k value (Dunn score, distortion,
+    silhouette score, and Davis-Bouldin score).
+
+    Params:
+    -------
+    data : pandas.dataframe.
+        Contain k in the 1st col, with the
+        rest of columns containing the values
+        of the clustering evaluation metrics.
+    &#34;&#34;&#34;
+    _,axs = plt.subplots(nrows=2,ncols=2,figsize=(11,6))
+    axs = np.ravel(axs)
+    for fig_idx,metric in enumerate(data.columns[1:].values):
+        sns.lineplot(x=&#39;k&#39;,y=metric,data=data,ax=axs[fig_idx],linewidth=3)
+        axs[fig_idx].set_xticks([i+2 for i in range(np.max(data.k)-1)])
+        axs[fig_idx].set_xlabel(&#39;Number of clusters&#39;,fontsize=15)
+        axs[fig_idx].set_ylabel(metric.replace(&#39;_&#39;,&#39; &#39;),fontsize=15)
+        axs[fig_idx].grid(False)
+
+    plt.tight_layout()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.plot_clusters3D"><code class="name flex">
+<span>def <span class="ident">plot_clusters3D</span></span>(<span>eigens, labels, clusters_colors=None, grid=True, alpha=0.7, dot_size=3, edgecolor=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Visualize the identified clusters (brain states) in a
+3D scatter plot, which constitutes a low-dimensional
+representation of the 'state space'.
+Method : take the eigenvectors and extract the first
+three principal components to reduce the dimensionality
+of the data to a 3D space. Each dot in the plot thus
+represents a single eigenvector, and is coloured according
+to the cluster it belongs to.</p>
+<h2 id="params">Params:</h2>
+<p>eigens : ndarray with shape (n_samples, n_rois).
+Contains the eigenvectors of each
+subject for each time point.</p>
+<p>labels : ndarray with shape (n_samples,).
+Contains the predicted cluster assignment
+for each eigenvector in 'eigens'.</p>
+<p>clusters_colors : list [optional].
+Provide a list with the desired color
+of each cluster. If not provided, then
+a predefined set of colors will be used.</p>
+<p>grid : bool.
+Whether to show grid or not.</p>
+<p>alpha : float.
+Set transparency of dots.</p>
+<p>dot_size : float or int.
+Set dot size.</p>
+<p>edge_color : None | str.
+Specify an edge color to use on dots.</p>
+<h2 id="returns">Returns:</h2>
+<p>fig : generated plot.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_clusters3D(eigens,labels,clusters_colors=None,grid=True,alpha=.7,dot_size=3,edgecolor=None):
+    &#34;&#34;&#34;
+    Visualize the identified clusters (brain states) in a
+    3D scatter plot, which constitutes a low-dimensional
+    representation of the &#39;state space&#39;. 
+    Method : take the eigenvectors and extract the first
+    three principal components to reduce the dimensionality
+    of the data to a 3D space. Each dot in the plot thus
+    represents a single eigenvector, and is coloured according
+    to the cluster it belongs to.
+    
+    Params:
+    -------
+    eigens : ndarray with shape (n_samples, n_rois).
+        Contains the eigenvectors of each
+        subject for each time point.
+
+    labels : ndarray with shape (n_samples,).
+        Contains the predicted cluster assignment
+        for each eigenvector in &#39;eigens&#39;.
+
+    clusters_colors : list [optional].
+        Provide a list with the desired color
+        of each cluster. If not provided, then
+        a predefined set of colors will be used.
+
+    grid : bool.
+        Whether to show grid or not.
+
+    alpha : float.
+        Set transparency of dots.
+
+    dot_size : float or int. 
+        Set dot size.
+
+    edge_color : None | str.
+        Specify an edge color to use on dots.
+
+    Returns:
+    --------
+    fig : generated plot.
+    &#34;&#34;&#34;
+    if clusters_colors is not None:
+        if np.unique(labels).size!=len(clusters_colors):
+            raise ValueError(&#39;The number of clusters and the number of colours provided must match&#39;)
+    else: 
+        clusters_colors = [
+            &#39;royalblue&#39;,
+            &#39;grey&#39;,
+            &#39;tomato&#39;,
+            &#39;orange&#39;,
+            &#39;cyan&#39;,
+            &#39;violet&#39;,
+            &#39;yellow&#39;,
+            &#39;purple&#39;,
+            &#39;firebrick&#39;,
+            &#39;teal&#39;,
+            &#39;orchid&#39;,
+            &#39;red&#39;,
+            &#39;green&#39;,
+            &#39;steelblue&#39;,
+            &#39;indigo&#39;,
+            &#39;gold&#39;,
+            &#39;sienna&#39;,
+            &#39;coral&#39;,
+            &#39;olive&#39;,
+            &#39;salmon&#39;
+        ]
+
+    pca = PCA(n_components=3)
+    pcs = pca.fit_transform(eigens)
+    x_pcs = pd.concat((pd.DataFrame(pcs),pd.Series(labels)),axis=1)
+    x_pcs.columns = np.array([&#39;PC_1&#39;,&#39;PC_2&#39;,&#39;PC_3&#39;,&#39;Cluster&#39;])
+
+    #plotting
+    fig = plt.figure(figsize=(8,8))
+    ax = plt.axes(projection =&#34;3d&#34;)
+    for i,color in zip(np.unique(labels),clusters_colors):
+        ax.scatter3D(
+            x_pcs[x_pcs.Cluster==i][&#39;PC_3&#39;],
+            x_pcs[x_pcs.Cluster==i][&#39;PC_2&#39;],
+            x_pcs[x_pcs.Cluster==i][&#39;PC_1&#39;], 
+            c=color,
+            edgecolors=edgecolor,
+            s=dot_size,
+            alpha=alpha
+            )
+
+    ax.w_xaxis.pane.fill = False
+    ax.w_yaxis.pane.fill = False
+    ax.w_zaxis.pane.fill = False
+
+    ax.set_xlabel(&#39;3rd PC&#39;, fontsize=15, fontweight=&#39;regular&#39;,labelpad=20)
+    ax.set_ylabel(&#39;2nd PC&#39;, fontsize=15, fontweight=&#39;regular&#39;,labelpad=20)
+    ax.set_zlabel(&#39;1st PC&#39;, fontsize=15, fontweight=&#39;regular&#39;,labelpad=20)
+    if not grid: 
+        ax.grid(False)
+    plt.tight_layout()
+    plt.show()
+
+    return fig</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.plot_clusters_boundaries"><code class="name flex">
+<span>def <span class="ident">plot_clusters_boundaries</span></span>(<span>y, n_clusters=2, alpha=0.05)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Plot cluster centroids decision boundaries in
+2D space after applying PCA.</p>
+<h2 id="params">Params:</h2>
+<p>y : ndarray with shape (n_samples, n_rois).
+Contains the eigenvectors.</p>
+<p>n_clusters : int.
+Specify the k number of clusters.</p>
+<p>alpha : float.
+Specify the transparency of the
+dots (observations).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_clusters_boundaries(y,n_clusters=2,alpha=0.05):
+    &#34;&#34;&#34;
+    Plot cluster centroids decision boundaries in
+    2D space after applying PCA.
+
+    Params:
+    -------
+    y : ndarray with shape (n_samples, n_rois).
+        Contains the eigenvectors.
+
+    n_clusters : int.
+        Specify the k number of clusters.
+
+    alpha : float.
+        Specify the transparency of the
+        dots (observations).
+    &#34;&#34;&#34;
+    ỹ = PCA(n_components=2).fit_transform(y) #embedding
+    kmeans = KMeansLeida(k=n_clusters, n_init=4)
+    kmeans.fit(ỹ)
+
+    # Step size of the mesh. Decrease to increase the quality of the VQ.
+    h = 0.0007  # point in the mesh [x_min, x_max]x[y_min, y_max].
+
+    # Plot the decision boundary. For that, we will assign a color to each
+    x_min, x_max = ỹ[:, 1].min(), ỹ[:, 1].max()
+    y_min, y_max = ỹ[:, 0].min(), ỹ[:, 0].max()
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+    # Obtain labels for each point in mesh. Use last trained model.
+    Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])
+
+    # Put the result into a color plot
+    Z = Z.reshape(xx.shape)
+
+    plt.ion()
+    plt.figure(figsize=(8,8))
+    #plt.clf()
+    plt.imshow(
+        Z,
+        interpolation=&#34;nearest&#34;,
+        extent=(xx.min(), xx.max(), yy.min(), yy.max()),
+        cmap=plt.cm.Paired,
+        aspect=&#34;auto&#34;,
+        origin=&#34;lower&#34;,
+        alpha=.9
+    )
+
+    # Plot dots (eigenvectors/samples)
+    plt.plot(
+        ỹ[:, 1],
+        ỹ[:, 0],
+        &#39;o&#39;,
+        markersize=4,
+        markerfacecolor=&#39;black&#39;,
+        markeredgecolor=&#39;grey&#39;,
+        markeredgewidth=.5,
+        alpha=alpha
+        )
+
+    # Plot the centroids as a white X
+    centroids = kmeans.cluster_centers_
+    plt.scatter(
+        centroids[:, 1],
+        centroids[:, 0],
+        marker=&#34;X&#34;,
+        s=400,
+        linewidths=3,
+        color=&#34;black&#34;,
+        zorder=10,
+        edgecolors=&#39;w&#39;
+    )
+
+    plt.title(
+        f&#34;K-means clustering (K={n_clusters}) on the eigenvectors (PCA-reduced data)&#34;
+    )
+    plt.xlim(x_min, x_max)
+    plt.xlabel(&#34;Centroids are marked with white cross.\nObservations are marked with black dots&#34;)
+    plt.ylim(y_min, y_max)
+    plt.xticks(())
+    plt.yticks(())
+    plt.tight_layout()</code></pre>
+</details>
+</dd>
+<dt id="pyleida.clustering.plot_voronoi"><code class="name flex">
+<span>def <span class="ident">plot_voronoi</span></span>(<span>centroids)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Plot the clusters centroids in a 2D Voronoi
+cells space. Performs a PCA to reduce the
+dimensionality of the original centroid space
+to a 2D space.</p>
+<h2 id="params">Params:</h2>
+<p>centroids : ndarray with shape (n_centroids, n_regions).
+Centroids of a particular K partition.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_voronoi(centroids):
+    &#34;&#34;&#34;
+    Plot the clusters centroids in a 2D Voronoi
+    cells space. Performs a PCA to reduce the
+    dimensionality of the original centroid space
+    to a 2D space.
+
+    Params:
+    --------
+    centroids : ndarray with shape (n_centroids, n_regions).
+        Centroids of a particular K partition.
+
+    &#34;&#34;&#34;
+    pcs = PCA(n_components=2).fit_transform(centroids)
+    vor = Voronoi(pcs)
+
+    plt.ion()
+    voronoi_plot_2d(vor,point_size=10,show_vertices=False)
+    plt.title(f&#39;K = {centroids.shape[0]}&#39;)
+    plt.tight_layout()</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+
+<section>
+    <h2 class="section-title" id="header-submodules">Sub-modules</h2>
+    <dl>
+    <dt><code class="name"><a title="pyleida.clustering.rsnets_overlap" href="rsnets_overlap.html">pyleida.clustering.rsnets_overlap</a></code></dt>
+    <dd>
+    <div class="desc"><p>Compute overlap between phase-locking states and Yeo resting-state networks</p></div>
+    </dd>
+    </dl>
+</section>
+
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyleida" href="../index.html">pyleida</a></code></li>
+</ul>
+</li>
+
+<li><h3><a href="#header-classes">Class</a></h3>
+    <ul>
+    <li>
+    <h4><code><a title="pyleida.clustering.KMeansLeida" href="#pyleida.clustering.KMeansLeida">KMeansLeida</a></code></h4>
+    <ul class="">
+    <li><code><a title="pyleida.clustering.KMeansLeida.fit" href="#pyleida.clustering.KMeansLeida.fit">fit</a></code></li>
+    <li><code><a title="pyleida.clustering.KMeansLeida.predict" href="#pyleida.clustering.KMeansLeida.predict">predict</a></code></li>
+    <li><code><a title="pyleida.clustering.KMeansLeida.transform" href="#pyleida.clustering.KMeansLeida.transform">transform</a></code></li>
+    </ul>
+    </li>
+    </ul>
+</li>
+
+<li><h3><a href="#header-functions">Functions</a></h3>
+    <ul class="">
+    <li><code><a title="pyleida.clustering.barplot_eig" href="#pyleida.clustering.barplot_eig">barplot_eig</a></code></li>
+    <li><code><a title="pyleida.clustering.barplot_states" href="#pyleida.clustering.barplot_states">barplot_states</a></code></li>
+    <li><code><a title="pyleida.clustering.centroid2matrix" href="#pyleida.clustering.centroid2matrix">centroid2matrix</a></code></li>
+    <li><code><a title="pyleida.clustering.dunn_fast" href="#pyleida.clustering.dunn_fast">dunn_fast</a></code></li>
+    <li><code><a title="pyleida.clustering.identify_states" href="#pyleida.clustering.identify_states">identify_states</a></code></li>
+    <li><code><a title="pyleida.clustering.patterns_stability" href="#pyleida.clustering.patterns_stability">patterns_stability</a></code></li>
+    <li><code><a title="pyleida.clustering.plot_clustering_scores" href="#pyleida.clustering.plot_clustering_scores">plot_clustering_scores</a></code></li>
+    <li><code><a title="pyleida.clustering.plot_clusters3D" href="#pyleida.clustering.plot_clusters3D">plot_clusters3D</a></code></li>
+    <li><code><a title="pyleida.clustering.plot_clusters_boundaries" href="#pyleida.clustering.plot_clusters_boundaries">plot_clusters_boundaries</a></code></li>
+    <li><code><a title="pyleida.clustering.plot_voronoi" href="#pyleida.clustering.plot_voronoi">plot_voronoi</a></code></li>
+    </ul>
+</li>
+
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+    <ul>
+    <li><code><a title="pyleida.clustering.rsnets_overlap" href="rsnets_overlap.html">pyleida.clustering.rsnets_overlap</a></code></li>
+    </ul>
+</li>
+
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

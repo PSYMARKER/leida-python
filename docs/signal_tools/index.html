@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>pyleida.signal_tools API documentation</title>
+<meta name="description" content="The module &#39;pyleida.signal_tools&#39; provides functions
+to compute relevant information from BOLD time series." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyleida.signal_tools</code></h1>
+</header>
+<section id="section-intro">
+<p>The module 'pyleida.signal_tools' provides functions
+to compute relevant information from BOLD time series.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;The module &#39;pyleida.signal_tools&#39; provides functions
+to compute relevant information from BOLD time series.&#34;&#34;&#34;
+
+from ._signal_tools import (
+    hilbert_phase,
+    clean_signals,
+    phase_coherence,
+    get_eigenvectors,
+    txt_matrix
+)
+
+__all__ = [
+    &#34;hilbert_phase&#34;,
+    &#34;clean_signals&#34;,
+    &#34;phase_coherence&#34;,
+    &#34;get_eigenvectors&#34;,
+    &#34;txt_matrix&#34;
+]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyleida.signal_tools.clean_signals"><code class="name flex">
+<span>def <span class="ident">clean_signals</span></span>(<span>signals, detrend=True, standardize='zscore', filter_type=None, low_pass=None, high_pass=None, TR=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Perform a cleaning process of the signals.
+Low-pass filtering improves specificity.
+High-pass filtering should be kept small,
+to keep some sensitivity.</p>
+<p>Note: uses nilearn's 'signal.clean()' function.</p>
+<h2 id="params">Params:</h2>
+<p>signals : dict
+Contains the BOLD signals to process.
+Keys must be subjects ids and values
+arrays with shape (N_rois, N_volumes).</p>
+<p>detrend : bool.
+Whether to perform a detrending of the
+signals.</p>
+<p>standardize : str or bool {'zscore','psc',False}.
+Method to standardize the signals. If 'zscore',
+the signals are shifted to zero mean and unit
+variance.
+If 'psc', the signals are shifted to zero mean
+and scaled to percent signal change.</p>
+<p>filter_type : str or bool {'butterworth','cosine',False}
+Method to filter the signals, if desired. If
+False, do not perform filtering.</p>
+<p>low_pass : None or float.
+Low cutoff frequency in Hertz. If specified,
+signals above this frequency will be filtered
+out.
+If None, no low-pass filtering will be performed.
+Default=None</p>
+<p>high_pass : None or float.
+High cutoff frequency in Hertz. If specified,
+signals below this frequency will be filtered
+out. Default=None.</p>
+<p>TR : None, int, or float.
+Specify the Time Repetition of the fMRI scans.</p>
+<h2 id="returns">Returns:</h2>
+<p>clean_signals : dict.
+Contains the cleaned signals.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clean_signals(signals,detrend=True,standardize=&#39;zscore&#39;,filter_type=None,low_pass=None,high_pass=None,TR=None):
+    &#34;&#34;&#34;
+    Perform a cleaning process of the signals.
+    Low-pass filtering improves specificity.
+    High-pass filtering should be kept small,
+    to keep some sensitivity.
+
+    Note: uses nilearn&#39;s &#39;signal.clean()&#39; function.
+
+    Params:
+    -------
+    signals : dict 
+        Contains the BOLD signals to process.
+        Keys must be subjects ids and values
+        arrays with shape (N_rois, N_volumes).
+
+    detrend : bool.
+        Whether to perform a detrending of the
+        signals.
+
+    standardize : str or bool {&#39;zscore&#39;,&#39;psc&#39;,False}.
+        Method to standardize the signals. If &#39;zscore&#39;,
+        the signals are shifted to zero mean and unit
+        variance.
+        If &#39;psc&#39;, the signals are shifted to zero mean
+        and scaled to percent signal change.
+
+    filter_type : str or bool {&#39;butterworth&#39;,&#39;cosine&#39;,False}
+        Method to filter the signals, if desired. If
+        False, do not perform filtering.
+
+    low_pass : None or float.
+        Low cutoff frequency in Hertz. If specified,
+        signals above this frequency will be filtered
+        out. 
+        If None, no low-pass filtering will be performed.
+        Default=None
+
+    high_pass : None or float.
+        High cutoff frequency in Hertz. If specified,
+        signals below this frequency will be filtered
+        out. Default=None.
+
+    TR : None, int, or float.
+        Specify the Time Repetition of the fMRI scans.
+
+    Returns:
+    --------
+    clean_signals : dict.
+        Contains the cleaned signals.
+    &#34;&#34;&#34;
+    if not isinstance(signals,dict):
+        raise ValueError(&#34;&#39;signals&#39; must be a dictionary!&#34;)
+    
+    cleaned_signals = {}
+    
+    for sub in signals.keys():
+        cleaned_signals[sub] = clean(
+            signals[sub].T,
+            detrend=detrend, 
+            standardize=standardize,
+            filter=False if filter_type is None else filter_type, 
+            low_pass=low_pass, 
+            high_pass=high_pass, 
+            t_r=TR
+            ).T
+
+    return cleaned_signals</code></pre>
+</details>
+</dd>
+<dt id="pyleida.signal_tools.get_eigenvectors"><code class="name flex">
+<span>def <span class="ident">get_eigenvectors</span></span>(<span>dFC, n=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>For a given subject, extract the leading
+eigenvector of each phase-coherence connectivity
+matrix at time t.</p>
+<h2 id="params">Params:</h2>
+<p>dFC : ndarray with shape (N_rois,N_rois,N_volumes).
+Contains the phase-coherence matrices
+for each time point t.</p>
+<p>n : int.
+The number of desired eigenvalues and
+eigenvectors.</p>
+<h2 id="returns">Returns:</h2>
+<p>LEi : ndarray with shape (N_time_points, N_ROIs)
+Extracted leading eigenvectors.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_eigenvectors(dFC,n=1):
+    &#34;&#34;&#34;
+    For a given subject, extract the leading
+    eigenvector of each phase-coherence connectivity
+    matrix at time t.
+    
+    Params:
+    -------
+    dFC : ndarray with shape (N_rois,N_rois,N_volumes). 
+        Contains the phase-coherence matrices
+        for each time point t.
+
+    n : int. 
+        The number of desired eigenvalues and
+        eigenvectors.
+    
+    Returns:
+    --------
+    LEi : ndarray with shape (N_time_points, N_ROIs)
+        Extracted leading eigenvectors.
+    &#34;&#34;&#34;
+    if not isinstance(dFC,np.ndarray) or (isinstance(dFC,np.ndarray) and dFC.ndim!=3):
+        raise Exception(&#34;&#39;dFC&#39; must be a 3D array!&#34;)
+    
+    T, N = dFC.shape[-1], dFC.shape[0] #number of time points and number of regions
+    
+    LEi = np.empty((T,n*N))
+    for t in range(T):
+        avals, avects = eigs(dFC[:,:,t], n, which=&#39;LM&#39;)
+        ponderation = avals.real / np.sum(avals.real)
+        for x in range(avects.shape[1]):
+            # convention, negative orientation
+            if np.mean(avects[:, x] &gt; 0) &gt; .5:
+                avects[:, x] *= -1
+            elif np.mean(avects[:, x] &gt; 0) == .5 and np.sum(avects[avects[:, x] &gt; 0, x]) &gt; -1. * sum(avects[avects[:, x] &lt; 0, x]):
+                avects[:, x] *= -1
+
+        LEi[t] = np.hstack([p * avects.real[:, x].real for x, p in enumerate(ponderation)])
+
+    return LEi</code></pre>
+</details>
+</dd>
+<dt id="pyleida.signal_tools.hilbert_phase"><code class="name flex">
+<span>def <span class="ident">hilbert_phase</span></span>(<span>signals)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the Hilbert transform to get the
+instantaneous phase of the BOLD time series
+of each brain region/parcel.</p>
+<h2 id="params">Params:</h2>
+<p>signals : ndarray of shape (N_rois, N_time_points).
+BOLD time series of a particular subject.</p>
+<h2 id="return">Return:</h2>
+<p>phase : ndarray of shape (N_rois, N_time_points).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hilbert_phase(signals):
+    &#34;&#34;&#34;
+    Compute the Hilbert transform to get the
+    instantaneous phase of the BOLD time series
+    of each brain region/parcel.
+
+    Params:
+    -------
+    signals : ndarray of shape (N_rois, N_time_points).
+        BOLD time series of a particular subject.
+
+    Return:
+    -------
+    phase : ndarray of shape (N_rois, N_time_points).
+    &#34;&#34;&#34;
+    phase = hilbert(signals, axis=1)
+    N_rois = phase.shape[0]
+    for roi in range(N_rois): 
+        phase[roi, :] = np.angle(phase[roi, :]).real
+    phase = phase.real
+    return phase</code></pre>
+</details>
+</dd>
+<dt id="pyleida.signal_tools.phase_coherence"><code class="name flex">
+<span>def <span class="ident">phase_coherence</span></span>(<span>signals_phases)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the phase-coherence (or phase-locked)
+connectivity matrices for a given subject.</p>
+<p>Because cos(0) = 1, if two areas n and p have
+temporarily aligned BOLD signals (i.e. they have
+similar phases), then dFC(n, p, t) will be close
+to 1. Instead, in periods where the BOLD signals
+are orthogonal (for instance, one increasing at 45°
+and the other decreasing at 45°) dFC(n, p, t) will
+be close to 0.</p>
+<h2 id="params">Params:</h2>
+<p>signals_phases : ndarray with shape (N_rois,time_points).
+Instantaneous phase of each brain
+region/parcel for each time point/volume.</p>
+<h2 id="return">Return:</h2>
+<p>dFC : ndarray with shape (N_rois,N_rois,time_points).
+Time-resolved dynamic FC matrix where
+N_rois is the number of brain areas and
+time_points is the total number of recording
+frames.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def phase_coherence(signals_phases):
+    &#34;&#34;&#34;
+    Compute the phase-coherence (or phase-locked) 
+    connectivity matrices for a given subject.
+    
+    Because cos(0) = 1, if two areas n and p have
+    temporarily aligned BOLD signals (i.e. they have
+    similar phases), then dFC(n, p, t) will be close
+    to 1. Instead, in periods where the BOLD signals
+    are orthogonal (for instance, one increasing at 45°
+    and the other decreasing at 45°) dFC(n, p, t) will
+    be close to 0.
+    
+    Params:
+    --------
+    signals_phases : ndarray with shape (N_rois,time_points).
+        Instantaneous phase of each brain
+        region/parcel for each time point/volume.
+    
+    Return:
+    -------
+    dFC : ndarray with shape (N_rois,N_rois,time_points). 
+        Time-resolved dynamic FC matrix where
+        N_rois is the number of brain areas and
+        time_points is the total number of recording
+        frames. 
+    &#34;&#34;&#34;
+    
+    if not isinstance(signals_phases,np.ndarray) or (isinstance(signals_phases,np.ndarray) and signals_phases.ndim!=2):
+        raise Exception(&#34;&#39;signals_phases&#39; must be a 2D array.&#34;)
+    
+    N = signals_phases.shape[0] #number of voxels/parcels
+    T = signals_phases.shape[1]-2 #number of time points/volumes
+
+    dFC = np.zeros((N,N,T)) #matrix to save the phase-coherence between regions n and p at time t.
+    signals_phases = signals_phases[:,1:-1] #delete the fist and last time point of the time series of each ROI signal.
+    
+    for time_point in range(T): #for each time point:
+        for roi_1 in range(N): #for each region of interest
+            for roi_2 in range(N): #relate with other region of interest
+                dFC[roi_1,roi_2,time_point] = np.cos(
+                    ang_shortest_diff(
+                        signals_phases[roi_1,time_point],
+                        signals_phases[roi_2,time_point]
+                        )
+                    )
+    return dFC</code></pre>
+</details>
+</dd>
+<dt id="pyleida.signal_tools.txt_matrix"><code class="name flex">
+<span>def <span class="ident">txt_matrix</span></span>(<span>dFC, similarity_metric='pearson', plot=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>To study the evolution of the dFC over time,
+we compute a time-versus-time matrix representing
+the functional connectivity dynamics (FCD), where
+each entry, FCD(tx, ty), corresponds to a measure
+of resemblance between the dFC at times tx and ty.</p>
+<h2 id="params">Params:</h2>
+<p>dFC : either ndarray of shape (N_rois,N_rois,time_points)
+containing the phase-coherence matrix for each time point;
+or ndarray with shape (N_time_points, N_ROIs) thats contains
+the eigenvectors of each dFC matrix.</p>
+<p>similarity_metric : str.
+Whether to use 'pearson' or cosine similarity ('cosine')
+to determine the similarity between time points.</p>
+<h2 id="returns">Returns:</h2>
+<p>time_x_time_mat : ndarray of shape (N_time_points, N_time_points).
+Time vs time matrix.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def txt_matrix(dFC,similarity_metric=&#39;pearson&#39;,plot=True):
+    &#34;&#34;&#34;
+    To study the evolution of the dFC over time,
+    we compute a time-versus-time matrix representing 
+    the functional connectivity dynamics (FCD), where
+    each entry, FCD(tx, ty), corresponds to a measure 
+    of resemblance between the dFC at times tx and ty.
+    
+    Params:
+    -------
+    dFC : either ndarray of shape (N_rois,N_rois,time_points)
+    containing the phase-coherence matrix for each time point;
+    or ndarray with shape (N_time_points, N_ROIs) thats contains
+    the eigenvectors of each dFC matrix.
+
+    similarity_metric : str. 
+        Whether to use &#39;pearson&#39; or cosine similarity (&#39;cosine&#39;)
+        to determine the similarity between time points.
+    
+    Returns:
+    --------
+    time_x_time_mat : ndarray of shape (N_time_points, N_time_points).
+        Time vs time matrix.
+    &#34;&#34;&#34;
+    if not isinstance(similarity_metric,str):
+        raise TypeError(&#34;&#39;similarity_metric&#39; must be a string.&#34;)
+    
+    if similarity_metric not in [&#39;pearson&#39;,&#39;cosine&#39;]:
+        raise ValueError(&#34;You must provide a valid &#39;similarity_metric&#39; (pearson or cosine).&#34;)
+
+    if not isinstance(dFC,np.ndarray):
+        raise TypeError(&#34;&#39;dFC&#39; must be either a 2D array or a 3D array.&#34;)
+
+    #Cheking whether the provided dFC data
+    # is a connectivity matrix or eigenvectors
+    # to define the number of time points T.
+    N_time_points = dFC.shape[-1] if dFC.ndim&gt;2 else dFC.shape[0]
+
+    #create a empty 2D array with time_points x time_points    
+    time_x_time_mat = np.zeros((N_time_points,N_time_points)) 
+    
+    #Computing the time x time matrix
+    for t in range(N_time_points):
+        for t2 in range(N_time_points):
+            if dFC.ndim==3:
+                if similarity_metric==&#39;pearson&#39;: 
+                    time_x_time_mat[t,t2] = pearsonr(
+                        dFC[:,:,t][np.triu_indices_from(dFC[:,:,t],k=1)],
+                        dFC[:,:,t2][np.triu_indices_from(dFC[:,:,t2],k=1)]
+                        )[0] #compute similarity with Pearson correlation coefficient
+                else: 
+                    time_x_time_mat[t,t2] = 1 - cosine(
+                        dFC[:,:,t][np.triu_indices_from(dFC[:,:,t],k=1)],
+                        dFC[:,:,t2][np.triu_indices_from(dFC[:,:,t2],k=1)]
+                        )
+            else:
+                if similarity_metric==&#39;pearson&#39;:
+                    #compute similarity with Pearson correlation coefficient 
+                    time_x_time_mat[t,t2] = pearsonr(dFC[t,:],dFC[t2,:])[0] 
+                else:
+                    #compute similarity with cosine 
+                    time_x_time_mat[t,t2] = 1 - cosine(dFC[t,:],dFC[t2,:]) 
+                    
+    if plot:
+        plt.ion()
+        plt.figure()
+        sns.heatmap(
+            time_x_time_mat,
+            cmap=&#39;jet&#39;,
+            vmin=-1,
+            vmax=1,
+            center=0,
+            square=True,
+            cbar_kws={
+                &#34;shrink&#34;: .5,
+                &#34;label&#34;:&#39;Pearson\ncorrelation&#39; if similarity_metric==&#39;pearson&#39; else &#39;Cosine\nsimilarity&#39;
+                }
+            )
+        plt.xticks(
+                np.arange(20,N_time_points,20),
+                np.arange(20,N_time_points,20).tolist(),
+                rotation=0
+            )
+        plt.yticks(
+                np.arange(20,N_time_points,20),
+                np.arange(20,N_time_points,20).tolist(),
+                rotation=0
+            )
+        plt.tick_params(
+            axis=&#39;both&#39;,         
+            which=&#39;both&#39;,     
+            bottom=False,
+            left=False
+            )
+        plt.xlabel(&#39;Time&#39;,fontweight=&#39;regular&#39;,fontsize=18)
+        plt.ylabel(&#39;Time&#39;,fontweight=&#39;regular&#39;,fontsize=18)
+        plt.title(&#39;Functional connectivity\ndynamics&#39;,fontweight=&#39;regular&#39;)
+        plt.tight_layout()
+        
+    return time_x_time_mat</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyleida" href="../index.html">pyleida</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pyleida.signal_tools.clean_signals" href="#pyleida.signal_tools.clean_signals">clean_signals</a></code></li>
+<li><code><a title="pyleida.signal_tools.get_eigenvectors" href="#pyleida.signal_tools.get_eigenvectors">get_eigenvectors</a></code></li>
+<li><code><a title="pyleida.signal_tools.hilbert_phase" href="#pyleida.signal_tools.hilbert_phase">hilbert_phase</a></code></li>
+<li><code><a title="pyleida.signal_tools.phase_coherence" href="#pyleida.signal_tools.phase_coherence">phase_coherence</a></code></li>
+<li><code><a title="pyleida.signal_tools.txt_matrix" href="#pyleida.signal_tools.txt_matrix">txt_matrix</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
