@@ -1,8 +1,5 @@
 [![Downloads](https://pepy.tech/badge/pyleida)](https://pepy.tech/project/pyleida)
 
-
-<img src="https://lh4.googleusercontent.com/xyNT8fFem8XFYYq4waDe8LoE1woO_vU_7UnIdfy4OunQpmT7hD8wZG71I9_EPKwmgVE73gVuzuwK6rNCD6sKYmz8_zJrhjRckZcRai5IFG6r8Vc7=w1280" width="150" height="100">
-
 # PyLeida
 
 `pyleida` is a Python toolbox to apply the <i><b>Leading Eigenvector Dynamics Analysis</b></i> (<b>LEiDA</b>) framework to <i>functional magnetic resonance imaging (fMRI) data</i>. It contains all the necessary tools to apply the framework from the beggining to the end of the pipeline or workflow, save results, generate reports, and figures. 
@@ -136,7 +133,7 @@ Inside this folder, the user will find the following contents:
 Jupyter notebooks with examples is provided in the 'examples' folder of this repository.
 
 ### Documentation
-A detailled description of the package API can be founded here: https://PSYCHOMARK.github.io/pyleida/
+A detailled description of the package API can be founded here: https://psychomark.github.io/leida-python/
 
 ### Communication
 
