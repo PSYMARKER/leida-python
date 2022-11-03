@@ -561,6 +561,8 @@ class DataLoader:
         _check_k_input(self._K_min_,self._K_max_,k)
         _check_state(k,state)
 
+        #Get centroids of all k partitions
+        #in a single dataframe        
         centr = {}
 
         for k_ in range(self._K_min_,self._K_max_+1):
@@ -571,12 +573,15 @@ class DataLoader:
         
         centr = pd.concat(centr,ignore_index=True)
 
+        #Compute overlap of all PL states
         corr,pvals = rsnets.compute_overlap(
             centr,
             parcellation=parcellation,
             n_areas=n_areas
             )
 
+        #Get the information of
+        #the selected PL state
         overlap = rsnets.state_overlap(
             corr,
             pvals,
