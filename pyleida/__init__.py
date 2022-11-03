@@ -2,7 +2,7 @@
 Leading Eigenvector Dynamics Analysis (LEiDA) in Python
 ------------------------------------------------------------------------
 Documentation is available in the docstrings and online at the site of the repository
-https://github.com/PSYCHOMARK/leida-python
+https://github.com/PSYMARKER/leida-python
 
 Contents
 --------
@@ -25,9 +25,6 @@ leida                   --- Class to run the LEiDA pipeline.
 plotting                --- Plotting tools.
 signal_tools            --- Utilities for BOLD signals.
 """
-__pdoc__ = {}
-__pdoc__["_leida"] = True
-__pdoc__["_data_loader"] = True
 
 from ._leida import Leida
 from ._data_loader import DataLoader
