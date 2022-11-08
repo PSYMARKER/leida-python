@@ -1,6 +1,7 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import os
+from joblib import Parallel,delayed
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.spatial.distance import cdist
@@ -11,6 +12,7 @@ from sklearn.metrics import (
     adjusted_mutual_info_score,
     adjusted_rand_score
 )
+from sklearn.cluster import kmeans_plusplus
 from sklearn.model_selection import (
     train_test_split,
     KFold,
@@ -46,19 +48,31 @@ class KMeansLeida():
         Maximum number of iterations of the k-means
         algorithm for a single run.
 
+    init_method : str. Default='km++'. Options='random','km++'.
+        Method for centroids initialization.
+        'k-means++' : selects initial cluster
+        centroids using sampling based on an
+        empirical probability distribution of
+        the points' contribution to the overall
+        inertia.
+        'random': choose n_clusters observations
+        (rows) at random from data for the initial
+        centroids.
+
+
     Attributes:
     -----------
     cluster_centers_ : ndarray of shape (n_centroids,n_ROIs).
         Coordinates of cluster centers.
 
-    labels_ : ndarray of shape (n_samples,).
+    labels_ : ndarray with shape (n_samples,).
         Labels of each point.
 
     inertia_ : float.
         Sum of squared distances of samples to their closest
         cluster center (aka distortion).
     """
-    def __init__(self,k=2, metric='cosine',n_init=10,n_iter=1_000):
+    def __init__(self,k=2, metric='cosine',n_init=10,n_iter=1_000,init_method='km++'):
         #validation of input data
         if not isinstance(metric,str):
             raise TypeError("'metric' must be a string!")
@@ -74,12 +88,75 @@ class KMeansLeida():
         if k<2:
             raise ValueError("'k' must be > 1")
 
+        if n_init>50_000:
+            raise ValueError("'n_init' must be <= 50000.")
+
+        if not isinstance(init_method,str) or init_method not in ['random','km++']:
+            raise Exception("'init_method' should be 'random' or 'km++'.")
+        
         self._k_ = k
         self._metric_ = metric
         self._n_iter_ = n_iter
         self._n_init_ = n_init
+        self._method_ = init_method
 
-    def fit(self,y,random_state=None):
+    def _fit_parallel(self,y):
+        """
+        Execute k-means clustering for a single
+        initialization of random centroids.
+
+        Params:
+        --------
+        y : ndarray of shape (n_samples,n_features).
+            Training instances to cluster.
+
+        Returns:
+        --------
+        lst : list of length 3.
+            Contains the distortion, centroids,
+            and labels obtained for the current
+            execution.
+        """
+        #Step 1. Assigning first centroids positions
+        #either randomly or using kmeans++
+        if self._method_=='random':
+            idx = np.random.choice(len(y), self._k_, replace=False)  
+        else:
+            _,idx = kmeans_plusplus(y,self._k_,random_state=None)
+
+        centroids = y[idx, :]
+            
+        #Step 2. Finding the distance between centroids and all the data labels
+        distances = cdist(y, centroids, self._metric_)
+            
+        #Step 3. Predict each observation label based on the minimum Distance
+        labels = np.array([np.argmin(i) for i in distances])
+            
+        #Step 4.Repeating the above steps for a defined number of iterations
+        labels_all = []
+        for iter in range(self._n_iter_): 
+            centroids = []
+            for centroid_idx in range(self._k_):
+                #Updating centroids by computing the mean of the observations in each cluster
+                temp_cent = y[labels==centroid_idx].mean(axis=0) 
+                centroids.append(temp_cent)
+        
+            centroids = np.vstack(centroids) #Updated centroids 
+                
+            distances = cdist(y, centroids, self._metric_)
+            labels = np.array([np.argmin(i) for i in distances])
+            if iter!=0:
+                if np.array_equal(labels,labels_all[-1]):
+                    #print(f'\tConverged at iteration n° {iter+1}')
+                    break
+            labels_all.append(labels)
+
+        #compute distortion on final centroids of current centroids initialization
+        distortion = self._distortion(y,centroids)
+
+        return [distortion,centroids,[labels]]
+
+    def fit(self,y,n_jobs=-2,random_state=None):
         """
         Compute k-means clustering.
 
@@ -87,6 +164,13 @@ class KMeansLeida():
         --------
         y : ndarray of shape (n_samples,n_features).
             Training instances to cluster.
+
+        n_jobs : int. Default : -2.
+            The maximum number of concurrently running
+            jobs. If -1 all CPUs are used. If 1 is given,
+            no parallel computing code is used. For n_jobs
+            below -1, (n_cpus + 1 + n_jobs) are used. Thus
+            for n_jobs = -2, all CPUs but one are used. 
 
         random_state : int or None.
             Determines random number generation
@@ -98,56 +182,42 @@ class KMeansLeida():
         self : object.
             Fitted estimator.
         """
-        for init_idx in range(self._n_init_):
-            #print(f'\tCurrent initialization: {init_idx+1}')
-            if random_state is not None:
-                np.random.seed(random_state)
-            idx = np.random.choice(len(y), self._k_, replace=False)  
+        #Validations
+        if not isinstance(y,np.ndarray) or (isinstance(y,np.ndarray) and (y.ndim!=2)):
+            raise TypeError("'y' must be a 2D array with shape (n_samples,n_features).")
 
-            #Step 1. Randomly assigning first centroids positions
-            centroids = y[idx, :]
-             
-            #Step 2. Finding the distance between centroids and all the data labels
-            distances = cdist(y, centroids ,self._metric_)
-             
-            #Step 3. Predict each observation label based on the minimum Distance
-            labels = np.array([np.argmin(i) for i in distances]) #Step 3
-             
-            #Step 4.Repeating the above steps for a defined number of iterations
-            labels_all = []
-            for iter in range(self._n_iter_): 
-                centroids = []
-                for centroid_idx in range(self._k_):
-                    #Updating centroids by computing the mean of the observations in each cluster
-                    temp_cent = y[labels==centroid_idx].mean(axis=0) 
-                    centroids.append(temp_cent)
-         
-                centroids = np.vstack(centroids) #Updated centroids 
-                 
-                distances = cdist(y, centroids ,self._metric_)
-                labels = np.array([np.argmin(i) for i in distances])
-                if iter!=0:
-                    if np.array_equal(labels,labels_all[-1]):
-                        #print(f'\tConverged at iteration n° {iter+1}')
-                        break
-                labels_all.append(labels)
+        #Check that the n of samples 
+        #is higher than the selected K
+        n_samples = y.shape[0]
 
-            #compute distortion on final centroids of current centroids initialization
-            distortion = self._distortion(y,centroids)
+        if self._k_ > n_samples:
+            raise Exception("The number of samples must be higher than 'k'.")
 
-            #update centroids,distortion and labels keeping always the best updated
-            if init_idx == 0:
-                best_distortion = distortion
-                optimum_centroids = centroids
-                optimum_labels = labels.copy()
-            if distortion < best_distortion:
-                best_distortion = distortion.copy()
-                optimum_centroids = centroids.copy()
-                optimum_labels = labels.copy()
-             
-        self.cluster_centers_ = optimum_centroids
-        self.labels_ = optimum_labels
-        self.inertia_ = best_distortion
+        #Validate n_jobs
+        if not isinstance(n_jobs,int):
+            raise TypeError("'n_jobs' must be an integer.")
+
+        n_cpus = os.cpu_count()
+        if n_jobs>n_cpus:
+            n_jobs=-2
+            print(f"Warning: 'n_jobs' can't be higher than the number of available CPUs ({n_cpus}). "
+                    "'n_jobs' was thus automatically adjusted to -2")
+
+        #Set seed for centroid initializations
+        if random_state is not None:
+            np.random.seed(random_state)
+
+        #Run K-Means
+        results = Parallel(n_jobs=n_jobs,backend='loky')(
+            delayed(self._fit_parallel)(y) for init_idx in range(self._n_init_)
+            )
+
+        #Keep best results based on distortion
+        idx_best = np.argmin([results[replicate][0] for replicate in range(self._n_init_)])
+
+        self.cluster_centers_ = results[idx_best][1]
+        self.labels_ = results[idx_best][-1][0]
+        self.inertia_ = results[idx_best][0]
 
         self._remap_labels()
         self._is_fitted = True
@@ -307,15 +377,18 @@ def identify_states(eigens_dataset,K_min=2,K_max=20,n_init=15,random_state=None,
             results_path = f'{path}/clustering'
             if not os.path.exists(results_path):
                 os.makedirs(results_path)
-            print(f"-Creating folder to save results: './{results_path}'")
+            print(f"-Creating folder to save results: '{results_path}'")
         except:
             print("Warning: the folder to save the results could't be created.")
 
     #Execute the k-means models fitting process
-    eigens_predictions = eigens_dataset[['subject_id','condition']] #copy provided data (to avoid overwriting)
+    eigens_predictions = eigens_dataset[['subject_id','condition']] #keep metadata columns
     X = np.array(eigens_dataset.iloc[:,2:],dtype=np.float32) #keep array with the eigenvectors (remove 'subject_ids' and 'condition' columns)
 
     N_samples = X.shape[0]
+    #i n samples>30_000, then
+    #compute the Silhouette and
+    #Dunn scores using a subsample
     if N_samples>30_000:
         random_samples_idx = np.random.choice(np.arange(N_samples),size=30_000,replace=False)
 
