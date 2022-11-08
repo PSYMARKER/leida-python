@@ -326,7 +326,7 @@ def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right'
         Whether to show only the cortical mesh, or add
         background with sulcus information.
 
-    mesh_alpha : float. Default = 0.05
+    mesh_alpha : float. Default = 0.05.
         Specify the transparency of the mesh.
 
     Returns:

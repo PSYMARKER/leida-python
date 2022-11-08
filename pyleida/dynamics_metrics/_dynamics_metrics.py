@@ -50,7 +50,7 @@ def compute_dynamics_metrics(clusters_labels,TR=None,save_results=False,path=Non
             results_path = f'{path}/dynamics_metrics'
             if not os.path.exists(results_path): 
                 os.makedirs(results_path)
-            print(f"-Folder created to save results: './{results_path}'")
+            print(f"-Folder created to save results: '{results_path}'")
         except:
             raise Exception("PROCESS ABORTED: the folder to save the results could't be created.")
     
