@@ -105,10 +105,11 @@ class Leida:
         self.classes = load_classes(data_path)
         self.rois_labels = load_rois_labels(data_path)
         self.rois_coordinates = load_rois_coordinates(data_path)
+        self._data_path_ = data_path
 
         self._validate_constructor_params() #check if the data has been loaded sucessfully.
 
-    def fit_predict(self,TR=None,paired_tests=False,n_perm=5_000,save_results=True,random_state=None):
+    def fit_predict(self,TR=None,paired_tests=False,n_replicates='auto',n_perm=5_000,save_results=True):
         """
         Execute the LEiDA pipeline: 
             1) Compute the instantaneous phase of each signal, the
@@ -136,6 +137,13 @@ class Leida:
             Specify if groups are independent or related/paired,
             to run the correct statistical tests.
 
+        n_replicates : int or 'auto'. Default = 'auto'.
+            Select the number of times that the K-Means
+            algorithm will be executed for each K partition
+            with different centroids initializations.
+            If 'auto', then the number of replicates will
+            be calculated as np.ceil((50+n_samples)/300).
+        
         n_perm : int.
             Select the number of permutations that will be
             applied when running the statistical analysis of
@@ -147,18 +155,22 @@ class Leida:
             called 'LEiDA_results' containing all the results
             will be created. Note: These results can be easely
             retrieved later using the 'DataLoader' class.
-
-        random_state : None | int.
-            Determines random number generation for centroid
-            initialization. Use an int to make the randomness
-            deterministic.
         """
         self._K_min_ = 2
         self._K_max_ = 20
+        self._n_replicates_ = n_replicates
         
         #validate provided 'TR'
         if TR is not None and not isinstance(TR,(int,float)):
             raise TypeError("'TR' must be 'None', and integer or a floating number!")
+
+        #check 'n_replicates' input
+        if not isinstance(n_replicates,(int,str)):
+            raise TypeError("'n_replicates' must be a string or integer.")
+        if isinstance(n_replicates,str) and n_replicates!='auto':
+                raise ValueError("If string, 'n_replicates' must be 'auto'.")
+        elif isinstance(n_replicates,int) and (n_replicates<10 or n_replicates>10000):
+                raise ValueError("'n_replicates' must be > 10 and <=10000.")
 
         #validate paired_tests input
         if not isinstance(paired_tests,bool):
@@ -176,11 +188,11 @@ class Leida:
             raise TypeError("'save_results' must be a boolean value (True or False)!")
 
         #Run the analysis
-        self._results_path_ = 'LEiDA_results'
+        self._results_path_ = os.path.split(os.path.abspath(self._data_path_))[0]+'/LEiDA_results'
 
         self.eigenvectors,self._clustering_,self._dynamics_ = self._execute_all(
             TR=TR,
-            random_state=random_state,
+            random_state=None,
             paired_tests=paired_tests,
             n_perm=n_perm,
             save_results=save_results,
@@ -220,7 +232,7 @@ class Leida:
             initialization. Use an int to make the randomness
             deterministic.
 
-        paired_tests : bool. Default: False
+        paired_tests : bool. Default: False.
             Specify if groups are independent or related/paired,
             to run the correct statistical tests.
 
@@ -260,7 +272,7 @@ class Leida:
                             "the folder to another location.")
             else:
                 try:
-                    print(f"\n-Creating folder to save results: './{self._results_path_}'")
+                    print(f"\n-Creating folder to save results: '{self._results_path_}'")
                     os.makedirs(self._results_path_)
                 except:
                     raise Exception("The folder to save the results could't be created.")
@@ -310,11 +322,18 @@ class Leida:
                 print("Warning: An error ocurred when saving the 'eigenvectors.csv' file to local folder.")
         
         #clustering
-        print("\n 2) RUNNING K-MEANS CLUSTERING ON EIGENVECTORS.")
+        if self._n_replicates_=='auto':
+            n_samples = df_eigens.shape[0] #get n samples
+            self._n_replicates_ = int(np.ceil((50+n_samples)/300)) #determine number of initializations
+
+        print("\n 2) RUNNING K-MEANS CLUSTERING ON EIGENVECTORS "
+            f"(N° of replicates: {self._n_replicates_} - max iterations: 1000).")
+
         predictions,clustering_performance,models = identify_states(
             df_eigens,
             K_min=self._K_min_,
             K_max=self._K_max_,
+            n_init=self._n_replicates_,
             random_state=random_state,
             save_results=save_results,
             path=self._results_path_ if save_results else None
@@ -392,7 +411,7 @@ class Leida:
 
         print("\n** THE ANALYSIS HAS FINISHED SUCCESFULLY!")
         if save_results:
-            print(f"-All the results were save in './{self._results_path_}'")
+            print(f"-All the results were save in '{self._results_path_}'")
 
         print("\n-You can explore the results in detail by using "
             "the methods and attributes of the Leida class.")
@@ -791,6 +810,8 @@ class Leida:
         _check_k_input(self._K_min_,self._K_max_,k)
         _check_state(k,state)
 
+        #Get centroids of all k partitions
+        #in a single dataframe
         centr = {}
 
         for k_ in range(self._K_min_,self._K_max_+1):
@@ -801,12 +822,15 @@ class Leida:
         
         centr = pd.concat(centr,ignore_index=True)
 
+        #Compute overlap of all PL states
         corr,pvals = rsnets.compute_overlap(
             centr,
             parcellation=parcellation,
             n_areas=n_areas
             )
 
+        #Get the information of
+        #the selected PL state
         overlap = rsnets.state_overlap(
             corr,
             pvals,
