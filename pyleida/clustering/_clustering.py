@@ -545,7 +545,7 @@ def patterns_stability(X,y=None,n_clusters=None,folds=5,metric='ari',plot=True,d
     """
     Run a stratified KFold cross-validation to explore
     the stability of assigned clusters across folds.
-    The provided data in 'X' and is splitted in a train
+    The provided data in 'X' is splitted in a train
     set and a test set. Then, a cross-validation is
     performed by splitting the train set into n number
     of 'folds'. At each iteration, a given fold is used to
@@ -753,6 +753,8 @@ def barplot_states(centroids,rois_labels):
     """
     if not isinstance(centroids,np.ndarray):
         raise TypeError("'centroids' must be a numpy 2D array!")
+    if not isinstance(rois_labels,list):
+        raise TypeError("'rois_labels' must be a list!")
     if centroids.shape[1]!=len(rois_labels):
         raise Exception("The number of brain regions in 'centroids' and 'rois_labels' must be the same!")
     
