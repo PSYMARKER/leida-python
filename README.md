@@ -1,4 +1,4 @@
-[![Downloads](https://pepy.tech/badge/pyleida)](https://pepy.tech/project/pyleida)
+[![Downloads](https://static.pepy.tech/personalized-badge/pyleida?period=total&units=international_system&left_color=black&right_color=orange&left_text=Downloads)](https://pepy.tech/project/pyleida)
 
 # PyLeida
 
@@ -103,9 +103,12 @@ ld = Leida('data')
 # Run the complete pipeline:
 # Here, 'TR' specifies the Time Repetition of the fMRI data,
 # 'paired_test' specifies whether the groups/conditions are
-# independent or related, and 'n_perm' the number of permutations
-# that will be used in the statistical analyses.
-ld.fit_predict(TR=1.433,paired_tests=False,n_perm=5_000,save_results=True)
+# independent or related, 'n_perm' the number of permutations
+# that will be used in the statistical analyses, and n_replicates
+# the number of times that the K-Means algorithm will be 
+# initialized for each K partition with different starting
+# centroids.
+ld.fit_predict(TR=1.433,paired_tests=False,n_replicates=1_000,n_perm=5_000,save_results=True)
 
 
 ```
@@ -133,7 +136,7 @@ Inside this folder, the user will find the following contents:
 Jupyter notebooks with examples is provided in the 'examples' folder of this repository.
 
 ### Documentation
-A detailled description of the package API can be founded here: https://psychomark.github.io/leida-python/
+A detailled description of the package API can be founded here: https://psymarker.github.io/leida-python/
 
 ### Communication
 
