@@ -1,4 +1,4 @@
-"""Compute overlap between phase-locking states and Yeo resting-state networks"""
+"""Compute overlap between the BOLD phase-locking states and Yeo's 7 resting-state networks"""
 
 import numpy as np
 import pandas as pd
@@ -17,18 +17,18 @@ def compute_overlap(centroids,parcellation=None,n_areas=None):
 
     Params:
     --------
-    centroids : pd.dataframe with shape (209,n_rois+2)
+    centroids : pd.dataframe with shape (209,n_rois+2).
         Contains the clusters centroids of
         each k partition. 
         1st column ('k') specifies the partition,
         2nd column the 'state', and rest of columns
         each brain region/parcel value.
 
-    parcellation : str
+    parcellation : str.
         Specify path to your parcellation .nii file.
         Note: the parcellation must be of 2mm resolution.
 
-    n_areas : None | int
+    n_areas : None | int.
         Analyze only the first n areas from the provided
         parcellation. 
         Usefull when the parcellation contains subcortical
@@ -65,8 +65,9 @@ def compute_overlap(centroids,parcellation=None,n_areas=None):
     #load our parcellation mask in MNI152 2mm space
     parc_user = nib.load(parcellation).get_fdata()
 
+    #define n of areas to analyze
     if n_areas is None:
-        n_areas = np.max(parc_user)
+        n_areas = np.max(parc_user).astype(int)
     else:
         parc_user[parc_user>n_areas] = 0 
 
@@ -226,3 +227,65 @@ def plot_yeo_pvalues(pvalues,k=2,state=1):
     plt.show()
 
     return data
+
+# Auxiliary function
+def relabel_parc(parc,return_array=True):
+    """
+    Relabel the regions/parcels 
+    of the provided parcellation
+    from 1 to N regions.
+
+    Params:
+    -------
+    parc : 3d array | string.
+        Three-dimensional array containing
+        the parcellation to relabel or string
+        with the path of the .nii{.gz} file.
+    
+    return_array : bool. Default=True.
+        Whether to return parcellation as
+        array or as a nibabel image.
+        Note: nibabel image can be return
+        only if the nifti file was provided
+        in 'parc'.
+
+    Returns:
+    --------
+    new_parc : 3d array | nibabel.nifti1.Nifti1Image.
+        Relabeled parcellation in array
+        or image format.
+    """
+    #validations
+    if not isinstance(parc,(np.ndarray,str)):
+        raise TypeError("'parc' must be either a 3D array or a string "
+                        "with a path to the parcellation file.")
+    elif isinstance(parc,np.ndarray) and parc.ndim!=3:
+        raise ValueError("The array must be three-dimensional!")
+    elif isinstance(parc,np.ndarray) and not return_array:
+        raise Exception("The new parcellation can be returned as "
+                        "nibabel image only if a nifti file was "
+                        "provided as input.")
+    elif isinstance(parc,str):
+        try:
+            img = nib.load(parc)
+            aff = img.affine 
+            parc = img.get_fdata()
+        except:
+            raise Exception("The parcellation could't be loaded.")
+    
+    N_regions = np.unique(parc).size #get n of regions
+    labels = np.unique(parc) #get labels of the provided parcellation
+    dct = {k:v for k,v in zip(labels,[i for i in range(N_regions)])} #dict to map new labels
+    arr = np.empty(np.ravel(parc.size)) #empty vector to populate with new labels
+
+    #relabelling
+    for i,v in enumerate(np.ravel(parc)):
+        arr[i] = dct[v]
+
+    #reshape vector to original -3D- shape
+    new_parc = arr.reshape(parc.shape)
+
+    if not return_array:
+        new_parc = nib.Nifti1Image(new_parc,aff)
+
+    return new_parc
