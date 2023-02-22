@@ -35,7 +35,8 @@ from .plotting import (
     brain_states_nodes,
     brain_states_network,
     states_in_bold,
-    plot_pyramid,
+    stats_pyramid,
+    states_pyramid,
     states_k_glass,
     brain_states_on_surf,
     brain_states_on_surf2,
@@ -107,7 +108,7 @@ class Leida:
         self.rois_coordinates = load_rois_coordinates(data_path)
         self._data_path_ = data_path
 
-        self._validate_constructor_params() #check if the data has been loaded sucessfully.
+        self._validate_constructor_params() #check if the data has been loaded successfully.
 
     def fit_predict(self,TR=None,paired_tests=False,n_replicates='auto',n_perm=5_000,save_results=True):
         """
@@ -377,9 +378,9 @@ class Leida:
                     (pooled_stats.group_2.isin(conditions))
                     ].reset_index(drop=True)
 
-                #plot pyramid
+                #plot pyramid with stats
                 dyn_data = {k:v[v.condition.isin(conditions)] for k,v in dynamics_data[metric].items()}
-                plot_pyramid(
+                stats_pyramid(
                     dyn_data,
                     pooled_stats_,
                     K_min=self._K_min_,
@@ -409,7 +410,7 @@ class Leida:
                 stats = stats
             )
 
-        print("\n** THE ANALYSIS HAS FINISHED SUCCESFULLY!")
+        print("\n** THE ANALYSIS HAS FINISHED SUCCESSFULLY!")
         if save_results:
             print(f"-All the results were save in '{self._results_path_}'")
 
@@ -931,7 +932,7 @@ class Leida:
                 raise Exception(f"The number of 'ROIs labels' ({len(self.rois_labels)} were provided) "
                     f"must coincide with the number of provided coordinates ({self.rois_coordinates.shape[0]} were provided)")
 
-        print("All the data has been sucesfully loaded.")
+        print("All the data has been successfully loaded.")
 
     def _check_is_fitted(self):
         """
@@ -1234,7 +1235,7 @@ class Leida:
         """
         Create plot showing the time-series of BOLD signals, 
         highlighting the dominant phase-locking (PL) state
-        of each time point or volume.
+        at each time point or volume.
 
         Params:
         -------
@@ -1256,6 +1257,10 @@ class Leida:
         """
         self._check_is_fitted()
         _check_k_input(self._K_min_,self._K_max_,k)
+
+        if subject_id not in self.time_series.keys():
+            raise ValueError("The provided 'subject_id' was not founded!")
+            
         tseries = self.time_series[subject_id][:,1:-1] #get subject signals (excluding the 1st and last volumes)
         predictions = self._clustering_.predictions
         y = predictions[predictions.subject_id==subject_id][f'k_{k}'].values #get predictions for selected k.
@@ -1263,7 +1268,7 @@ class Leida:
         with plt.style.context("dark_background" if darkstyle else "default"):
             states_in_bold(tseries,y,alpha=alpha)
 
-    def plot_states_pyramid(self,metric='occupancies',conditions=None,despine=True):
+    def plot_stats_pyramid(self,metric='occupancies',conditions=None,despine=True):
         """
         Create a pyramid of barplots showing the 'metric'
         of interest for each group, cluster (PL state), and
@@ -1316,7 +1321,7 @@ class Leida:
             dyn_metric = self._dynamics_[metric]
             dyn_metric = {k:v[v.condition.isin(conditions)] for k,v in dyn_metric.items()}
 
-            plot_pyramid(
+            stats_pyramid(
                 dyn_metric,
                 pooled_stats_,
                 K_min=self._K_min_,
@@ -1389,7 +1394,7 @@ class Leida:
         with plt.style.context("dark_background" if darkstyle else "default"):
             states_k_glass(pl_states,self.rois_coordinates,darkstyle=darkstyle)
 
-    def plot_states_on_surf(self,k=2,state='all',parcellation=None,discretize=True,cmap='auto',darkstyle=False,open=False,save=False):
+    def plot_states_on_surf(self,k=2,state='all',parcellation=None,discretize=True,cmap='auto',darkstyle=False,open=True,save=False):
         """
         Create a 3D interactive figure embedded in a
         .html file showing the BOLD phase-locking (PL)
@@ -1505,14 +1510,14 @@ class Leida:
             Valid options are 'right', 'left',
             or 'both'.
 
-        view : str
+        view : str.
             View of the surface that is rendered. 
             Default='lateral'. Options = {'lateral',
             'medial', 'dorsal', 'ventral', 'anterior',
             'posterior'}. If 'hemi'='both', then 'dorsal'
             and 'lateral' views are displayed.
 
-        darkstyle : bool
+        darkstyle : bool.
             Whether to use a black background.
 
         save : bool.
@@ -1546,14 +1551,16 @@ class Leida:
                 parcellation=parcellation,
                 hemi=hemi,
                 surface=surface,
-                view=view
+                view=view,
+                open=False if save else True
                 )
         
         if save:
             try:
                 filename = f"{path}/K{k}_PL_state_{state}_{surface}surf_{hemi}hemi_{view if hemi!='both' else 'multiview'}{'_dark' if darkstyle else ''}.png"
                 g.savefig(filename,dpi=300)
-                plt.close()
+                plt.clf()
+                plt.close('all')
                 del g
                 print(f"The plot was save at: {filename}")
             except:
@@ -1633,3 +1640,48 @@ class Leida:
             cmap=cmap,
             darkstyle=darkstyle
             )
+
+    def plot_states_pyramid(self,parcellation=None,surface='pial',hemi='right',view='lateral',darkstyle=False):
+        """
+        Create a pyramid showing the PL states
+        of each K partition in transparent 
+        surface mesh. The created figure is
+        automatically saved as a .png file in
+        'LEiDA_results/clustering'.
+        Note: subcortical regions are not
+        displayed.
+
+        Params:
+        -------
+        parcellation : str.
+            Path to the .nii file containing
+            the parcellation from which the
+            signals were extracted.
+
+        surface : str.
+            Specify the surface type to plot
+            the pattern on. Valid options are
+            'pial','infl', and 'white'.
+
+        hemi : str. (Options = 'right', 'left','both').
+            Select the hemisphere to plot when 
+            'lateral' view is selected.
+            If 'dorsal' view is selected, then
+            'view' must be 'both'.
+
+        view : str.
+            View of the surface that is rendered. 
+            Default='lateral'. 
+            Options = {'lateral', 'dorsal'}.
+
+        darkstyle : bool.
+            Whether to use a black background.
+
+        save : bool.
+            Whether to save the created figure in
+            local folder. If True, the file is
+            saved in 'LEiDA_results/clustering'.
+        
+        """
+        self._check_is_fitted()
+        states_pyramid(self,parcellation,surface,hemi,view,darkstyle)

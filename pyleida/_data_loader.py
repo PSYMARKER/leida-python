@@ -21,7 +21,8 @@ from .data_utils.validation import (
 from .plotting import (
     brain_states_network,
     brain_states_nodes,
-    plot_pyramid,
+    stats_pyramid,
+    states_pyramid,
     states_k_glass,
     states_in_bold,
     brain_states_on_surf,
@@ -92,10 +93,10 @@ class DataLoader:
             raise ValueError("The provided 'results_path' could't be founded.")
         
         #Paths in which the data and results are stored
-        self._data_path_ = data_path
-        self._results_path_ = results_path
-        self._clustering_ = results_path + '/clustering'
-        self._dynamics_ = results_path + '/dynamics_metrics'
+        self._data_path_ = os.path.abspath(data_path)
+        self._results_path_ = os.path.abspath(results_path)
+        self._clustering_ = self._results_path_ + '/clustering'
+        self._dynamics_ = self._results_path_ + '/dynamics_metrics'
         self._models_ = self._clustering_ + '/models'
 
         #check if the 'clustering' and 'dynamics_metrics' folders exists in 'results_path'
@@ -801,7 +802,7 @@ class DataLoader:
 
         return plot
 
-    def plot_states_pyramid(self,metric='occupancies',conditions=None,despine=True):
+    def plot_stats_pyramid(self,metric='occupancies',conditions=None,despine=True):
         """
         Create a pyramid of barplots showing the 'metric'
         of interest for each group, cluster (PL state), and
@@ -855,7 +856,7 @@ class DataLoader:
             dyn_metric = self._pool_dynamics_metric(metric=metric) 
             dyn_metric = {k:v[v.condition.isin(conditions)] for k,v in dyn_metric.items()}
 
-            plot_pyramid(
+            stats_pyramid(
                 dyn_metric,
                 pooled_stats_,
                 K_min=K_min,
@@ -1047,7 +1048,7 @@ class DataLoader:
         """
         Create plot showing the time-series of BOLD signals, 
         highlighting the dominant phase-locking (PL) state
-        of each time point or volume.
+        at each time point or volume.
 
         Params:
         -------
@@ -1068,14 +1069,18 @@ class DataLoader:
             a darkstyle.
         """
         _check_k_input(self._K_min_,self._K_max_,k)
+
         signals = load_tseries(self._data_path_)
+        if subject_id not in signals.keys():
+            raise ValueError("The provided 'subject_id' was not founded!")
+            
         signals = signals[subject_id][:,1:-1] #get subject signals (and exclude 1st and last volumes)
         y = self.predictions[self.predictions.subject_id==subject_id][f'k_{k}'].values #get predictions for selected k.
 
         with plt.style.context('dark_background' if darkstyle else 'default'):
             states_in_bold(signals,y,alpha=alpha)
 
-    def plot_states_on_surf(self,k=2,state='all',parcellation=None,discretize=True,cmap='auto',darkstyle=False,open=False,save=False):
+    def plot_states_on_surf(self,k=2,state='all',parcellation=None,discretize=True,cmap='auto',darkstyle=False,open=True,save=False):
         """
         Create a 3D interactive figure embedded in a
         .html file showing the BOLD phase-locking (PL)
@@ -1196,7 +1201,7 @@ class DataLoader:
             'posterior'}. If 'hemi'='both', then 'dorsal'
             and 'lateral' views are displayed.
 
-        darkstyle : bool
+        darkstyle : bool.
             Whether to use a black background.
 
         save : bool.
@@ -1225,7 +1230,8 @@ class DataLoader:
                 parcellation=parcellation,
                 hemi=hemi,
                 surface=surface,
-                view=view
+                view=view,
+                open=False if save else True
                 )
         
         if save:
@@ -1235,7 +1241,8 @@ class DataLoader:
                     os.makedirs(path)
                 filename = f"{path}/K{k}_PL_state_{state}_{surface}surf_{hemi}hemi_{view if hemi!='both' else 'multiview'}.png"
                 g.savefig(filename,dpi=300)
-                plt.close()
+                plt.clf()
+                plt.close('all')
                 del g
                 print(f"The plot was save at: {filename}")
             except:
@@ -1313,3 +1320,47 @@ class DataLoader:
             cmap=cmap,
             darkstyle=darkstyle
             )
+
+    def plot_states_pyramid(self,parcellation=None,surface='pial',hemi='right',view='lateral',darkstyle=False):
+        """
+        Create a pyramid showing the PL states
+        of each K partition in transparent 
+        surface mesh. The created figure is
+        automatically saved as a .png file in
+        'LEiDA_results/clustering'.
+        Note: subcortical regions are not
+        displayed.
+
+        Params:
+        -------
+        parcellation : str.
+            Path to the .nii file containing
+            the parcellation from which the
+            signals were extracted.
+
+        surface : str.
+            Specify the surface type to plot
+            the pattern on. Valid options are
+            'pial','infl', and 'white'.
+
+        hemi : str. (Options = 'right', 'left','both').
+            Select the hemisphere to plot when 
+            'lateral' view is selected.
+            If 'dorsal' view is selected, then
+            'view' must be 'both'.
+
+        view : str.
+            View of the surface that is rendered. 
+            Default='lateral'. 
+            Options = {'lateral', 'dorsal'}.
+
+        darkstyle : bool.
+            Whether to use a black background.
+
+        save : bool.
+            Whether to save the created figure in
+            local folder. If True, the file is
+            saved in 'LEiDA_results/clustering'.
+        
+        """
+        states_pyramid(self,parcellation,surface,hemi,view,darkstyle)

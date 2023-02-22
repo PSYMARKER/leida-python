@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
-import os 
+import os
+import shutil
 import matplotlib.pyplot as plt
+from matplotlib.image import imread
 import seaborn as sns 
 from nilearn.plotting import (
     view_connectome,
@@ -293,7 +295,7 @@ def brain_states_on_surf(centroids,parcellation=None,discretize=True,cmap='auto'
 
     return plots if n_centroids>1 else g
 
-def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right',view='lateral',only_mesh=True,mesh_alpha=0.05):
+def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right',view='lateral',quality='high',only_mesh=True,mesh_alpha=0.05,open=True):
     """
     Plot a BOLD phase-locking state of interest 
     on cortical surface mesh. 
@@ -322,6 +324,12 @@ def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right'
         If 'hemi'='both', then 'dorsal' and 'lateral' views
         are displayed.
 
+    quality : str.
+        Quality of the surface mesh.
+        Valid options are 'high','medium', or 'low'.
+        Note: the higher the selected quality, the
+        higher the RAM usage.
+
     only_mesh : bool.
         Whether to show only the cortical mesh, or add
         background with sulcus information.
@@ -333,6 +341,7 @@ def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right'
     --------
     g : SurfaceView. 
     """
+    #validations
     if isinstance(parcellation,str):
         if not parcellation.endswith(('.nii','.nii.gz')):
             raise ValueError("The parcellation must be either a .nii or .nii.gz file.")
@@ -340,72 +349,48 @@ def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right'
         raise ValueError("You must provide the path to the parcellation file.")
     else:
         raise TypeError("'parcellation' must be a string!")
+
     if hemi not in ['left','right','both']:
         raise ValueError("'hemi' must be either 'right', 'left', or 'both'.")
     elif hemi=='both':
         print("WARNING: 'view' is automatically set to 'dorsal' and 'lateral' when 'hemi'='both'.")
+
     if surface not in ['pial','white','infl']:
         raise ValueError("'surface' must be either 'pial','infl', or 'white'.")
+
     view_options = ['lateral', 'medial', 'dorsal', 'ventral', 'anterior', 'posterior'] 
     if view not in view_options:
         raise ValueError(f"Valid options for 'view' are {view_options} .")
-
-    n_rois = centroid.size
     
+    surfaces_options = {
+        'high':'fsaverage',
+        'medium':'fsaverage5',
+        'low':'fsaverage4'
+        }
+
+    if quality not in surfaces_options.keys() or not isinstance(quality,str):
+        raise Exception("Valid 'quality' options are 'high','medium', or 'low'.")
+
+
+    #instantiate masker and load surface mesh
     parcellation_mask = NiftiLabelsMasker(parcellation).fit()
-    surf = fetch_surf_fsaverage('fsaverage')
+    surf = fetch_surf_fsaverage(surfaces_options[quality])
     pal = sns.diverging_palette(250, 15, s=75, l=40,n=9, center="dark",as_cmap=True)
 
+    n_rois = centroid.size
     centroid_map = np.array([1 if node>0.0 else 0.1 for node in centroid]).reshape(1,n_rois)
         
     #get stat map of current PL pattern to plot
     stat_map = parcellation_mask.inverse_transform(centroid_map)
 
-    plt.ion()
-    if hemi!='both':
-        texture = vol_to_surf(stat_map,surf[f'pial_{hemi}'])
+    #plotting
+    with plt.ion() if open else plt.ioff():
+        if hemi!='both':
+            texture = vol_to_surf(stat_map,surf[f'pial_{hemi}'])
 
-        fig_ = plot_surf_stat_map(
-            surf[f'{surface}_{hemi}'],
-            texture,
-            threshold=0.2, 
-            hemi=hemi,
-            view=view,
-            #title='Surface right hemisphere', 
-            colorbar=False, 
-            bg_map=None if only_mesh else surf[f'sulc_{hemi}'],
-            alpha=mesh_alpha,
-            cmap=pal,
-            bg_on_data=False
-            )
-
-        if view=='dorsal':
-            ax = fig_.axes
-            ax[0].view_init(90,270)
-
-    else:
-        fig_, axes_ = plt.subplots(nrows=2,ncols=2,figsize=(11,11),subplot_kw={'projection': '3d'})
-
-        ax_config = {
-            0 : ['left','dorsal'],
-            1 : ['right','dorsal'],
-            2 : ['left','lateral'],
-            3 : ['right','lateral']
-            }
-
-        axes_ = np.ravel(axes_)
-
-        texture = {}
-        texture['left'] = vol_to_surf(stat_map,surf['pial_left'])
-        texture['right'] = vol_to_surf(stat_map,surf['pial_right'])
-
-        for ax_idx,ax in enumerate(axes_):
-            hemi = ax_config[ax_idx][0]
-            view = ax_config[ax_idx][1]
-
-            plot_surf_stat_map(
+            fig_ = plot_surf_stat_map(
                 surf[f'{surface}_{hemi}'],
-                texture[hemi],
+                texture,
                 threshold=0.2, 
                 hemi=hemi,
                 view=view,
@@ -413,16 +398,53 @@ def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right'
                 bg_map=None if only_mesh else surf[f'sulc_{hemi}'],
                 alpha=mesh_alpha,
                 cmap=pal,
-                bg_on_data=False,
-                axes=ax,
-                figure=fig_,
-                #engine='plotly',
-                #kwargs={'symmetric_cmap':False}
+                bg_on_data=False
                 )
 
-        axes_[0].view_init(90,270)
-        axes_[1].view_init(90,270)
-        plt.tight_layout(pad=0,h_pad=0,w_pad=0)
+            if view=='dorsal':
+                ax = fig_.axes
+                ax[0].view_init(90,270)
+
+        else:
+            fig_, axes_ = plt.subplots(nrows=2,ncols=2,figsize=(11,11),subplot_kw={'projection': '3d'})
+
+            ax_config = {
+                0 : ['left','dorsal'],
+                1 : ['right','dorsal'],
+                2 : ['left','lateral'],
+                3 : ['right','lateral']
+                }
+
+            axes_ = np.ravel(axes_)
+
+            texture = {}
+            texture['left'] = vol_to_surf(stat_map,surf['pial_left'])
+            texture['right'] = vol_to_surf(stat_map,surf['pial_right'])
+
+            for ax_idx,ax in enumerate(axes_):
+                hemi = ax_config[ax_idx][0]
+                view = ax_config[ax_idx][1]
+
+                plot_surf_stat_map(
+                    surf[f'{surface}_{hemi}'],
+                    texture[hemi],
+                    threshold=0.2, 
+                    hemi=hemi,
+                    view=view,
+                    colorbar=False, 
+                    bg_map=None if only_mesh else surf[f'sulc_{hemi}'],
+                    alpha=mesh_alpha,
+                    cmap=pal,
+                    bg_on_data=False,
+                    axes=ax,
+                    figure=fig_,
+                    #engine='plotly',
+                    #kwargs={'symmetric_cmap':False}
+                    )
+
+            axes_[0].view_init(90,270)
+            axes_[1].view_init(90,270)
+            plt.tight_layout(pad=0,h_pad=0,w_pad=0)
 
     return fig_
 
@@ -430,7 +452,7 @@ def states_k_glass(centroids,coords,darkstyle=False):
     """
     Create a glass brain (axial view) showing the
     network representation of each PL pattern for
-    the selected 'k' partition.
+    a specific 'k' partition.
 
     Params:
     -------
@@ -515,18 +537,19 @@ def states_k_glass(centroids,coords,darkstyle=False):
         if not N_states%2==0:
             sns.despine(left=True,bottom=True,ax=axs[-1]) #delete axis
             axs[-1].tick_params( #delete thicks info
-                        axis='both',          
-                        which='both',      
-                        bottom=False,      
-                        top=False,         
-                        left=False,      
-                        labelbottom=False,
-                        labelleft=False)
+                axis='both',          
+                which='both',      
+                bottom=False,      
+                top=False,         
+                left=False,      
+                labelbottom=False,
+                labelleft=False
+                )
 
-def brain_dynamics_gif(states_labels,centroids,coords,filename='dfc',darkstyle=False):
+def network_dynamics_gif(states_labels,centroids,coords,filename='dfc',darkstyle=False):
     """
     Create a .gif file showing an animated network
-    representation of the  detected phase-locking
+    representation of the detected phase-locking
     pattern of each volume for a given subject.
 
     Params:
@@ -617,6 +640,440 @@ def brain_dynamics_gif(states_labels,centroids,coords,filename='dfc',darkstyle=F
     for filename_ in set(filenames):
         os.remove(filename_)
 
+#Pyramid of phase-locking states plot
+def states_pyramid(self,parcellation=None,surface='pial',hemi='right',view='lateral',darkstyle=False):
+    """
+    Create a pyramid showing the PL states
+    of each K partition in transparent 
+    surface mesh. The created figure is
+    automatically saved as a .png file in
+    'LEiDA_results/clustering'.
+    Note: subcortical regions are not
+    displayed.
+
+    Params:
+    -------
+    parcellation : str.
+        Path to the .nii file containing
+        the parcellation from which the
+        signals were extracted.
+
+    surface : str.
+        Specify the surface type to plot
+        the pattern on. Valid options are
+        'pial','infl', and 'white'.
+
+    hemi : str. (Options = 'right', 'left','both').
+        Select the hemisphere to plot when 
+        'lateral' view is selected.
+        If 'dorsal' view is selected, then
+        'view' must be 'both'.
+
+    view : str.
+        View of the surface that is rendered. 
+        Default='lateral'. 
+        Options = {'lateral', 'dorsal'}.
+
+    darkstyle : bool.
+        Whether to use a black background.
+
+    save : bool.
+        Whether to save the created figure in
+        local folder. If True, the file is
+        saved in 'LEiDA_results/clustering'.
+    
+    """
+    #validations
+    if surface not in ['pial','infl'] or not isinstance(surface,str):
+        raise ValueError("'surface' must be 'pial' or 'infl'.")
+    if not isinstance(darkstyle,bool):
+        raise TypeError("'darkstyle' must be True or False!")
+    if not isinstance(view,str):
+        raise TypeError("'view' must be a string!")
+
+    #path to temporary save .png images
+    #of each single PL state
+    path = f'{self._results_path_}/.tmp'
+    if not os.path.exists(path):
+        try:
+            os.makedirs(path)
+        except:
+            raise Exception("The temporary folder to save single images could't be created.")
+    
+    if view=='dorsal':
+        if hemi!='both':
+            raise ValueError("'hemi' must be 'both' when 'dorsal' view is selected.")
+        else:
+            #self._pyramid_dorsal(parcellation,surface,darkstyle,path)
+            _pyramid_dorsal(self,parcellation,surface,darkstyle,path)
+    elif view=='lateral':
+        if hemi not in ['right','left']:
+            raise ValueError("'You must select 'right' or 'left' hemi when view='lateral'.")
+        else:
+            #self._pyramid_lateral(parcellation,surface,hemi,darkstyle,path)
+            _pyramid_lateral(self,parcellation,surface,hemi,darkstyle,path)
+    else:
+        raise ValueError("'view' must be 'dorsal' or 'lateral'.")
+
+    #remove .tmp folder and files
+    if os.path.exists(path):
+        try:
+            shutil.rmtree(path)
+        except:
+            print("Warning: the temporary folder with creates .png files could't be removed.")
+
+def _make_pyramid(k_min=2,k_max=20,darkstyle=False,view=None,surface=None,hemi=None,path=None):
+    """
+    Auxiliary function of 'states_pyramid.
+    Take individual .png files of each PL
+    state and insert them in a pyramid to
+    visualize all the PL states of each K
+    partition.
+
+    Params:
+    -------
+    k_min,k_max : int.
+        Min and Max K partitions explored.
+    
+    darkstyle : bool.
+        Whether to use a black background.
+
+    view : str.
+        View of the surface that is rendered. 
+        Default='lateral'. 
+        Options = {'lateral', 'dorsal'}.
+
+    surface : str.
+        Specify the surface type to plot
+        the pattern on. Valid options are
+        'pial','infl', and 'white'.
+
+    hemi : str. (Options = 'right', 'left', None).
+        Select the hemisphere to plot when 
+        'lateral' view is selected.
+        If 'dorsal' view is selected, then
+        'view' must be ''None'.
+
+    path : str.
+        Path to the temporary folder that
+        contains the individual .png file/s
+        of each PL state.
+
+    Returns:
+    --------
+    fig,axs : generated figure.
+    """
+    #validation of path
+    if path is None:
+        raise ValueError("'path' can not be None!")
+    
+    #creating pyramid
+    with plt.ioff():
+        with plt.style.context('dark_background' if darkstyle else 'default'):
+            fig,axs = plt.subplots(ncols=20,nrows=19,figsize=(15,10))
+
+            for idx in range(k_max-1):
+                for state_idx in range(idx+2):
+                    if view=='lateral':
+                        filename = f"{path}/K{idx+2}_PL_state_{state_idx+1}_{surface}surf_{hemi}hemi_{view}.png"
+                    else:
+                        filename = f"{path}/K{idx+2}_PL_state_{state_idx+1}_{surface}_{view}.png"
+                    img = imread(filename)
+                    axs[idx,state_idx].imshow(img)
+
+                    if view=='lateral':
+                        axs[idx,state_idx].set_ylim(500,100) #_>when dpi=150
+                        axs[idx,state_idx].set_xlim(50,550) #->when dpi=150
+
+                    #despine and remove ticks
+                    sns.despine(ax=axs[idx,state_idx],bottom=True,left=True)
+                    axs[idx,state_idx].tick_params(
+                        axis='both',
+                        which='both',
+                        bottom=False,
+                        top=False,
+                        left=False,
+                        labelbottom=False,
+                        labelleft=False
+                        )
+
+                    del img
+
+                #despine and remove ticks of
+                #empty figures
+                current_k = k_min+idx
+                for add in np.arange(current_k,k_max):
+                    sns.despine(left=True,bottom=True,ax=axs[idx,add])
+                    axs[idx,add].tick_params(
+                        axis='both',
+                        which='both',
+                        bottom=False,
+                        top=False,
+                        left=False,
+                        labelbottom=False,
+                        labelleft=False
+                        )
+
+                axs[idx,0].set_ylabel(f'K = {k_min+idx}',rotation=0,labelpad=30)
+
+            plt.tight_layout(h_pad=0,w_pad=0,pad=0)
+
+    return fig,axs
+
+def _pyramid_dorsal(self,parcellation=None,surface='pial',darkstyle=False,path=None):
+    """
+    Auxiliary function of 'states_pyramid'.
+    Create a pyramid showing a dorsal view
+    of the PL states of each K partition.
+
+    Params:
+    -------
+    parcellation : str.
+        Path to the .nii file containing
+        the parcellation from which the
+        signals were extracted.
+
+    surface : str.
+        Specify the surface type to plot
+        the pattern on. Valid options are
+        'pial','infl', and 'white'.
+
+    darkstyle : bool.
+        Whether to use a black background.
+    
+    path : str.
+        Path to temporary folder in which
+        each single .png image of each PL
+        state will be saved before constructing
+        the pyramid.
+    """
+    ##creating .png file for each PL state
+    print('-Creating pyramid of PL states. Please wait...')
+
+    view='dorsal'
+
+    for k in range(self._K_min_,self._K_max_+1): #for each k partition
+        centroids = self.load_centroids(k=k).values #load centroids
+
+        for state in range(centroids.shape[0]): #for each state
+            centroid = centroids[state,:]
+
+            pths = []
+            for _hemi_ in ['left','right']: #for each hemisphere
+                #plotting each PL state of each K partition  
+                with plt.style.context('dark_background' if darkstyle else 'default'):
+                    g = brain_states_on_surf2(
+                        centroid,
+                        parcellation=parcellation,
+                        hemi=_hemi_,
+                        surface=surface,
+                        view=view,
+                        quality='low',
+                        mesh_alpha=0.10,
+                        open=False
+                        )
+                
+                try:
+                    filename = f"{path}/K{k}_PL_state_{state+1}_{surface}surf_{_hemi_}hemi_{view}.png"
+                    pths.append(filename)
+                    g.savefig(filename,dpi=150)
+                    plt.close()
+                    del g
+                except:
+                    raise Exception("An error occured when saving the plot.")
+
+            _join_dorsal_hemis(pths[0],pths[1],surf=surface,darkstyle=darkstyle) #join both hemis in single image
+            plt.clf()
+            plt.close()
+
+    #creating pyramid
+    #fig,axs = self._make_pyramid(darkstyle=darkstyle,view=view,surface=surface,hemi=None,path=path)
+    fig,axs = _make_pyramid(
+        k_min=self._K_min_,
+        k_max=self._K_max_,
+        darkstyle=darkstyle,
+        view=view,
+        surface=surface,
+        hemi=None,
+        path=path
+    )
+
+    try:
+        fname = f"{self._clustering_}/states_pyramid_{view}_view_{surface}_surf{'_dark' if darkstyle else ''}.png"
+        plt.savefig(fname,dpi=300)
+        plt.clf()
+        plt.close('all')
+        del fig,axs
+        print(f"-The figure has been correctly saved in: {fname}")
+    except:
+        plt.clf()
+        plt.close('all')
+        del fig,axs
+        raise Exception("An error occured when saving the plot.")
+
+def _pyramid_lateral(self,parcellation=None,surface='pial',hemi='right',darkstyle=False,path=None):
+    """
+    Auxiliary function of 'states_pyramid'.
+    Create a pyramid showing a lateral view
+    of the PL states of each K partition.
+
+    Params:
+    -------
+    parcellation : str.
+        Path to the .nii file containing
+        the parcellation from which the
+        signals were extracted.
+
+    surface : str.
+        Specify the surface type to plot
+        the pattern on. Valid options are
+        'pial','infl', and 'white'.
+
+    hemi : str.
+        Select the hemisphere to plot.
+        Valid options are 'right', 'left',
+        or 'both'.
+
+    darkstyle : bool.
+        Whether to use a black background.
+    
+    path : str.
+        Path to temporary folder in which
+        each single .png image of each PL
+        state will be saved before constructing
+        the pyramid.
+    """
+    ##creating .png file for each PL state
+    print('-Creating pyramid of PL states. Please wait...')
+
+    view='lateral'
+
+    for k in range(self._K_min_,self._K_max_+1):
+        centroids = self.load_centroids(k=k).values 
+
+        for state in range(centroids.shape[0]):
+            centroid = centroids[state,:]
+
+            #plotting each PL state of each K partition  
+            with plt.style.context('dark_background' if darkstyle else 'default'):
+                g = brain_states_on_surf2(
+                    centroid,
+                    parcellation=parcellation,
+                    hemi=hemi,
+                    surface=surface,
+                    view=view,
+                    quality='low',
+                    mesh_alpha=0.10,
+                    open=False
+                    )
+            
+            try:
+                filename = f"{path}/K{k}_PL_state_{state+1}_{surface}surf_{hemi}hemi_{view}.png"
+                g.savefig(filename,dpi=150)
+                plt.close()
+                del g
+            except:
+                raise Exception("An error occured when saving the plot.")
+
+    #creating pyramid
+    #fig,axs = self._make_pyramid(darkstyle=darkstyle,view=view,surface=surface,hemi=hemi,path=path)
+    fig,axs = _make_pyramid(
+        k_min=self._K_min_,
+        k_max=self._K_max_,
+        darkstyle=darkstyle,
+        view=view,
+        surface=surface,
+        hemi=hemi,
+        path=path
+        )
+
+    try:
+        fname = f"{self._results_path_}/clustering/states_pyramid_{view}_view_{surface}_surf_{hemi}_hemi{'_dark' if darkstyle else ''}.png"
+        plt.savefig(fname,dpi=300)
+        plt.clf()
+        plt.close('all')
+        del fig,axs
+        print(f"-The figure has been correctly saved in: {fname}")
+    except:
+        plt.clf()
+        plt.close('all')
+        del fig,axs
+        raise Exception("An error occured when saving the plot.")
+
+def _join_dorsal_hemis(img_lh,img_rh,surf='pial',darkstyle=False):
+    """
+    Take two .png files with dorsal views
+    created with 'brain_states_on_surf2'
+    of each hemisphere and join them in
+    a single .png file.
+    This auxiliary function is used in the
+    creation of the pyramid of PL states for
+    each K partition.
+
+    Params:
+    --------
+    img_lh, img_rh : str.
+        Paths to the .png files.
+
+    surf : str.
+        Name of the surface type to plot.
+
+    darkstyle : bool.
+        Whether to use a dark background.
+    """
+    #path to save joined figure
+    pth = os.path.dirname(img_lh)
+
+    #defining filename to save final figure
+    filename = os.path.basename(img_lh)
+    filename = filename.split('surf_',1)[0]
+    filename = f"{pth}/{filename}_dorsal.png"
+
+    #load images as numpy arrays
+    img_lh = imread(img_lh)
+    img_rh = imread(img_rh)
+
+    #joining
+    with plt.style.context('dark_background' if darkstyle else 'default'):
+        _,subplot = plt.subplots(1,2)
+
+        subplot[0].imshow(img_lh)
+        subplot[1].imshow(img_rh)
+
+        if surf=='pial':
+            #subplot[0].set_xlim(370,700)#->option for dpi=300
+            #subplot[0].set_ylim(1000,200)#->option for dpi=300
+            #subplot[1].set_ylim(1000,210)#->option for dpi=300
+            #subplot[1].set_xlim(600,970) #->option for dpi=300
+            subplot[0].set_xlim(185,350)#->option for dpi=150
+            subplot[0].set_ylim(500,100)#->option for dpi=150
+            subplot[1].set_ylim(500,105)#->option for dpi=150
+            subplot[1].set_xlim(300,485) #->option for dpi=150            
+        elif surf=='infl':
+            for i in range(2):
+                #subplot[i].set_xlim(430,790)#-> option for dpi=300
+                #subplot[i].set_ylim(970,200)#-> option for dpi=300
+                subplot[i].set_xlim(215,395)#-> option for dpi=150
+                subplot[i].set_ylim(485,100)#-> option for dpi=150
+
+        for i in range(2):
+            sns.despine(left=True,bottom=True,right=True,ax=subplot[i])
+            subplot[i].tick_params(
+                axis='both',
+                which='both',
+                bottom=False,
+                top=False,
+                left=False,
+                labelbottom=False,
+                labelleft=False
+                )
+
+        plt.tight_layout(h_pad=0,w_pad=-13 if surf=='pial' else -12,pad=0)
+
+    plt.savefig(filename,dpi=100)
+
+    plt.close('all')
+    del _,subplot
 
 #Matrices plots
 def matrices_gif(mats,cmap='jet',filename='dfc',vmin=-1,vmax=1,darkstyle=False):
@@ -1043,10 +1500,10 @@ def _save_html(path,plot,k,state=None,plot_type=None):
 
 #Dynamical systems theory metrics plots
 
-def plot_pyramid(metric_data,stats,K_min=2,K_max=20,class_column='condition',metric_name=None,despine=True):
+def stats_pyramid(metric_data,stats,K_min=2,K_max=20,class_column='condition',metric_name=None,despine=True):
     """
-    Create pyramid showing the metric of interest
-    for each group, cluster, and K. Significant
+    Create pyramid of barplots showing the metric of
+    interest for each group, cluster, and K. Significant
     states are coloured 'blue' if the associated
     p-value is lower than 0.05 but higher than 0.05/k,
     and 'red' if the p-value is lower than 0.05/k.
