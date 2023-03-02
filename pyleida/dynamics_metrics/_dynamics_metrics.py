@@ -222,7 +222,7 @@ def transition_probabilities(labels,k,norm=True,plot=False):
         Contains the KMeans predicted label
         for each time point.
 
-    norm : bool. 
+    norm : bool.
         Whether to normalize the values of the
         transitions matrix.
 
@@ -540,6 +540,60 @@ def dwell_times_group(metadata,labels,TR=None,save_results=False,path=None):
             print("Warning: 'dwell_times.csv' was not saved in local folder.")
 
     return results
+
+def promiscuity(centroids,as_proportion=True,plot=True,cmap='viridis'):
+    """
+    Calculates promiscuity of nodes across
+    phase-locking modes/states.
+    Promiscuity calculates the number of
+    states each node is a member of.
+
+    Params:
+    -------
+    -centroids : pd.dataframe with shape (N_centroids,N_rois).
+        Centroids of a specific K partition.
+
+    -as_proportion : bool.
+        Whether to express promiscuity as
+        proportion or as raw count.
+
+    -plot : bool.
+        Whether to create a barplot
+        showing the computed promiscuity.
+
+    -cmap : str.
+        Colormap to use in the barplot.
+
+    Returns:
+    ---------
+    -promiscuity : pd.dataframe.
+        Contains the computed promiscuity 
+        of each node across modes.
+    """
+    N_states = centroids.shape[0]
+
+    dct = {}
+
+    for col in centroids.columns:
+        dct[col] = np.sum([1 for i in centroids.loc[:,col] if i>0])
+
+    df = pd.DataFrame(dct,index=[0]).T.reset_index()
+    df = df.sort_values(by=0,ascending=False)
+    df.columns = ['ROI','promiscuity']
+
+    if as_proportion:
+        df['promiscuity'] = (df.promiscuity / N_states) * 100
+
+    if plot:
+        plt.ion()
+        plt.figure(figsize=(6,11))
+        sns.barplot(data=df,x='promiscuity',y='ROI',palette=cmap)
+        plt.yticks(fontsize=5)
+        plt.ylabel('')
+        plt.xlabel('Proportion (%)' if as_proportion else 'Count',fontsize=15)
+        plt.tight_layout()
+
+    return df
 
 #plotting functions 
 
