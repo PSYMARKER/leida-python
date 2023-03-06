@@ -35,6 +35,7 @@ def hilbert_phase(signals):
     Return:
     -------
     phase : ndarray of shape (N_rois, N_time_points).
+        Instantaneous phase/s of the provided signal/s.
     """
     phase = hilbert(signals, axis=1)
     N_rois = phase.shape[0]
@@ -49,9 +50,9 @@ def ang_shortest_diff(a,b):
 	
     Params:
     -------
-	a : angle
+	a : angle.
 
-	b : angle
+	b : angle.
 	
     Returns:
     --------
@@ -74,7 +75,7 @@ def clean_signals(signals,detrend=True,standardize='zscore',filter_type=None,low
 
     Params:
     -------
-    signals : dict 
+    signals : dict.
         Contains the BOLD signals to process.
         Keys must be subjects ids and values
         arrays with shape (N_rois, N_volumes).
@@ -83,30 +84,30 @@ def clean_signals(signals,detrend=True,standardize='zscore',filter_type=None,low
         Whether to perform a detrending of the
         signals.
 
-    standardize : str or bool {'zscore','psc',False}.
+    standardize : str | bool {'zscore','psc',False}.
         Method to standardize the signals. If 'zscore',
         the signals are shifted to zero mean and unit
         variance.
         If 'psc', the signals are shifted to zero mean
         and scaled to percent signal change.
 
-    filter_type : str or bool {'butterworth','cosine',False}
+    filter_type : str | bool {'butterworth','cosine',False}
         Method to filter the signals, if desired. If
         False, do not perform filtering.
 
-    low_pass : None or float.
+    low_pass : None | float.
         Low cutoff frequency in Hertz. If specified,
         signals above this frequency will be filtered
         out. 
         If None, no low-pass filtering will be performed.
         Default=None
 
-    high_pass : None or float.
+    high_pass : None | float.
         High cutoff frequency in Hertz. If specified,
         signals below this frequency will be filtered
         out. Default=None.
 
-    TR : None, int, or float.
+    TR : None | int | float.
         Specify the Time Repetition of the fMRI scans.
 
     Returns:
