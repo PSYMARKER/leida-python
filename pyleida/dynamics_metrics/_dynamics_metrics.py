@@ -462,10 +462,7 @@ def dwell_times(labels,TR=None,plot=False):
         plt.figure()
         plt.grid()
         sns.barplot(x=[f'State {i+1}' for i in range(len(mean_dwell))],y=mean_dwell.Mean_lifetime)
-        if TR is None:
-            plt.ylabel('Average lifetime (TRs)',fontsize=15,fontweight='regular') 
-        else:
-            plt.ylabel('Average lifetime (s)',fontsize=15,fontweight='regular')
+        plt.ylabel(f"Average lifetime ({'TRs' if TR is None else 's'})",fontsize=15,fontweight='regular') 
         plt.xlabel('State',fontsize=15,fontweight='regular') 
         plt.tight_layout()
         plt.show()
@@ -583,12 +580,20 @@ def promiscuity(centroids,as_proportion=True,plot=True,cmap='viridis'):
 
     if as_proportion:
         df['promiscuity'] = (df.promiscuity / N_states) * 100
+    else:
+        df['promiscuity'] = [int(i) for i in df.promiscuity]
 
     if plot:
         plt.ion()
         plt.figure(figsize=(6,11))
         sns.barplot(data=df,x='promiscuity',y='ROI',palette=cmap)
         plt.yticks(fontsize=5)
+        if not as_proportion:
+            n_max = np.max(df.promiscuity)
+            plt.xticks(
+                np.arange(0,n_max+1),
+                [int(i) for i in np.arange(0,n_max+1)]
+                )
         plt.ylabel('')
         plt.xlabel('Proportion (%)' if as_proportion else 'Count',fontsize=15)
         plt.tight_layout()
