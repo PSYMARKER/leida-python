@@ -159,35 +159,40 @@ def hedges_g(x1,x2,paired=False):
     g : float.
         Hedge's effect size.
     """
-    #sample sizes
-    n1 = x1.size
-    n2 = x2.size
-    
-    #degrees of freedom
-    dof = n1+n2-2
-    
-    #variances
-    var1 = np.var(x1)
-    var2 = np.var(x2)
-    
-    #difference in means
-    m1 = np.mean(x1)
-    m2 = np.mean(x2)
-    diff_mean = np.abs(m1-m2)
-    
-    #pooled standard deviation
-    #s1 = np.std(x1)
-    #s2 = np.std(x2)
-    
-    #Hedges's g
     if not paired:
+        #sample sizes
+        n1 = x1.size
+        n2 = x2.size
+        
+        #degrees of freedom
+        dof = n1+n2-2
+        
+        #variances
+        var1 = np.var(x1)
+        var2 = np.var(x2)
+
+        #difference in means
+        m1 = np.mean(x1)
+        m2 = np.mean(x2)
+        diff_mean = m1-m2
+        bias_correction = (n1 + n2 - 2) / (n1 + n2 - 4)
         s_pooled = np.sqrt(
             (((n1-1)*var1)+((n2-1)*var2))/dof
             )
-        g = diff_mean/s_pooled
+    else:
+        #differences mean
+        diff = x1-x2
+        diff_mean = np.mean(diff)
+        std_diff = np.std(diff, ddof=1)
+        n = diff.size
+        bias_correction = (n - 1) / (n - 3)
+
+    #Hedges's g
+    if not paired:
+        g = diff_mean/s_pooled*bias_correction
 
     else:
-        g = diff_mean / np.sqrt((var1+var2) / 2)
+        g = diff_mean / std_diff*bias_correction
 
     return g
 
