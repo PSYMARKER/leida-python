@@ -90,13 +90,16 @@ def permtest_ind(data,class_column=None,n_perm=5_000,alternative='two-sided'):
         raise TypeError("'n_perm' must be an integer!")
     
     features = [col for col in data if col!=class_column] #list with variables to be tested
-    n_tests = len(features) #number of tests that will be executed
     groups = np.unique(data[class_column]) #get the groups names.
     results = [] #list to save results
 
     for col in features:
-        x1 = data[data[class_column]==groups[0]][col].values #data of first group.
-        x2 = data[data[class_column]==groups[1]][col].values #data of the other group.
+        x1 = data[data[class_column] == groups[0]][col].dropna().values  # data of the first group, removing NaN values.
+        x2 = data[data[class_column] == groups[1]][col].dropna().values  # data of the other group, removing NaN values.
+
+        if len(x1) == 0 or len(x2) == 0:
+            # Skip this variable if any group has no valid data points after removing NaN values.
+            continue
 
         #running Levene's test
         _,p_levene = levene(x1,x2,center='mean')
@@ -127,6 +130,7 @@ def permtest_ind(data,class_column=None,n_perm=5_000,alternative='two-sided'):
     results = pd.DataFrame(results)
 
     #Bonferroni correction for multiple testing comparison
+    n_tests = results.shape[0] #number of tests that were executed
     results['alpha_Bonferroni'] = 0.05/n_tests
     results['reject_null'] = [True if p<(0.05/n_tests) else False for p in results['p-value'].values]
 
@@ -232,15 +236,32 @@ def permtest_rel(data,class_column=None,n_perm=5_000,alternative='two-sided'):
         raise TypeError("'n_perm' must be an integer!")
     
     features = [col for col in data if col!=class_column] #list with variables to be tested
-    n_tests = len(features) #number of tests that will be executed
     groups = np.unique(data[class_column]) #get the groups names.
     results = [] #list to save results
     rng = np.random.default_rng()
 
     for col in features:
-        x1 = data[data[class_column]==groups[0]][col].values #data of first group.
-        x2 = data[data[class_column]==groups[1]][col].values #data of the other group.
+        x1 = data[data[class_column] == groups[0]][col].values  # data of the first group
+        x2 = data[data[class_column] == groups[1]][col].values  # data of the other group
 
+        #removing NaNs
+        nan_idx1 = np.where(np.isnan(x1))[0]
+
+        if nan_idx1.shape[0] != 0:
+            x1 = np.delete(x1, nan_idx1)
+            x2 = np.delete(x2,nan_idx1)
+
+        nan_idx2 = np.where(np.isnan(x2))[0]
+
+        if nan_idx2.shape[0] != 0:
+            x1 = np.delete(x1, nan_idx2)
+            x2 = np.delete(x2,nan_idx2)
+
+
+        if len(x1) == 0 or len(x2) == 0:
+            # Skip this variable if any group has no valid data points after removing NaN values.
+            continue
+        
         #running the permutation test
         test = permutation_test(
             (x1, x2), 
@@ -268,6 +289,7 @@ def permtest_rel(data,class_column=None,n_perm=5_000,alternative='two-sided'):
     results = pd.DataFrame(results)
 
     #Bonferroni correction for multiple testing comparison
+    n_tests = results.shape[0] #number of tests that were executed
     results['alpha_Bonferroni'] = 0.05/n_tests
     results['reject_null'] = [True if p<(0.05/n_tests) else False for p in results['p-value'].values]
 
