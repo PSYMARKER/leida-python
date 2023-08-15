@@ -2,7 +2,10 @@ from setuptools import setup,find_packages
 
 DESCRIPTION = "Python package to execute the Leading Eigenvector Dynamics Analysis (LEiDA) on functional MRI data"
 
-VERSION = "1.0"
+with open('README.md', encoding='utf-8') as f:
+    LONG_DESCRIPTION = f.read()
+
+VERSION = "1.1"
 
 base_packages = [
     "numpy>=1.16.0",
@@ -19,7 +22,9 @@ setup(
     name="pyleida",
     version=VERSION,
     description=DESCRIPTION,
-    url="https://github.com/PSYCHOMARK/leida-python",
+    long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
+    url="https://github.com/PSYMARKER/leida-python",
     author="Alvaro Deleglise",
     author_email="alvarodeleglise@gmail.com",
     license="MIT",
@@ -35,5 +40,8 @@ setup(
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering",
         ],
-    zip_safe=False
+    zip_safe=False,
+    include_package_data=True,
+    #package_data={'pyleida': ['clustering/parc_MNI2mm.npz']},
+    package_data={'pyleida': ['*.npz']}
     )
