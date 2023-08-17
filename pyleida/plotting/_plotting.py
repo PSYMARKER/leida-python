@@ -1820,3 +1820,227 @@ def _explore_state(centroid,rois_labels,occupancy,dwell_times,coords,state_numbe
 
     plt.tight_layout(w_pad=0.7,h_pad=10)
     plt.show()
+
+def radar_plot(df, condition_column='condition', metric='mean', group_colors=None, alpha=0.25,darkstyle=False):
+    """
+    Generate a radar plot to show the mean or median
+    values of each variable in the provided DataFrame.
+
+    Params:
+    -------
+    df : pd.DataFrame with shape (N_observations,N_variables+1).
+        Dataframe with data of a particular metric
+        (e.g. dwell times). Each column represents
+        a different PL state, and the 'condition'
+        column specifies the group for each row.
+
+    condition_column : str, optional.
+        The column name in the DataFrame that specifies
+        the group for each row. Defaults to 'condition'.
+
+    metric : str, optional.
+        The metric to be used for computing the summary.
+        Can be 'mean' or 'median'. Defaults to 'mean'.
+
+    group_colors : list, optional.
+        A list of colors to be used for each group in
+        the radar plot. If not provided, default colors
+        will be used.
+
+    alpha : float.
+        Select the transparency of the areas.
+
+    darkstyle : bool.
+        Whether to use a dark background for plotting.
+
+    Returns:
+    ---------
+    None (displays the radar plot using matplotlib).
+    """
+    # Validations
+    if not isinstance(darkstyle,bool):
+        raise TypeError("'darkstyle' must be a boolean!")
+    if not isinstance(condition_column,str):
+        raise TypeError("'condition_column' must be a string!")
+    if not isinstance(df,pd.DataFrame):
+        raise TypeError("'df' must be a pd.DataFrame!")
+    if not isinstance(metric,str):
+        raise TypeError("'metric' must be 'mean' or 'median'.")
+    
+    # Calculate the mean or median values across rows for each group
+    if metric == 'mean':
+        summary = df.groupby(condition_column).mean()
+    elif metric == 'median':
+        summary = df.groupby(condition_column).median()
+    else:
+        raise ValueError("Invalid metric. Use 'mean' or 'median'.")
+
+    # Number of variables and angles for the radar plot
+    num_vars = len(summary.columns)
+    angles = np.linspace(0, 2*np.pi, num_vars, endpoint=False)
+
+    # Close the plot by repeating the first data point
+    angles = np.concatenate((angles, [angles[0]]))
+
+    with plt.style.context('default' if not darkstyle else 'dark_background'):
+
+        # Create the radar plot
+        _, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+
+        # If group_colors is provided, use it for plotting, otherwise use default colors
+        if group_colors:
+            num_colors = len(group_colors)
+            if num_colors != len(summary):
+                raise ValueError("The number of group_colors should match the number of groups.")
+        else:
+            group_colors = ['royalblue','firebrick']
+
+        # Plot each group's radar plot
+        for i, (group, data) in enumerate(summary.iterrows()):
+            data = pd.concat([data, pd.Series(data.iloc[0])])
+            ax.plot(angles, data, label=str(group), color=group_colors[i], linewidth=2)
+            ax.fill(angles, data, alpha=alpha, color=group_colors[i])
+
+        # Set the labels for each variable
+        ax.set_thetagrids(np.degrees(angles[:-1]), [col.replace('_',' ') for col in summary.columns])
+
+        # Adjust the position of the labels to avoid overlapping with the radar plot
+        ax.set_rlabel_position(0)
+
+        #ax.set_title(f'Radar Plot ({metric.capitalize()}) for Different Groups', fontsize=16)
+        ax.legend()
+
+        plt.show()
+
+def plot_patterns_k(dynamics_metric,type='violin',metric=None,add_points=False,colors=None):
+    """
+    Create either a violinplot, barplot or boxplot showing
+    the corresponding values of each phase-locking pattern
+    of a particular k partition, provided in 'dynamics_metric'
+    for each group/condition/session.
+
+    Params:
+    -------
+    dynamics_metric : pd.DataFrame.  
+        Contains the values of a dynamical system theory
+        metric for each subject and PL pattern. 
+        1st column contains 'subject_id', 2nd column 'condition',
+        and the rest of the columns the values for each pattern.
+
+    type : str.
+        Select the type of plot to create. Options are 'barplot',
+        'violinplot' or 'boxplot'.
+
+    metric : str. Optional.
+        Select the metric whose values are in 'dynamics_metric'.
+        Only used to insert y label.
+
+    add_points : str.
+        Whether to show each observation as a point
+        above the created plot.
+        Valid options are False, 'swarm', or 'strip'.
+
+    color : list or None.
+        Select the color to represent each group.
+        If None, black and grey are used.
+    """
+
+    options_type = ['violin','boxplot','barplot']
+    options_addpoints = ['strip','swarm',False]
+
+    n_groups = np.unique(dynamics_metric.condition).size
+
+    if type not in options_type:
+        raise ValueError("Valid type options are 'violin', 'boxplot', or 'barplot'.")
+    elif type=='violin' and n_groups>2:
+        raise ValueError("'violin' is not available when the number of groups/conditions > 2")
+
+    if add_points not in options_addpoints:
+        raise ValueError("Valid options are 'strip', 'swarm', or False")
+
+    if colors is not None:
+        if n_groups != len(colors):
+            raise ValueError("The number of colors and the number of groups/condition must be the same.")
+
+    data = pd.melt(dynamics_metric,id_vars=['condition'],value_vars=list(dynamics_metric.columns[2:]))
+    data['variable'] = [str(i).replace('_',' ') for i in data.variable]
+    
+    n_patterns = np.unique(data.variable).size
+
+    plt.figure(figsize=(7,4))
+    if add_points=='swarm':
+        sns.swarmplot(
+            data=data,
+            x='variable',
+            y='value',
+            hue = 'condition',
+            #jitter=True,
+            color='black',
+            edgecolor=None,
+            dodge = True,
+            size=1,
+            alpha=.6,
+            )
+
+    elif add_points=='strip':
+        sns.stripplot(
+            data=data,
+            x='variable',
+            y='value',
+            hue = 'condition',
+            jitter=True,
+            color='black',
+            edgecolor=None,
+            dodge = True,
+            size=1,
+            alpha=.6
+            )
+        
+    plt.legend([],[], frameon=False)
+    
+    if type=='boxplot':
+        sns.boxplot(
+            data=data,
+            x='variable',
+            y='value',
+            hue='condition',
+            palette=['black','grey'] if colors is None else colors,
+            )
+
+    elif type=='violin':
+        sns.violinplot(
+            data=data,
+            x='variable',
+            y='value',
+            hue='condition',
+            palette=['black','grey'] if colors is None else colors,
+            scale='width',
+            inner='box',
+            linewidth=0.1,
+            split=True,
+            cut = 0,
+            dodge = False
+            )
+        
+    elif type=='barplot':
+        sns.barplot(
+            data=data,
+            x='variable',
+            y='value',
+            hue='condition',
+            palette=['black','grey'] if colors is None else colors
+            )
+
+    plt.xlabel('PL Pattern',fontsize=16,labelpad=15)
+    plt.ylabel('' if metric is None else metric,fontsize=16,labelpad=15)
+    if n_patterns>5:
+        plt.xticks(
+            range(n_patterns),
+            [f'Pattern {i+1}' for i in range(n_patterns)],
+            rotation=30,
+            horizontalalignment="right"
+            )
+    else:
+        plt.xticks(range(n_patterns),[f'Pattern {i+1}' for i in range(n_patterns)])
+        
+    plt.tight_layout()

@@ -15,7 +15,9 @@ from ._plotting import (
     stats_pyramid,
     states_pyramid,
     _explore_state,
-    _save_html
+    _save_html,
+    radar_plot,
+    plot_patterns_k
 )
 
 __all__ = [
@@ -32,5 +34,7 @@ __all__ = [
     "stats_pyramid",
     "states_pyramid",
     "_explore_state",
-    "_save_html"
+    "_save_html",
+    "radar_plot",
+    "plot_patterns_k"
 ]

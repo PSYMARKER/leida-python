@@ -547,26 +547,34 @@ def promiscuity(centroids,as_proportion=True,plot=True,cmap='viridis'):
 
     Params:
     -------
-    -centroids : pd.dataframe with shape (N_centroids,N_rois).
+    centroids : pd.dataframe with shape (N_centroids,N_rois).
         Centroids of a specific K partition.
+        Columns must have the ROI's names.
 
-    -as_proportion : bool.
+    as_proportion : bool.
         Whether to express promiscuity as
         proportion or as raw count.
 
-    -plot : bool.
+    plot : bool.
         Whether to create a barplot
         showing the computed promiscuity.
 
-    -cmap : str.
+    cmap : str.
         Colormap to use in the barplot.
 
     Returns:
     ---------
-    -promiscuity : pd.dataframe.
+    promiscuity : pd.dataframe.
         Contains the computed promiscuity 
         of each node across modes.
     """
+    if not isinstance(centroids,pd.DataFrame):
+        raise TypeError("'centroids' must be a pandas dataframe!")
+    if not isinstance(as_proportion,bool):
+        raise TypeError("'as_proportion' must be a boolean!")
+    if not isinstance(plot,bool):
+        raise TypeError("'plot' must be a boolean!")
+    
     N_states = centroids.shape[0]
 
     dct = {}
@@ -599,138 +607,3 @@ def promiscuity(centroids,as_proportion=True,plot=True,cmap='viridis'):
         plt.tight_layout()
 
     return df
-
-#plotting functions 
-
-def plot_patterns_k(dynamics_metric,type='violin',metric=None,add_points=False,colors=None):
-    """
-    Create either a violinplot, barplot or boxplot showing
-    the corresponding values of each phase-locking pattern
-    of a particular k partition, provided in 'dynamics_metric'
-    for each group/condition/session.
-
-    Params:
-    -------
-    dynamics_metric : pd.DataFrame.  
-        Contains the values of a dynamical system theory
-        metric for each subject and PL pattern. 
-        1st column contains 'subject_id', 2nd column 'condition',
-        and the rest of the columns the values for each pattern.
-
-    type : str.
-        Select the type of plot to create. Options are 'barplot',
-        'violinplot' or 'boxplot'.
-
-    metric : str. Optional.
-        Select the metric whose values are in 'dynamics_metric'.
-        Only used to insert y label.
-
-    add_points : str.
-        Whether to show each observation as a point
-        above the created plot.
-        Valid options are False, 'swarm', or 'strip'.
-
-    color : list or None.
-        Select the color to represent each group.
-        If None, black and grey are used.
-    """
-
-    options_type = ['violin','boxplot','barplot']
-    options_addpoints = ['strip','swarm',False]
-
-    n_groups = np.unique(dynamics_metric.condition).size
-
-    if type not in options_type:
-        raise ValueError("Valid type options are 'violin', 'boxplot', or 'barplot'.")
-    elif type=='violin' and n_groups>2:
-        raise ValueError("'violin' is not available when the number of groups/conditions > 2")
-
-    if add_points not in options_addpoints:
-        raise ValueError("Valid options are 'strip', 'swarm', or False")
-
-    if colors is not None:
-        if n_groups != len(colors):
-            raise ValueError("The number of colors and the number of groups/condition must be the same.")
-
-    data = pd.melt(dynamics_metric,id_vars=['condition'],value_vars=list(dynamics_metric.columns[2:]))
-    data['variable'] = [str(i).replace('_',' ') for i in data.variable]
-    
-    n_patterns = np.unique(data.variable).size
-
-    plt.figure(figsize=(7,4))
-    if add_points=='swarm':
-        sns.swarmplot(
-            data=data,
-            x='variable',
-            y='value',
-            hue = 'condition',
-            #jitter=True,
-            color='black',
-            edgecolor=None,
-            dodge = True,
-            size=1,
-            alpha=.6,
-            )
-
-    elif add_points=='strip':
-        sns.stripplot(
-            data=data,
-            x='variable',
-            y='value',
-            hue = 'condition',
-            jitter=True,
-            color='black',
-            edgecolor=None,
-            dodge = True,
-            size=1,
-            alpha=.6
-            )
-        
-    plt.legend([],[], frameon=False)
-    
-    if type=='boxplot':
-        sns.boxplot(
-            data=data,
-            x='variable',
-            y='value',
-            hue='condition',
-            palette=['black','grey'] if colors is None else colors,
-            )
-
-    elif type=='violin':
-        sns.violinplot(
-            data=data,
-            x='variable',
-            y='value',
-            hue='condition',
-            palette=['black','grey'] if colors is None else colors,
-            scale='width',
-            inner='box',
-            linewidth=0.1,
-            split=True,
-            cut = 0,
-            dodge = False
-            )
-        
-    elif type=='barplot':
-        sns.barplot(
-            data=data,
-            x='variable',
-            y='value',
-            hue='condition',
-            palette=['black','grey'] if colors is None else colors
-            )
-
-    plt.xlabel('PL Pattern',fontsize=16,labelpad=15)
-    plt.ylabel('' if metric is None else metric,fontsize=16,labelpad=15)
-    if n_patterns>5:
-        plt.xticks(
-            range(n_patterns),
-            [f'Pattern {i+1}' for i in range(n_patterns)],
-            rotation=30,
-            horizontalalignment="right"
-            )
-    else:
-        plt.xticks(range(n_patterns),[f'Pattern {i+1}' for i in range(n_patterns)])
-        
-    plt.tight_layout()
