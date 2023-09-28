@@ -133,6 +133,28 @@ def clean_signals(signals,detrend=True,standardize='zscore',filter_type=None,low
 
     return cleaned_signals
 
+def kuramoto_op(phases):
+    """
+    Computes the Kuramoto order parameter
+    for a given set of phases at time t.
+    
+    Params:
+    --------
+    phases : ndarray with shape (n_rois, 1).
+        Array of phase angles (in radians).
+    
+    Returns:
+    ---------
+    r : float.
+        Kuramoto order parameter.
+    """
+    # Calculate the mean complex order parameter
+    r = np.mean(np.exp(1j * phases))
+    
+    # Calculate the magnitude of the order parameter
+    r = np.abs(r)
+    
+    return r
 
 # Matrix utils
 def phase_coherence(signals_phases):

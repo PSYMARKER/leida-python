@@ -4,7 +4,11 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns 
 from itertools import groupby
-import pickle
+from pyleida.signal_tools import (
+    hilbert_phase,
+    phase_coherence,
+    kuramoto_op
+)
  
 #general functions
 
@@ -105,7 +109,7 @@ def compute_dynamics_metrics(clusters_labels,TR=None,save_results=False,path=Non
         }
 
 
-# functions to compute the occupancies,dwell times, and transitions
+# Functions to compute metrics derived from phase-locking: occupancies, dwell times, and transitions
 
 def fractional_occupancy(cluster_assignement):
     """
@@ -607,3 +611,105 @@ def promiscuity(centroids,as_proportion=True,plot=True,cmap='viridis'):
         plt.tight_layout()
 
     return df
+
+def pl_metastability(tseries,centroids):
+    """
+    Metastability derived from phase-locking
+    is calculated as the mean of the variance
+    of instantaneous phase-locking (iPL) over
+    time in each community. The mean value of
+    this measure across communities, denoted
+    as global metastability, represents the
+    overall variance in the phase-locking across
+    communities.
+
+    Params:
+    --------
+    tseries : numpy ndarray with shape (N_rois,N_volumes).
+        BOLD time series of a particular subject.
+
+    centroids : numpy ndarray with shape (N_centroids,N_rois).
+        Computed centroids for a given K-means
+        partition.
+
+    Returns:
+    --------
+    meta : numpy ndarray with shape (N_volumes,N_centroids).
+        Computed metastability for each
+        community at each time point.
+    """    
+    # Get the indices of each community/state
+    communities_indices = get_communities_indices(centroids.values)
+
+    iPL = phase_coherence(hilbert_phase(tseries))
+
+    N_volumes = iPL.shape[-1]
+    N_centroids = centroids.shape[0]
+
+    var_meta = np.zeros((N_volumes,N_centroids))
+
+
+    for t in range(N_volumes):
+        iPL_t = iPL[:,:,t] #get iPL at time t
+        for state in range(N_centroids):
+            state_idx = communities_indices[f'centroid_{state+1}'] #get state rois indices
+            state_matrix = iPL_t[state_idx][:,state_idx] #create matrix with only state rois.
+            var_meta[t,state] = np.var(np.ravel(state_matrix)) #compute the variance of iPL values
+
+    return var_meta
+
+def get_communities_indices(centroids_array):
+    """
+    Get indices of each community/state
+    """
+    N_centroids = centroids_array.shape[0]
+    indices = {}
+    
+    for c in range(N_centroids):
+        if np.all(centroids_array[c,:]<0):
+            indices[f'centroid_{c+1}'] = np.array([i for i in range(centroids_array.shape[1])])
+        else:
+            idx = np.where(centroids_array[c,:]>0)
+            indices[f'centroid_{c+1}'] = idx
+
+    return indices
+
+# Functions to compute metrics derived from phase-synchrony: 
+# synchronization and metastability
+
+def compute_kuramoto(centroids,phases):
+    """
+    Compute the Kuramoto order parameter for each
+    community of brain regions at each time t from
+    a set of phases of a particular subject.
+
+    Params:
+    -------
+    centroids : pd.DataFrame with shape (N_centroids, N_regions).
+        Computed centroids for a specific K partition.
+
+    phases : ndarray with shape (N_regions, N_volumes).
+        Phases of a set of brain regions.
+
+    Returns:
+    --------
+    synchrony : ndarray with shape (N_volumes, N_centroids).
+        Kuramoto order parameter for each community
+        at each time t.
+    """    
+    # Get the indices of each community/state
+    communities_indices = get_communities_indices(centroids.values)
+
+    N_volumes = phases.shape[1]
+    N_centroids = centroids.shape[0]
+
+    # Compute the kuramoto order parameter of each state at each time point
+    kuramoto = np.zeros((N_volumes,N_centroids))
+
+    for t in range(N_volumes):
+        for state in range(N_centroids):
+            kuramoto[t,state] = kuramoto_op(
+                phases[communities_indices[f'centroid_{state+1}'],t]
+                )
+
+    return kuramoto

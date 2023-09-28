@@ -10,7 +10,9 @@ from ._dynamics_metrics import (
     transition_probabilities,
     transition_probabilities_group,
     group_transition_matrix,
-    promiscuity
+    promiscuity,
+    compute_kuramoto,
+    pl_metastability
 )
 
 __all__ = [
@@ -22,5 +24,7 @@ __all__ = [
     "transition_probabilities",
     "transition_probabilities_group",
     "group_transition_matrix",
-    "promiscuity"
+    "promiscuity",
+    "compute_kuramoto",
+    "pl_metastability"
 ]

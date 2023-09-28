@@ -6,7 +6,8 @@ from ._signal_tools import (
     clean_signals,
     phase_coherence,
     get_eigenvectors,
-    txt_matrix
+    txt_matrix,
+    kuramoto_op
 )
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     "clean_signals",
     "phase_coherence",
     "get_eigenvectors",
-    "txt_matrix"
+    "txt_matrix",
+    "kuramoto_op"
 ]

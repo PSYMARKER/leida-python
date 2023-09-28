@@ -39,8 +39,13 @@ from .clustering import (
     plot_clustering_scores
 )
 from .clustering import rsnets_overlap as rsnets
-from .dynamics_metrics import group_transition_matrix
+from .dynamics_metrics import (
+    group_transition_matrix,
+    compute_kuramoto,
+    pl_metastability
+)
 from .stats import scatter_pvalues
+from .signal_tools import hilbert_phase
 
 
 class DataLoader:
@@ -593,6 +598,173 @@ class DataLoader:
             )
 
         return overlap
+
+    def phase_synchrony_metrics(self,k=2):
+        """
+        For each subject, compute the Kuramoto order 
+        parameter for each community at each time t.
+        In addition, computes the synchronization
+        and metastability of each community across
+        time.
+        Synchronization is calculated as the time-average
+        of the Kuramoto order parameter in each community
+        or centroid.
+        Metastability is calculated for each community
+        as the standard deviation of the Kuramoto order
+        parameter.
+
+        Note: See Hancock et al. (2022), NeuroImage.
+
+        Params:
+        -------
+        k : int.
+            Select the K partition of interest.
+
+        Returns:
+        --------
+        kuramoto : pd.DataFrame.
+            Contains the computed Kuramoto order parameter
+            of each subject, time point and community.
+
+        synchronization : pd.DataFrame with shape (N_subjects,N_communities +2).
+            Contains the computed synchronization of each
+            community, defined as the time-average of the
+            Kuramoto order parameter.
+
+        metastability : pd.DataFrame with shape (N_subjects,N_communities +2).
+            Contains the computed metastability of each
+            community for each subject, defined as the
+            standard deviation of the Kuramoto order
+            parameter across time.
+        """
+        _check_k_input(self._K_min_,self._K_max_,k)
+
+        time_series = self.time_series()
+        classes = load_classes(self._data_path_)
+        subject_ids = list(time_series.keys()) #list of subject ids
+        cent = self.load_centroids(k)
+
+        kura_lst = []
+
+        for sub_id in subject_ids: #for each subject
+            #get current subject signals
+            tseries = time_series[sub_id]
+            n_volumes = tseries.shape[1]-2
+
+            print(f"SUBJECT ID: {sub_id} ({n_volumes} volumes)")
+            
+            #Get the signals phases
+            phases = hilbert_phase(tseries)
+
+            #Compute synchrony of each community
+            kura = compute_kuramoto(cent,phases[:,1:-1])
+
+            df = pd.DataFrame(kura,columns=[f'PL_state_{i+1}' for i in range(cent.shape[0])])
+
+            if len(classes[sub_id])==1:
+                df.insert(0,'condition',[classes[sub_id][0] for i in range(n_volumes)])
+            else:
+                df.insert(0,'condition',classes[sub_id][1:-1])
+
+            df.insert(0,'subject_id',[sub_id for i in range(n_volumes)])
+            kura_lst.append(df)
+
+        # Preparing results
+        kuramoto = pd.concat(kura_lst) #full dataset of each community
+
+        # Compute synchronization of each
+        # community as their time-average
+        synchronization = kuramoto.groupby(['subject_id','condition']).mean().reset_index()
+
+        # Compute global synchronization
+        global_sync = []
+
+        for i in range(synchronization.shape[0]):
+            global_sync.append(np.mean(synchronization.iloc[i,2:].values))
+
+        synchronization['global'] = global_sync
+
+        # Compute metastability of each community
+        # as their std across time.
+        metastability = kuramoto.groupby(['subject_id','condition']).std().reset_index()
+
+        # Compute global metastability
+        global_meta = []
+
+        for i in range(metastability.shape[0]):
+            global_meta.append(np.mean(metastability.iloc[i,2:].values))
+
+        metastability['global'] = global_meta
+
+        return kuramoto,synchronization,metastability
+
+    def phase_locking_metastability(self,k):
+        """
+        Compute metastability from phase-locking (iPL) tensors.
+        This measure is calculated as the mean of the variance of
+        instantaneous phase-locking over time in each community.
+        The mean value of this measure across communities, denoted
+        as global metastability, represents the overall variance in
+        the phase-locking across communities.
+
+        Note: See Hancock et al. (2023), Plos One.
+
+        Params:
+        ------
+        k : int.
+            Select the K partition of
+            interest.
+
+        Returns:
+        --------
+        metastability : pd.DataFrame.
+            Contains the computed metastability
+            for each subject and condition.
+        """
+        _check_k_input(self._K_min_,self._K_max_,k)
+
+        time_series = self.time_series()
+        classes = load_classes(self._data_path_)
+        subject_ids = list(time_series.keys()) #list of subject ids
+        cent = self.load_centroids(k)
+
+        meta_lst = []
+
+        for sub_id in subject_ids: #for each subject
+            # Get current subject signals
+            tseries = time_series[sub_id]
+            n_volumes = tseries.shape[1]-2
+
+            print(f"SUBJECT ID: {sub_id} ({n_volumes} volumes)")
+            
+            # Compute metastability at each time point
+            meta = pl_metastability(tseries,cent)
+
+            df = pd.DataFrame(meta,columns=[f'PL_state_{i+1}' for i in range(cent.shape[0])])
+
+            # Add metadata
+            if len(classes[sub_id])==1:
+                df.insert(0,'condition',[classes[sub_id][0] for i in range(n_volumes)])
+            else:
+                df.insert(0,'condition',classes[sub_id][1:-1])
+
+            df.insert(0,'subject_id',[sub_id for i in range(n_volumes)])
+            meta_lst.append(df)
+
+        # Preparing results
+        metastability = pd.concat(meta_lst) #full dataset of each community
+
+        metastability = metastability.groupby(['subject_id','condition']).mean().reset_index()
+
+        # Compute global metastability
+        global_meta = []
+
+        for i in range(metastability.shape[0]):
+            global_meta.append(np.mean(metastability.iloc[i,2:].values))
+
+        metastability['global'] = global_meta
+
+        return metastability
 
     def _pool_stats(self,metric="occupancies"):
         """
