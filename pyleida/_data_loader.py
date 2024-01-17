@@ -45,7 +45,7 @@ from .dynamics_metrics import (
     pl_metastability
 )
 from .stats import scatter_pvalues
-from .signal_tools import hilbert_phase
+from .signal_tools import hilbert_phase,phase_coherence
 
 
 class DataLoader:
@@ -765,6 +765,153 @@ class DataLoader:
         metastability['global'] = global_meta
 
         return metastability
+
+    def regional_contribution(self,k=2,state=1,roi=None):
+        """
+        Compute the regional contribution of a 
+        region of interest (ROI) in a particular
+        state across time.
+        Regional contribution is calculated as the
+        mean value of instantaneous phase-locking
+        over time for the region/s of interest (ROI).
+        This metric can be used to explore for
+        connectivity differences between groups
+        or conditions.
+
+        Note: See Hancock et al.(2023), PlosOne.
+
+        Params:
+        -------
+        k : int.
+            Partition of interest.
+
+        state : int.
+            Select the PL state/pattern of
+            interest.
+
+        roi : list | string.
+            Name/s of the ROI/s for which the
+            regional contribution will be
+            computed. To compute the metric for
+            more than one ROI, then you have to
+            provide a list. If 'all', then
+            compute the contribution of each
+            ROI of the selected state.
+
+        Returns:
+        --------
+        contribution : pd.DataFrame.
+            Computed regional contribution
+            for the selected ROI/s.
+        """
+        # Validation of input parameters
+        _check_k_input(self._K_min_,self._K_max_,k)
+        _check_state(k,state)
+
+        if roi is None:
+            raise ValueError("'roi' cannot be None!")
+        else:
+            if isinstance(roi,str):
+                if roi=='all':
+                    rois = self.state_rois(k,state)
+                else:
+                    rois = [roi]
+            else:
+                rois = roi.copy()
+
+            for roi in rois:
+                if roi not in self.state_rois(k,state):
+                    raise ValueError(f"The specified ROI ({roi}) was not founded for the selected state!")
+        
+        # Load dict with time series of all subjects
+        time_series = self.time_series()
+
+        # Load dict with metadata of all subjects
+        classes = load_classes(self._data_path_)
+
+        subject_ids = list(time_series.keys()) #list of subject ids
+
+        # Load selected centroid
+        centr = self.load_centroids(k).iloc[state-1,:].values 
+
+        # Get state/community indices
+        if np.all(centr<0):
+            community_indices = np.array([i for i in range(centr.size)])
+        else:
+            community_indices = np.where(centr>0)[0]
+
+        # Create dict to save results
+        full_db = {}
+
+        for roi in rois:
+            full_db[roi] = []
+
+        # Compute regional contribution
+        for sub_id in subject_ids: #for each subject
+            # Get current subject signals
+            tseries = time_series[sub_id]
+            n_volumes = tseries.shape[1]-2
+
+            print(f"SUBJECT ID: {sub_id} ({n_volumes} volumes)")
+
+            # Get current subject iPL 3D tensor
+            iPL = phase_coherence(hilbert_phase(tseries))
+
+            for roi in rois:
+                # Get current roi index
+                roi_idx = self.rois_labels.index(roi)
+
+                # Get roi iPL vector for each time point
+                iPL_roi = iPL[roi_idx,:,:]
+                iPL_roi = iPL_roi[community_indices,:]
+
+                # Save in dataframe
+                iPL_roi_df = pd.DataFrame(iPL_roi.T,columns=self.state_rois(k,state))
+
+                # Drop column of ROI (because contains all ones)
+                iPL_roi_df.drop(columns=roi,inplace=True)
+
+                # Add metadata
+                if len(classes[sub_id])==1:
+                    iPL_roi_df.insert(0,'condition',[classes[sub_id][0] for i in range(n_volumes)])
+                else:
+                    iPL_roi_df.insert(0,'condition',classes[sub_id][1:-1])
+
+                iPL_roi_df.insert(0,'subject_id',[sub_id for i in range(n_volumes)])
+
+                # Append df of current subject
+                # and roi in dictionary
+                full_db[roi].append(iPL_roi_df)
+
+        # Compute mean across vector for
+        # each time point, roi, and subject
+        final = {}
+        
+        for roi in rois:
+            subs,conds,meta = [],[],[]
+            for sub_id in subject_ids:
+                df_roi = pd.concat(full_db[roi]) # Concatenate data of all subjects
+                df_sub = df_roi[df_roi.subject_id==sub_id]
+                conditions = np.unique(df_sub.condition)
+                for cond in conditions:
+                    df_sub_ = df_sub[df_sub.condition==cond].iloc[:,2:].values
+                    subs.append(sub_id)
+                    conds.append(cond)
+                    meta.append(np.mean(df_sub_))
+
+            final[roi] = pd.DataFrame({'subject_id':subs,'condition':conds,roi:meta})
+
+        # Merge results of all rois in a single dataframe
+        if len(rois)==1:
+            contribution = final[roi]
+        else:
+            dfs = list(final.keys())
+            contribution = final[dfs[0]]
+
+            for df in dfs[1:]:
+                contribution = pd.merge(contribution,final[df],how='inner',on=['subject_id','condition'])
+
+        return contribution
 
     def _pool_stats(self,metric="occupancies"):
         """
