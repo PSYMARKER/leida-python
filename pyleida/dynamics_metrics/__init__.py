@@ -12,7 +12,8 @@ from ._dynamics_metrics import (
     group_transition_matrix,
     promiscuity,
     compute_kuramoto,
-    pl_metastability
+    pl_metastability,
+    compute_magnetization
 )
 
 __all__ = [
@@ -26,5 +27,6 @@ __all__ = [
     "group_transition_matrix",
     "promiscuity",
     "compute_kuramoto",
-    "pl_metastability"
+    "pl_metastability",
+    "compute_magnetization"
 ]

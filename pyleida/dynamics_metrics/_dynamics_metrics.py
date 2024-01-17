@@ -713,3 +713,39 @@ def compute_kuramoto(centroids,phases):
                 )
 
     return kuramoto
+
+def compute_magnetization(eig):
+    """
+    Compute the instantaneous magnetization as
+    the ratio of in-phase regions to antiphase
+    regions, which indicates criticality.
+
+    Note: see Hancock et al. (2023) PlosOne.
+
+    Params:
+    -------
+    ei : np.ndarray with shape (N_volumes,N_regions).
+        Leading Eigenvector for each time t.
+
+    Returns:
+    --------
+    mg : np.ndarray with shape (N_volumes,1).
+        Computed magnetization for each
+        time point.
+    """
+    if not isinstance(eig,np.ndarray):
+        raise TypeError("'eig' must be a 2D array (N_volumes,N_regions).")
+    
+    N_time = eig.shape[0]
+
+    mg = []
+
+    for t in range(N_time):
+        v = eig[t,:]
+        in_ph = np.sum([1 for r in v if r>0])
+        anti_ph = np.sum([1 for r in v if r<0])
+        mg.append(in_ph / anti_ph)
+
+    return np.array(mg)
+    
+
