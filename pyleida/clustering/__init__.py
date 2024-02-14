@@ -15,6 +15,7 @@ from ._clustering import (
     plot_voronoi,
     dunn_fast,
     patterns_stability,
+    centroids_cosinedistances
 )
 
 __all__ = [
@@ -28,5 +29,6 @@ __all__ = [
     "plot_clusters_boundaries",
     "plot_voronoi",
     "dunn_fast",
-    "patterns_stability"
+    "patterns_stability",
+    "centroids_cosinedistances"
 ]

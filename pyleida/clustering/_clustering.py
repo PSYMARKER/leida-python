@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from joblib import Parallel,delayed
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import seaborn as sns
 from scipy.spatial.distance import cdist
 from sklearn.metrics.pairwise import cosine_distances
@@ -681,6 +682,55 @@ def patterns_stability(X,y=None,n_clusters=None,folds=5,metric='ari',plot=True,d
 
     return scores
 
+def centroids_cosinedistances(centr,plot='scatter2d',darkstyle=False):
+    """
+    Compute the cosine distance
+    between each pair of centroids.
+
+    Params:
+    -------
+    centr : np.ndarray of shape (N_centroids,N_features).
+        Centroids for which the distances
+        are going to be computed.
+
+    plot : str | None.
+        Select whether to create a 
+        'scatter2d','scatter3d', or
+        no plot.
+
+    darkstyle : bool.
+        Specify whether to use a darkstyle
+        in the created plot.
+
+    Returns:
+    --------
+    distances : np.ndarray of shape (N_centroids,N_centroids).
+        Computed distance matrix.
+    """
+    # validations
+    if not isinstance(centr,np.ndarray):
+        raise TypeError("'centr' must be a numpy 2D array!")
+    if not isinstance(darkstyle,bool):
+        raise TypeError("'darkstyle' must be True or False")
+
+    plot_options = ['scatter2d','scatter3d','heatmap',None]
+    if plot not in plot_options:
+        raise ValueError(f"Valid options for 'plot' are {plot_options}")
+    
+    # computing distances
+    def cosine_distance(u, v):
+        return 1 - np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))
+
+    distances = cdist(centr, centr, metric=cosine_distance)
+
+    # plotting
+    if plot is not None:
+        plt.ion()
+        with plt.style.context('dark_background' if darkstyle else 'default'):
+                create_scatterplot(distances,2 if plot=='scatter2d' else 3)
+
+    return distances
+
 # Plotting functions
 
 def plot_clustering_scores(data):
@@ -1007,6 +1057,80 @@ def plot_clusters_boundaries(y,n_clusters=2,alpha=0.05):
     plt.xticks(())
     plt.yticks(())
     plt.tight_layout()
+
+def create_scatterplot(distance_matrix,d=2):
+    """
+    Auxiliary function of the
+    'centroids_cosinedistances'
+    function.
+
+    Params:
+    --------
+    distance_matrix : np.ndarray with shape (N_centroids,N_centroids).
+        Compute distances between centroids.
+    d : int.
+        Whether to draw a 3D or 2D scatterplot.
+    """
+    def optimize_coordinates(coordinates, distance_matrix):
+        """
+        Optimization process to adjust coordinates
+        based on the distance matrix. Auxiliary 
+        function integrated in 'create_3d_scatterplot'
+        and 'create_2d_scatterplot'.
+        """
+        num_iterations = 1_000
+        learning_rate = 0.01
+
+        for _ in range(num_iterations):
+            # Compute pairwise distances between current coordinates
+            current_distances = np.linalg.norm(coordinates[:, np.newaxis, :] - coordinates, axis=-1)
+
+            # Compute the difference between current and target distances
+            diff = current_distances - distance_matrix
+
+            # Update coordinates based on the difference and learning rate
+            coordinates -= learning_rate * 2 * np.sum(diff[:, :, np.newaxis] * (coordinates[:, np.newaxis, :] - coordinates), axis=1)
+
+        return coordinates
+    
+    
+    # Extract the number of points (variables)
+    num_points = len(distance_matrix)
+
+    # Generate coordinates based on the distance matrix
+    coordinates = np.random.rand(num_points, d)  # Initial random coordinates
+
+    # Optimize the coordinates to match the provided distance matrix
+    coordinates = optimize_coordinates(coordinates, distance_matrix)
+
+    if d==3:
+        # Create a 3D scatter plot
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
+        # Scatter plot with text labels
+        for i in range(num_points):
+            ax.scatter(coordinates[i, 0], coordinates[i, 1], coordinates[i, 2], c='teal', marker='o')
+            ax.text(coordinates[i, 0], coordinates[i, 1], coordinates[i, 2], f'Mode {i+1}', color='firebrick')
+
+            # Label axes
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+            ax.set_zlabel('Z')
+
+    else:
+        # Scatter plot with distance labels
+        for i in range(num_points):
+            plt.scatter(coordinates[i, 0], coordinates[i, 1], c='teal', marker='o')
+            plt.text(coordinates[i, 0], coordinates[i, 1]+0.05, f'Mode {i+1}', color='firebrick', ha='center', va='center')
+
+            # Label axes
+            plt.xlabel('X')
+            plt.ylabel('Y')
+
+    # Show the plot
+    plt.tight_layout()
+    plt.show()
 
 # Compute Dunn Score functions 
 
