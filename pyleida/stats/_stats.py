@@ -189,7 +189,11 @@ def hedges_g(x1,x2,paired=False):
         diff_mean = np.mean(diff)
         std_diff = np.std(diff, ddof=1)
         n = diff.size
-        bias_correction = (n - 1) / (n - 3)
+
+        if n-3>0:
+            bias_correction = (n - 1) / (n - 3)
+        else:
+            bias_correction = n - 1
 
     #Hedges's g
     if not paired:
@@ -257,9 +261,8 @@ def permtest_rel(data,class_column=None,n_perm=5_000,alternative='two-sided'):
             x1 = np.delete(x1, nan_idx2)
             x2 = np.delete(x2,nan_idx2)
 
-
-        if len(x1) == 0 or len(x2) == 0:
-            # Skip this variable if any group has no valid data points after removing NaN values.
+        # Skip the variable if any group has less than 2 data points after removing NaN values.
+        if len(x1) < 2 or len(x2) < 2:
             continue
         
         #running the permutation test
