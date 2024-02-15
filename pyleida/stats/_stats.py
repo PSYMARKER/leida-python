@@ -465,7 +465,7 @@ def scatter_pvalues(pooled_stats,metric='occupancies',fill_areas=True,darkstyle=
         plt.ylabel('Two-sided p-value',fontsize=15)
         plt.xticks(np.arange(K_min,K_max+1),[k for k in np.arange(K_min,K_max+1)])
         plt.xlim(left=K_min-1,right=K_max+1)
-        plt.ylim(bottom=0.00000001)
+        #plt.ylim(bottom=0.00000001)
         if metric is not None:
             title = f"{str(metric).capitalize().replace('_',' ')}: {np.unique(pooled_stats.group_1)[0]} vs {np.unique(pooled_stats.group_2)[0]}"
             plt.title(title,fontsize=20,pad=20)
