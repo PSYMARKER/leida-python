@@ -202,13 +202,13 @@ def load_tseries(path):
 
     Params:
     -------
-    path : str
+    path : str.
         Path to the local folder in which
         the file/s is/are located.
 
     Returns:
     --------
-    tseries : dict
+    tseries : dict.
         Returns a dictionary with 'subjects_ids' as keys
         and BOLD time series as values.
     """ 
