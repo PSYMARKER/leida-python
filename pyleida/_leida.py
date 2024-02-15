@@ -112,7 +112,7 @@ class Leida:
 
         self._validate_constructor_params() #check if the data has been loaded successfully.
 
-    def fit_predict(self,TR=None,paired_tests=False,n_replicates='auto',n_perm=5_000,save_results=True):
+    def fit_predict(self,kmin=2,kmax=20,TR=None,paired_tests=False,n_replicates='auto',n_perm=5_000,save_results=True):
         """
         Execute the LEiDA pipeline: 
             1) Compute the instantaneous phase of each signal, the
@@ -135,6 +135,15 @@ class Leida:
             If 'None', then the dwell times will express
             the mean lifetime of each PL state in TR units,
             instead of seconds.
+
+        kmin : int. Default = 2.
+            Specify the lowest K value to apply with 
+            K-Means clustering.
+
+        kmax : int. Default = 20.
+            Specify the highest K value to apply with 
+            K-Means clustering.
+            Note: kmax must be lower than 50.
 
         paired_tests : bool. Default: False.
             Specify if groups are independent or related/paired,
@@ -159,9 +168,26 @@ class Leida:
             will be created. Note: These results can be easely
             retrieved later using the 'DataLoader' class.
         """
-        self._K_min_ = 2
-        self._K_max_ = 20
-        self._n_replicates_ = n_replicates
+
+        #validate kmin and kmax
+        if isinstance(kmin,int):
+            if kmin<2:
+                raise ValueError("'kmin' can't be lower than 2!")
+            else:
+                self._K_min_ = kmin
+        else:
+            raise TypeError("'kmin' must be an integer!")
+        
+        if isinstance(kmax,int):
+            if kmax>50:
+                raise ValueError("'kmax' can't be higher than 50!")
+            else:
+                self._K_max_ = kmax
+        else:
+            raise TypeError("'kmax' must be an integer!")
+        
+        if self._K_min_>=self._K_max_:
+            raise ValueError("'kmin' can't be equal or higher than kmax!")
         
         #validate provided 'TR'
         if TR is not None and not isinstance(TR,(int,float)):
@@ -172,8 +198,9 @@ class Leida:
             raise TypeError("'n_replicates' must be a string or integer.")
         if isinstance(n_replicates,str) and n_replicates!='auto':
                 raise ValueError("If string, 'n_replicates' must be 'auto'.")
-        elif isinstance(n_replicates,int) and (n_replicates<10 or n_replicates>10000):
+        elif isinstance(n_replicates,int) and (n_replicates<10 or n_replicates>10_000):
                 raise ValueError("'n_replicates' must be > 10 and <=10000.")
+        self._n_replicates_ = n_replicates
 
         #validate paired_tests input
         if not isinstance(paired_tests,bool):
@@ -330,7 +357,8 @@ class Leida:
             self._n_replicates_ = int(np.ceil((50+n_samples)/300)) #determine number of initializations
 
         print("\n 2) RUNNING K-MEANS CLUSTERING ON EIGENVECTORS "
-            f"(N° of replicates: {self._n_replicates_} - max iterations: 1000).")
+            f"(N° of replicates: {self._n_replicates_} - max iterations: 1000)."
+            f"Range of K values to explore: {self._K_min_}-{self._K_max_}")
 
         predictions,clustering_performance,models = identify_states(
             df_eigens,

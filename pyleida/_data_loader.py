@@ -143,8 +143,10 @@ class DataLoader:
                                 f"'rois_labels.txt' ({nlabels}), and 'rois_coordinates.csv' "
                                 f"({ncoords}) must coincide!")
 
-        self._K_min_ = 2
-        self._K_max_ = 20
+        #getting kmin and kmax values
+        ks = [int(i.split('_')[-1]) for i in self.predictions.columns.values if 'k' in i]
+        self._K_min_ = np.min(ks)
+        self._K_max_ = np.max(ks)
 
         self._classes_lst_ = np.unique(self.eigenvectors.condition).tolist()
         self._N_classes_ = len(self._classes_lst_)
