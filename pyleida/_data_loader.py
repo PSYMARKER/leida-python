@@ -1175,7 +1175,7 @@ class DataLoader:
                     ].reset_index(drop=True)
 
             dyn_metric = self._pool_dynamics_metric(metric=metric) 
-            dyn_metric = {k:v[v.condition.isin(conditions)] for k,v in dyn_metric.items()}
+            dyn_metric = {k:v[v.condition.isin(cond)] for k,v in dyn_metric.items()}
 
             stats_pyramid(
                 dyn_metric,
