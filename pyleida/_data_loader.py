@@ -1344,7 +1344,7 @@ class DataLoader:
         performance = pd.read_csv(f'{self._clustering_}/clustering_performance.csv',sep='\t')
         plot_clustering_scores(performance)
 
-    def plot_states_network_glass(self,k=2,darkstyle=False):
+    def plot_states_network_glass(self,k=2,all_nodes=False,darkstyle=False):
         """
         Create a glass brain (axial view) showing the
         network representation of each phase-locking
@@ -1355,6 +1355,11 @@ class DataLoader:
         k : int.
             Select the partition of interest.
 
+        all_nodes : bool. Default: False.
+            Specify whether to show all
+            nodes or just the nodes of
+            the current state.
+
         darkstyle : bool.
             Whether to use a dark theme for
             the plots.
@@ -1363,7 +1368,7 @@ class DataLoader:
         pl_states = self.load_centroids(k=k).values
 
         with plt.style.context("dark_background" if darkstyle else "default"):
-            states_k_glass(pl_states,self.rois_coordinates_,darkstyle=darkstyle)
+            states_k_glass(pl_states,self.rois_coordinates_,all_nodes=all_nodes,darkstyle=darkstyle)
 
     def plot_states_in_bold(self,subject_id,k=2,alpha=.5,darkstyle=False):
         """

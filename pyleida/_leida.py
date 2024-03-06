@@ -1711,7 +1711,7 @@ class Leida:
         self._check_is_fitted()
         plot_clustering_scores(self._clustering_.performance)
 
-    def plot_states_network_glass(self,k=2,darkstyle=False):
+    def plot_states_network_glass(self,k=2,all_nodes=False,darkstyle=False):
         """
         Create a glass brain (axial view) showing the
         network representation of each phase-locking
@@ -1722,6 +1722,11 @@ class Leida:
         k : int.
             Select the partition of interest.
 
+        all_nodes : bool. Default: False.
+            Specify whether to show all
+            nodes or just the nodes of
+            the current state.
+        
         darkstyle : bool.
             Whether to use a dark theme for
             the plots.
@@ -1735,7 +1740,7 @@ class Leida:
         pl_states = self.load_centroids(k=k).values
 
         with plt.style.context("dark_background" if darkstyle else "default"):
-            states_k_glass(pl_states,self.rois_coordinates,darkstyle=darkstyle)
+            states_k_glass(pl_states,self.rois_coordinates_,all_nodes=all_nodes,darkstyle=darkstyle)
 
     def plot_states_on_surf(self,k=2,state='all',parcellation=None,discretize=True,cmap='auto',darkstyle=False,open=True,save=False):
         """

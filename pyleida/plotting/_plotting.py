@@ -448,7 +448,7 @@ def brain_states_on_surf2(centroid,parcellation=None,surface='pial',hemi='right'
 
     return fig_
 
-def states_k_glass(centroids,coords,darkstyle=False):
+def states_k_glass(centroids,coords,all_nodes=False,darkstyle=False):
     """
     Create a glass brain (axial view) showing the
     network representation of each PL pattern for
@@ -462,6 +462,11 @@ def states_k_glass(centroids,coords,darkstyle=False):
 
     coords : ndarray with shape (N_rois, 3).
         ROIs coordinates in MNI space.
+
+    all_nodes : bool. Default: False.
+        Specify whether to show all
+        nodes or just the nodes of
+        the current state.
         
     darkstyle : bool.
         Whether to use a dark theme for the plots.
@@ -507,10 +512,14 @@ def states_k_glass(centroids,coords,darkstyle=False):
         edges_lw = {'linewidth':sizes_and_lws['lw'][n_columns-2],'color':'firebrick'}
         centroid = centroids[state_idx,:]
         network = centroid2network(centroid)
+        if not all_nodes:
+            rois_idxs = centroid>0
+            network = network[rois_idxs,:]
+            network = network[:,rois_idxs]
 
         plot_connectome(
             network, 
-            coords, 
+            coords if all_nodes else coords[rois_idxs], 
             node_color='blue' if not np.any(network) else 'black' if not darkstyle else 'white', 
             node_size=sizes_and_lws['node_size'][n_columns-2], 
             #edge_cmap=<matplotlib.colors.LinearSegmentedColormap object>, 
