@@ -1587,7 +1587,8 @@ def stats_pyramid(metric_data,stats,K_min=2,K_max=20,class_column='condition',me
                 linewidth=0,
                 color=stats_df[(stats_df.k==K_min+idx)&(stats.variable.str.contains(feature))].color.values[0],
                 errcolor=".2", 
-                edgecolor='white'
+                edgecolor='white',
+                errorbar='se'
                 )
             axs[idx,feature_idx].set_box_aspect(1)
             axs[idx,feature_idx].set_xlabel('')
