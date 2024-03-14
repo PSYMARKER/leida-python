@@ -1789,12 +1789,8 @@ def _explore_state(centroid,rois_labels,occupancy,dwell_times,coords,state_numbe
         x=occupancy.condition,
         y=occupancy.value,
         ax=axd['lower center'],
-        color='black' if not darkstyle else 'white',
-        width=.4,
-        fliersize=.4,
-        #linewidth=.8,
-        #boxprops = dict(linewidth=3,color='black'),
-        medianprops = dict(linewidth=1.5, color='black' if darkstyle else 'white')
+        color='firebrick',
+        errobar='se'
         )
     axd['lower center'].set_ylabel('Occupancy',fontsize=15)
     axd['lower center'].set_xlabel('')
@@ -1812,12 +1808,8 @@ def _explore_state(centroid,rois_labels,occupancy,dwell_times,coords,state_numbe
         x=dwell_times.condition,
         y=dwell_times.value,
         ax=axd['lower right'],
-        color='black' if not darkstyle else 'white',
-        width=.4,
-        fliersize=.4,
-        #linewidth=.8,
-        #boxprops = dict(linewidth=3, color='black'),
-        medianprops = dict(linewidth=1.5, color='black' if darkstyle else 'white')
+        color='firebrick',
+        errobar='se'
         )
     axd['lower right'].set_ylabel('Dwell time',fontsize=15)
     axd['lower right'].set_xlabel('')
