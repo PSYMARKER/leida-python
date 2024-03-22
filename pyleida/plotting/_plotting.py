@@ -1726,7 +1726,7 @@ def _explore_state(centroid,rois_labels,occupancy,dwell_times,coords,state_numbe
         axes=axd['upper center'], 
         annotate=True, 
         black_bg=True if darkstyle else False, 
-        alpha=0.1, 
+        alpha=0.3, 
         edge_kwargs=edges_lw, 
         node_kwargs=None, 
         colorbar=False
@@ -1785,12 +1785,12 @@ def _explore_state(centroid,rois_labels,occupancy,dwell_times,coords,state_numbe
     str_length = [len(cond) for cond in np.unique(occupancy.condition)]
     N_conds = np.unique(occupancy.condition).size
 
-    sns.boxplot(
+    sns.barplot(
         x=occupancy.condition,
         y=occupancy.value,
         ax=axd['lower center'],
         color='firebrick',
-        errobar='se'
+        errorbar='se'
         )
     axd['lower center'].set_ylabel('Occupancy',fontsize=15)
     axd['lower center'].set_xlabel('')
@@ -1804,12 +1804,12 @@ def _explore_state(centroid,rois_labels,occupancy,dwell_times,coords,state_numbe
     #creating boxplot with dwell times
     dwell_times.columns = ['condition','value']
     N_conds = np.unique(dwell_times.condition).size
-    sns.boxplot(
+    sns.barplot(
         x=dwell_times.condition,
         y=dwell_times.value,
         ax=axd['lower right'],
         color='firebrick',
-        errobar='se'
+        errorbar='se'
         )
     axd['lower right'].set_ylabel('Dwell time',fontsize=15)
     axd['lower right'].set_xlabel('')
