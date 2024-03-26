@@ -218,7 +218,7 @@ class Leida:
             raise TypeError("'save_results' must be a boolean value (True or False)!")
 
         #Run the analysis
-        self._results_path_ = os.path.split(os.path.abspath(self._data_path_))[0]+'/LEiDA_results'
+        self._results_path_ = os.path.split(os.path.abspath(self._data_path_))[0]+'/LEiDA_results_run_1'
 
         self.eigenvectors,self._clustering_,self._dynamics_ = self._execute_all(
             TR=TR,
@@ -296,16 +296,18 @@ class Leida:
         #creating folder to save results
         if save_results:
             if os.path.exists(self._results_path_):
-                raise Warning("EXECUTION ABORTED: The folder 'LEiDA_results' already "
-                            "exists. If you have results from earlier executions of "
-                            "the analysis, consider changing the folder's name or moving "
-                            "the folder to another location.")
-            else:
-                try:
-                    print(f"\n-Creating folder to save results: '{self._results_path_}'")
-                    os.makedirs(self._results_path_)
-                except:
-                    raise Exception("The folder to save the results could't be created.")
+                #getting info of previous results to define
+                #the 'run' number.
+                root_folder = os.path.split(os.path.abspath(self._data_path_))[0]
+                preexisting_results = [f for f in os.listdir(root_folder) if os.path.isdir(f'{root_folder}/{f}') and f.startswith('LEiDA_results_run')]
+                execution_number = np.max([int(i.split('_')[-1]) for i in preexisting_results])+1
+                #redefine results path
+                self._results_path_ = root_folder+f'/LEiDA_results_run_{execution_number}'
+            try:
+                print(f"\n-Creating folder to save results: '{self._results_path_}'")
+                os.makedirs(self._results_path_)
+            except:
+                raise Exception("The folder to save the results could't be created.")
 
         #creating variables to save results    
         eigens = []
