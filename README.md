@@ -133,7 +133,7 @@ Inside this folder, the user will find the following contents:
 
 ## Help and support
 ### Tutorials
-Jupyter notebooks with examples is provided in the 'examples' folder of this repository.
+Jupyter notebooks with examples is going to provided in the 'examples' folder of this repository.
 
 ### Documentation
 A detailled description of the package API can be founded here: https://psymarker.github.io/leida-python/
